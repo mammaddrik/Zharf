@@ -1,0 +1,22 @@
+@font-face {
+    font-family: "bootstrap-icons";
+    src: url("../../fonts/bootstrap-icons.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+.bi::before {
+    display: inline-block;
+    font-family: "bootstrap-icons";
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    vertical-align: -0.125em;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+.bi-list::before {
+    content: "\f479";
+}

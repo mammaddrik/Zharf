@@ -68,6 +68,9 @@
 
     --container-width: 1240px;
 
+    --page-padding: 24px;
+    --section-padding: 150px;
+
     --radius-small: 8px;
     --radius-medium: 16px;
     --radius-large: 28px;
