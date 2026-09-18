@@ -219,3 +219,175 @@
     height: 1px;
     background: var(--color-text-subtle);
 }
+
+.introduction {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+}
+
+.introduction-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 120px 120px;
+    mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+    pointer-events: none;
+}
+
+.introduction-container {
+    position: relative;
+    width: min(calc(100% - 48px), var(--container-width));
+    min-height: 720px;
+    margin: 0 auto;
+    padding: 140px 0;
+}
+
+.introduction-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-text-subtle);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+}
+
+.introduction-index {
+    color: var(--color-accent-bright);
+}
+
+.introduction-content {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    margin-top: 120px;
+}
+
+.introduction-title {
+    max-width: 760px;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.055em;
+}
+
+.introduction-title span {
+    display: block;
+    color: var(--color-text-muted);
+}
+
+.introduction-description {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px;
+    max-width: 720px;
+    margin-top: 64px;
+}
+
+.introduction-description p {
+    color: var(--color-text-muted);
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.introduction-description p + p {
+    color: var(--color-text-subtle);
+}
+
+.introduction-elements {
+    position: absolute;
+    top: 50%;
+    right: 2%;
+    width: 360px;
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.introduction-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 76%;
+    height: 34%;
+    border: 1px solid rgba(167, 139, 250, 0.16);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(-28deg);
+}
+
+.introduction-orbit-small {
+    width: 52%;
+    height: 22%;
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) rotate(52deg);
+}
+
+.introduction-orbit span {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent-bright);
+    box-shadow: 0 0 18px rgba(167, 139, 250, 0.7);
+    transform: translate(-50%, -50%);
+}
+
+.introduction-orbit-small span {
+    left: auto;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: none;
+}
+
+.introduction-node {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.introduction-node-one {
+    top: 18%;
+    left: 20%;
+}
+
+.introduction-node-two {
+    top: 72%;
+    left: 76%;
+}
+
+.introduction-node-three {
+    top: 34%;
+    left: 84%;
+}
+
+.introduction-tags {
+    position: absolute;
+    right: 0;
+    bottom: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+    max-width: 420px;
+}
+
+.introduction-tags span {
+    padding: 9px 13px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-subtle);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+}
