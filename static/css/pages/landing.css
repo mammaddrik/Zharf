@@ -96,8 +96,9 @@
 
 .hero-title {
     max-width: 760px;
+    font-family: var(--font-display);
     font-size: clamp(64px, 8vw, 120px);
-    font-weight: 500;
+    font-weight: 700;
     line-height: 0.95;
     letter-spacing: -0.06em;
 }
@@ -271,8 +272,9 @@
 
 .introduction-title {
     max-width: 760px;
+    font-family: var(--font-display);
     font-size: clamp(52px, 7vw, 96px);
-    font-weight: 500;
+    font-weight: 700;
     line-height: 0.98;
     letter-spacing: -0.055em;
 }
