@@ -1,0 +1,26 @@
+html {
+    background: var(--color-background);
+}
+
+body {
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+}
+
+::selection {
+    background: var(--color-accent);
+    color: var(--color-text);
+}
+
+.site-navigation,
+.hero {
+    width: 100%;
+}
+
+.navigation-container,
+.hero-content {
+    width: min(calc(100% - 48px), var(--container-width));
+    margin: 0 auto;
+}
