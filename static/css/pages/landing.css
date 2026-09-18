@@ -750,3 +750,235 @@
     right: -8px;
     transform: rotate(4deg);
 }
+
+.possibilities {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+}
+
+.possibilities-background {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 50% 48%, rgba(139, 92, 246, 0.08), transparent 30%),
+        radial-gradient(circle at 20% 70%, rgba(139, 92, 246, 0.035), transparent 28%);
+    pointer-events: none;
+}
+
+.possibilities-container {
+    position: relative;
+    width: min(calc(100% - 48px), var(--container-width));
+    margin: 0 auto;
+    padding: 150px 0;
+}
+
+.possibilities-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-text-subtle);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+}
+
+.possibilities-index {
+    color: var(--color-accent-bright);
+}
+
+.possibilities-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 80px;
+    margin-top: 100px;
+}
+
+.possibilities-title {
+    max-width: 760px;
+    font-family: var(--font-display);
+    font-size: clamp(52px, 7vw, 94px);
+    font-weight: 700;
+    line-height: 0.97;
+    letter-spacing: -0.055em;
+}
+
+.possibilities-title span {
+    display: block;
+    color: var(--color-text-muted);
+}
+
+.possibilities-description {
+    max-width: 300px;
+    padding-bottom: 8px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.possibilities-scene {
+    position: relative;
+    width: min(100%, 900px);
+    height: 560px;
+    margin: 80px auto 0;
+}
+
+.possibility-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.possibility-orbit-one {
+    width: 620px;
+    height: 250px;
+    transform: translate(-50%, -50%) rotate(22deg);
+}
+
+.possibility-orbit-two {
+    width: 760px;
+    height: 320px;
+    border-color: rgba(167, 139, 250, 0.08);
+    transform: translate(-50%, -50%) rotate(-34deg);
+}
+
+.possibility-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    height: 130px;
+    border: 1px solid rgba(167, 139, 250, 0.32);
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 68%),
+        rgba(13, 13, 18, 0.8);
+    box-shadow:
+        0 0 70px rgba(139, 92, 246, 0.12),
+        inset 0 0 40px rgba(139, 92, 246, 0.08);
+    color: var(--color-text);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    transform: translate(-50%, -50%);
+}
+
+.possibility-core::before {
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    content: "";
+}
+
+.possibility-item {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-full);
+    background: rgba(13, 13, 18, 0.7);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.possibility-item-index {
+    color: var(--color-accent-bright);
+    font-size: 8px;
+}
+
+.possibility-item-name {
+    color: var(--color-text-muted);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+}
+
+.possibility-item-notes {
+    top: 17%;
+    left: 18%;
+    transform: rotate(-6deg);
+}
+
+.possibility-item-projects {
+    top: 12%;
+    right: 16%;
+    transform: rotate(5deg);
+}
+
+.possibility-item-ideas {
+    bottom: 19%;
+    left: 15%;
+    transform: rotate(4deg);
+}
+
+.possibility-item-tools {
+    right: 13%;
+    bottom: 22%;
+    transform: rotate(-5deg);
+}
+
+.possibility-item-experiments {
+    top: 50%;
+    right: 2%;
+    transform: translateY(-50%) rotate(3deg);
+}
+
+.possibility-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-accent-bright);
+    box-shadow: 0 0 14px rgba(167, 139, 250, 0.7);
+}
+
+.possibility-particle-one {
+    top: 18%;
+    left: 43%;
+}
+
+.possibility-particle-two {
+    top: 72%;
+    left: 42%;
+    opacity: 0.5;
+}
+
+.possibility-particle-three {
+    top: 31%;
+    right: 32%;
+    opacity: 0.7;
+}
+
+.possibility-particle-four {
+    bottom: 16%;
+    right: 40%;
+    opacity: 0.35;
+}
+
+.possibilities-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    color: var(--color-text-subtle);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+}
+
+.possibilities-footer span:last-child {
+    color: var(--color-accent-bright);
+}
