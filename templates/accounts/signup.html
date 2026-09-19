@@ -15,7 +15,7 @@
             </p>
         </div>
 
-        <form method="post" class="authentication-form" novalidate>
+        <form method="post" class="authentication-form" data-form-submit novalidate>
             {% csrf_token %}
 
             {% if form.non_field_errors %}
@@ -30,10 +30,16 @@
 
             {% include 'components/forms/password_field.html' with field=form.password %}
 
+            {% include 'components/forms/password_strength.html' %}
+
             {% include 'components/forms/password_field.html' with field=form.confirm_password %}
 
             <button type="submit" class="authentication-submit">
-                Create account
+                <span class="authentication-submit-label">Create account</span>
+                <span class="authentication-submit-loading" aria-hidden="true">
+                    <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
+                    Creating account...
+                </span>
             </button>
         </form>
 

@@ -28,3 +28,7 @@
 .bi-eye-slash::before {
     content: "\f33e";
 }
+
+.bi-arrow-repeat::before {
+    content: "\f130";
+}

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'css/pages/authentication.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/form-field.css' %}">
     <link rel="stylesheet" href="{% static 'css/components/password-field.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/password-strength.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -30,5 +31,7 @@
 
 {% block scripts %}
     <script src="{% static 'js/components/password-toggle.js' %}"></script>
+    <script src="{% static 'js/components/password-strength.js' %}"></script>
+    <script src="{% static 'js/components/form-submit.js' %}"></script>
     <script src="{% static 'js/accounts/main.js' %}"></script>
 {% endblock %}
