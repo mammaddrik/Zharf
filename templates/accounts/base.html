@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/authentication.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/form-field.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/password-field.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main class="authentication-page">
+        <div class="authentication-background">
+            <div class="authentication-orbit authentication-orbit-one"></div>
+            <div class="authentication-orbit authentication-orbit-two"></div>
+            <div class="authentication-orbit authentication-orbit-three"></div>
+        </div>
+
+        <div class="authentication-container">
+            <a href="{% url 'home' %}" class="authentication-brand" aria-label="Zharf home">
+                ZHARF
+            </a>
+
+            <div class="authentication-content">
+                {% block authentication_content %}
+                {% endblock %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/components/password-toggle.js' %}"></script>
+    <script src="{% static 'js/accounts/main.js' %}"></script>
+{% endblock %}

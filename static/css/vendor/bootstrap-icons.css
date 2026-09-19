@@ -20,3 +20,11 @@
 .bi-list::before {
     content: "\f479";
 }
+
+.bi-eye::before {
+    content: "\f341";
+}
+
+.bi-eye-slash::before {
+    content: "\f33e";
+}

@@ -1,0 +1,45 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Create Account — Zharf{% endblock %}
+
+{% block authentication_content %}
+    <section class="authentication-panel">
+        <div class="authentication-header">
+            <span class="authentication-eyebrow">WELCOME TO ZHARF</span>
+
+            <h1>Create your space.</h1>
+
+            <p>
+                Create an account and start building your own digital space.
+            </p>
+        </div>
+
+        <form method="post" class="authentication-form" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% include 'components/forms/field.html' with field=form.email %}
+
+            {% include 'components/forms/password_field.html' with field=form.password %}
+
+            {% include 'components/forms/password_field.html' with field=form.confirm_password %}
+
+            <button type="submit" class="authentication-submit">
+                Create account
+            </button>
+        </form>
+
+        <div class="authentication-footer">
+            <span>Already have an account?</span>
+            <a href="#">Sign in</a>
+        </div>
+    </section>
+{% endblock %}

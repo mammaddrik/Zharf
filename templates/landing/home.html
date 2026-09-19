@@ -1,4 +1,10 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/back-to-top.css' %}">
+{% endblock %}
 
 {% block content %}
     {% include 'landing/sections/navigation.html' %}
@@ -9,4 +15,18 @@
     {% include 'landing/sections/open_source.html' %}
     {% include 'landing/sections/cta.html' %}
     {% include 'landing/sections/footer.html' %}
+{% endblock %}
+
+{% block components %}
+    {% include 'components/back_to_top.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/core/motion.js' %}"></script>
+    <script src="{% static 'js/landing/entrance.js' %}"></script>
+    <script src="{% static 'js/landing/reveal.js' %}"></script>
+    <script src="{% static 'js/landing/ambient.js' %}"></script>
+    <script src="{% static 'js/landing/parallax.js' %}"></script>
+    <script src="{% static 'js/components/back-to-top.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

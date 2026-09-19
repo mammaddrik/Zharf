@@ -1,0 +1,224 @@
+.authentication-page {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(139, 92, 246, 0.08),
+            transparent 32%
+        ),
+        var(--color-background);
+}
+
+.authentication-background {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.authentication-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 1px solid rgba(139, 92, 246, 0.08);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.authentication-orbit-one {
+    width: 420px;
+    height: 420px;
+}
+
+.authentication-orbit-two {
+    width: 680px;
+    height: 680px;
+}
+
+.authentication-orbit-three {
+    width: 960px;
+    height: 960px;
+}
+
+.authentication-container {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 32px, 440px);
+    padding: 48px 0;
+}
+
+.authentication-brand {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 48px;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-decoration: none;
+    transition:
+        color var(--transition-medium),
+        opacity var(--transition-medium);
+}
+
+.authentication-brand:hover {
+    color: var(--color-accent);
+}
+
+.authentication-content {
+    width: 100%;
+}
+
+.authentication-panel {
+    width: 100%;
+}
+
+.authentication-header {
+    margin-bottom: 32px;
+}
+
+.authentication-eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1.4;
+}
+
+.authentication-header h1 {
+    margin: 0;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: clamp(28px, 5vw, 38px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+.authentication-header p {
+    max-width: 360px;
+    margin: 14px 0 0;
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.authentication-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.authentication-submit {
+    width: 100%;
+    height: 48px;
+    margin-top: 4px;
+    border: 1px solid rgba(139, 92, 246, 0.55);
+    border-radius: var(--radius-md);
+    background: rgba(139, 92, 246, 0.12);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        border-color var(--transition-medium),
+        background var(--transition-medium),
+        transform var(--transition-medium);
+}
+
+.authentication-submit:hover {
+    border-color: rgba(139, 92, 246, 0.8);
+    background: rgba(139, 92, 246, 0.18);
+    transform: translateY(-1px);
+}
+
+.authentication-submit:active {
+    transform: translateY(0);
+}
+
+.authentication-submit:focus-visible {
+    outline: 1px solid rgba(139, 92, 246, 0.75);
+    outline-offset: 3px;
+}
+
+.authentication-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 28px;
+    color: var(--color-text-muted);
+    font-size: 11px;
+}
+
+.authentication-footer a {
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.authentication-footer a:hover {
+    color: var(--color-accent);
+}
+
+
+@media (max-width: 767px) {
+    .authentication-container {
+        width: min(100% - 28px, 440px);
+        padding: 32px 0;
+    }
+
+    .authentication-brand {
+        margin-bottom: 36px;
+        font-size: 16px;
+    }
+
+    .authentication-orbit-one {
+        width: 320px;
+        height: 320px;
+    }
+
+    .authentication-orbit-two {
+        width: 520px;
+        height: 520px;
+    }
+
+    .authentication-orbit-three {
+        width: 720px;
+        height: 720px;
+    }
+
+    .authentication-header {
+        margin-bottom: 28px;
+    }
+
+    .authentication-header h1 {
+        font-size: 30px;
+    }
+
+    .authentication-form {
+        gap: 18px;
+    }
+
+    .authentication-submit {
+        height: 46px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .authentication-brand {
+        transition: none;
+    }
+}
