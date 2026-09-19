@@ -12,7 +12,11 @@ const ZharfPasswordStrength = {
     },
 
     bind(component) {
-        const passwordInput = document.querySelector('#id_password');
+        const passwordInput = component
+            .closest('form')
+            ?.querySelector(
+                'input[name="password"], input[name="new_password1"]'
+            );
 
         if (!passwordInput) {
             return;

@@ -1,9 +1,14 @@
+from django.core.serializers import python
 from django.test import TestCase
 
-from apps.accounts.forms import SignUpForm, SignInForm
+from apps.accounts.forms import (
+    SignInForm,
+    SignUpForm,
+    ZharfPasswordResetForm,
+    ZharfSetPasswordForm,
+)
+
 from apps.accounts.models import User
-
-from django.test import TestCase
 
 class SignUpFormTests(TestCase):
     def test_valid_signup_form(self):
@@ -122,3 +127,109 @@ class SignInFormTests(TestCase):
             'Invalid email or password.',
             form.non_field_errors()
         )
+
+class ZharfPasswordResetFormTests(TestCase):
+
+    def test_email_widget_styling(self):
+        form = ZharfPasswordResetForm()
+
+        widget = form.fields['email'].widget
+
+        self.assertEqual(widget.attrs['class'], 'form-input')
+        self.assertEqual(widget.attrs['placeholder'], 'you@example.com')
+        self.assertEqual(widget.attrs['autocomplete'], 'email')
+        self.assertEqual(widget.attrs['inputmode'], 'email')
+
+    def test_valid_email(self):
+        form = ZharfPasswordResetForm(
+            data={
+                'email': 'user@example.com',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_email(self):
+        form = ZharfPasswordResetForm(
+            data={
+                'email': 'invalid-email',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('email', form.errors)
+
+class ZharfSetPasswordFormTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='user@example.com',
+            password='OldPassword123!'
+        )
+
+    def test_password_widget_styling(self):
+        form = ZharfSetPasswordForm(user=self.user)
+
+        password_widget = form.fields['new_password1'].widget
+        confirmation_widget = form.fields['new_password2'].widget
+
+        self.assertEqual(
+            password_widget.attrs['class'],
+            'form-input'
+        )
+        self.assertEqual(
+            password_widget.attrs['placeholder'],
+            'Create a new password'
+        )
+        self.assertEqual(
+            password_widget.attrs['autocomplete'],
+            'new-password'
+        )
+
+        self.assertEqual(
+            confirmation_widget.attrs['class'],
+            'form-input'
+        )
+        self.assertEqual(
+            confirmation_widget.attrs['placeholder'],
+            'Repeat your new password'
+        )
+        self.assertEqual(
+            confirmation_widget.attrs['autocomplete'],
+            'new-password'
+        )
+
+    def test_valid_password(self):
+        form = ZharfSetPasswordForm(
+            user=self.user,
+            data={
+                'new_password1': 'NewStrongPassword123!',
+                'new_password2': 'NewStrongPassword123!',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_password_mismatch(self):
+        form = ZharfSetPasswordForm(
+            user=self.user,
+            data={
+                'new_password1': 'NewStrongPassword123!',
+                'new_password2': 'DifferentPassword123!',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('new_password2', form.errors)
+
+    def test_weak_password(self):
+        form = ZharfSetPasswordForm(
+            user=self.user,
+            data={
+                'new_password1': '123',
+                'new_password2': '123',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('new_password2', form.errors)

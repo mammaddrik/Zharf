@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate, password_validation
-
+from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
 from .models import User
 
 class SignUpForm(forms.ModelForm):
@@ -132,3 +132,30 @@ class SignInForm(forms.Form):
             )
 
         return cleaned_data
+
+class ZharfPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-input',
+            'placeholder': 'you@example.com',
+            'autocomplete': 'email',
+            'inputmode': 'email',
+        })
+
+class ZharfSetPasswordForm(SetPasswordForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'form-input',
+            'placeholder': 'Create a new password',
+            'autocomplete': 'new-password',
+        })
+
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'form-input',
+            'placeholder': 'Repeat your new password',
+            'autocomplete': 'new-password',
+        })
