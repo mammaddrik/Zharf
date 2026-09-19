@@ -101,3 +101,96 @@ class SignUpViewTests(TestCase):
 
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
+
+class SignInViewTests(TestCase):
+    def setUp(self):
+        self.password = 'ValidPassword123!'
+
+        self.user = User.objects.create_user(
+            email='user@example.com',
+            password=self.password
+        )
+
+    def test_get_signin_page(self):
+        response = self.client.get(reverse('signin'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/signin.html')
+
+    def test_authenticated_user_redirects_to_home(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('signin'))
+
+        self.assertRedirects(response, reverse('home'))
+
+    def test_valid_credentials_login_and_redirect(self):
+        response = self.client.post(
+            reverse('signin'),
+            {
+                'email': 'user@example.com',
+                'password': self.password,
+            }
+        )
+
+        self.assertRedirects(response, reverse('home'))
+
+        user = response.wsgi_request.user
+
+        self.assertTrue(user.is_authenticated)
+        self.assertEqual(user, self.user)
+
+    def test_invalid_credentials_return_form_error(self):
+        response = self.client.post(
+            reverse('signin'),
+            {
+                'email': 'user@example.com',
+                'password': 'WrongPassword123!',
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'accounts/signin.html')
+        self.assertContains(
+            response,
+            'Invalid email or password.'
+        )
+
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_unknown_email_returns_form_error(self):
+        response = self.client.post(
+            reverse('signin'),
+            {
+                'email': 'unknown@example.com',
+                'password': self.password,
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'Invalid email or password.'
+        )
+
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+    def test_inactive_user_returns_form_error(self):
+        self.user.is_active = False
+        self.user.save(update_fields=['is_active'])
+
+        response = self.client.post(
+            reverse('signin'),
+            {
+                'email': 'user@example.com',
+                'password': self.password,
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            'Invalid email or password.'
+        )
+
+        self.assertFalse(response.wsgi_request.user.is_authenticated)

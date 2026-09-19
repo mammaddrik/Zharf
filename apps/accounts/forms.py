@@ -1,8 +1,7 @@
 from django import forms
-from django.contrib.auth import password_validation
+from django.contrib.auth import authenticate, password_validation
 
 from .models import User
-
 
 class SignUpForm(forms.ModelForm):
     password = forms.CharField(
@@ -83,3 +82,53 @@ class SignUpForm(forms.ModelForm):
             user.save()
 
         return user
+
+class SignInForm(forms.Form):
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-input',
+                'placeholder': 'you@example.com',
+                'autocomplete': 'email',
+                'inputmode': 'email',
+            }
+        )
+    )
+
+    password = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'form-input',
+                'placeholder': 'Enter your password',
+                'autocomplete': 'current-password',
+            }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.user = None
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+
+        if not email or not password:
+            return cleaned_data
+
+        self.user = authenticate(
+            email=email.strip().lower(),
+            password=password
+        )
+
+        if self.user is None:
+            raise forms.ValidationError(
+                'Invalid email or password.'
+            )
+
+        return cleaned_data

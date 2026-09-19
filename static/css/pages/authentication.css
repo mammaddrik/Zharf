@@ -212,6 +212,23 @@
     }
 }
 
+.authentication-forgot {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -8px;
+}
+
+.authentication-forgot a {
+    color: var(--color-text-muted);
+    font-size: 10px;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.authentication-forgot a:hover {
+    color: var(--color-accent);
+}
+
 @media (max-width: 767px) {
     .authentication-container {
         width: min(100% - 28px, 440px);

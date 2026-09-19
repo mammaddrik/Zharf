@@ -1,17 +1,17 @@
 {% extends 'accounts/base.html' %}
 {% load static %}
 
-{% block title %}Create Account — Zharf{% endblock %}
+{% block title %}Sign In — Zharf{% endblock %}
 
 {% block authentication_content %}
     <section class="authentication-panel">
         <div class="authentication-header">
-            <span class="authentication-eyebrow">WELCOME TO ZHARF</span>
+            <span class="authentication-eyebrow">WELCOME BACK</span>
 
-            <h1>Create your space.</h1>
+            <h1>Return to your space.</h1>
 
             <p>
-                Create an account and start building your own digital space.
+                Sign in to continue where you left off.
             </p>
         </div>
 
@@ -30,22 +30,22 @@
 
             {% include 'components/forms/password_field.html' with field=form.password %}
 
-            {% include 'components/forms/password_strength.html' %}
-
-            {% include 'components/forms/password_field.html' with field=form.confirm_password %}
+            <div class="authentication-forgot">
+                <a href="#">Forgot password?</a>
+            </div>
 
             <button type="submit" class="authentication-submit">
-                <span class="authentication-submit-label">Create account</span>
+                <span class="authentication-submit-label">Sign in</span>
                 <span class="authentication-submit-loading" aria-hidden="true">
                     <i class="bi bi-arrow-repeat" aria-hidden="true"></i>
-                    Creating account...
+                    Signing in...
                 </span>
             </button>
         </form>
 
         <div class="authentication-footer">
-            <span>Already have an account?</span>
-            <a href="{% url 'signin' %}">Sign in</a>
+            <span>Don't have an account?</span>
+            <a href="{% url 'signup' %}">Create one</a>
         </div>
     </section>
 {% endblock %}
