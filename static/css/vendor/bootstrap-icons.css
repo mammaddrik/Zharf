@@ -18,17 +18,25 @@
 }
 
 .bi-list::before {
-    content: "\f479";
+    content: "\F479";
+}
+
+.bi-arrow-right-short::before {
+    content: "\F135";
+}
+
+.bi-arrow-up-short::before {
+    content: "\F145";
 }
 
 .bi-eye::before {
-    content: "\f341";
+    content: "\F341";
 }
 
 .bi-eye-slash::before {
-    content: "\f33e";
+    content: "\F33e";
 }
 
 .bi-arrow-repeat::before {
-    content: "\f130";
+    content: "\F130";
 }
