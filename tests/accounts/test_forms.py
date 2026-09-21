@@ -1,14 +1,15 @@
-from django.core.serializers import python
 from django.test import TestCase
 
 from apps.accounts.forms import (
+    ProfileForm,
+    ProfileSetupForm,
     SignInForm,
     SignUpForm,
     ZharfPasswordResetForm,
     ZharfSetPasswordForm,
 )
 
-from apps.accounts.models import User
+from apps.accounts.models import Profile, User
 
 class SignUpFormTests(TestCase):
     def test_valid_signup_form(self):
@@ -233,3 +234,297 @@ class ZharfSetPasswordFormTests(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn('new_password2', form.errors)
+
+class ProfileFormTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='user@example.com',
+            password='ValidPassword123!'
+        )
+
+        self.profile = Profile.objects.create(
+            user=self.user,
+            username='existing_user'
+        )
+
+    def test_valid_profile_form(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+                'display_name': 'Mammad',
+                'bio': 'A short bio.',
+                'occupation': 'DevOps Engineer',
+                'company': 'Zharf',
+                'location': 'Istanbul',
+                'website': 'https://example.com',
+                'github': 'https://github.com/example',
+                'linkedin': 'https://linkedin.com/in/example',
+                'instagram': 'https://instagram.com/example',
+                'x': 'https://x.com/example',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_username_is_normalized(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': '  Mammad_D  ',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(form.cleaned_data['username'], 'mammad_d')
+
+    def test_username_too_short(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'ma',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_username_too_long(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'a' * 31,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_username_with_invalid_characters(self):
+        invalid_usernames = [
+            'mammad-d',
+            'mammad d',
+            '@mammad',
+        ]
+
+        for username in invalid_usernames:
+            form = ProfileForm(
+                instance=self.profile,
+                data={
+                    'username': username,
+                }
+            )
+
+            self.assertFalse(form.is_valid())
+            self.assertIn('username', form.errors)
+
+    def test_duplicate_username(self):
+        other_user = User.objects.create_user(
+            email='other@example.com',
+            password='ValidPassword123!'
+        )
+
+        Profile.objects.create(
+            user=other_user,
+            username='other_user'
+        )
+
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'other_user',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_current_username_is_allowed(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'existing_user',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_valid_urls(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+                'website': 'https://example.com',
+                'github': 'https://github.com/example',
+                'linkedin': 'https://linkedin.com/in/example',
+                'instagram': 'https://instagram.com/example',
+                'x': 'https://x.com/example',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_url(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+                'website': 'not-a-url',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('website', form.errors)
+
+    def test_optional_fields_can_be_empty(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_avatar_is_optional(self):
+        form = ProfileForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertFalse(form.cleaned_data['avatar'])
+
+class ProfileSetupFormTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            email='setup@example.com',
+            password='ValidPassword123!'
+        )
+
+        self.profile = Profile.objects.create(
+            user=self.user,
+            username='setup_user'
+        )
+
+    def test_valid_profile_setup_form(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+                'bio': 'A short bio.',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_username_is_normalized(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': '  Mammad_D  ',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.cleaned_data['username'],
+            'mammad_d'
+        )
+
+    def test_username_too_short(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'ma',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_username_too_long(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'a' * 31,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_username_with_invalid_characters(self):
+        invalid_usernames = [
+            'mammad-d',
+            'mammad d',
+            '@mammad',
+        ]
+
+        for username in invalid_usernames:
+            form = ProfileSetupForm(
+                instance=self.profile,
+                data={
+                    'username': username,
+                }
+            )
+
+            self.assertFalse(form.is_valid())
+            self.assertIn('username', form.errors)
+
+    def test_duplicate_username(self):
+        other_user = User.objects.create_user(
+            email='other@example.com',
+            password='ValidPassword123!'
+        )
+
+        Profile.objects.create(
+            user=other_user,
+            username='other_user'
+        )
+
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'other_user',
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
+
+    def test_current_username_is_allowed(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'setup_user',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_optional_fields_can_be_empty(self):
+        form = ProfileSetupForm(
+            instance=self.profile,
+            data={
+                'username': 'new_user',
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+    def test_only_setup_fields_are_available(self):
+        form = ProfileSetupForm(instance=self.profile)
+
+        self.assertEqual(
+            list(form.fields.keys()),
+            [
+                'avatar',
+                'username',
+                'bio',
+            ]
+        )

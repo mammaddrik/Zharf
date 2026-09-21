@@ -1,9 +1,14 @@
+import re
+
 from django import forms
 from django.contrib.auth import authenticate, password_validation
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
-from .models import User
+
+from .models import Profile, User
+
 
 class SignUpForm(forms.ModelForm):
+
     password = forms.CharField(
         label='Password',
         widget=forms.PasswordInput(
@@ -76,6 +81,7 @@ class SignUpForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
+
         user.set_password(self.cleaned_data['password'])
 
         if commit:
@@ -83,7 +89,9 @@ class SignUpForm(forms.ModelForm):
 
         return user
 
+
 class SignInForm(forms.Form):
+
     email = forms.EmailField(
         label='Email',
         widget=forms.EmailInput(
@@ -109,7 +117,6 @@ class SignInForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         self.user = None
 
     def clean(self):
@@ -133,7 +140,9 @@ class SignInForm(forms.Form):
 
         return cleaned_data
 
+
 class ZharfPasswordResetForm(PasswordResetForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -144,7 +153,9 @@ class ZharfPasswordResetForm(PasswordResetForm):
             'inputmode': 'email',
         })
 
+
 class ZharfSetPasswordForm(SetPasswordForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -159,3 +170,55 @@ class ZharfSetPasswordForm(SetPasswordForm):
             'placeholder': 'Repeat your new password',
             'autocomplete': 'new-password',
         })
+
+
+def validate_profile_username(username):
+    username = username.strip().lower()
+
+    if not re.fullmatch(r'[a-z0-9_]{3,30}', username):
+        raise forms.ValidationError(
+            'Username must contain only lowercase letters, numbers, and underscores.'
+        )
+
+    return username
+
+
+class ProfileSetupForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = [
+            'avatar',
+            'username',
+            'bio',
+        ]
+
+    def clean_username(self):
+        return validate_profile_username(
+            self.cleaned_data['username']
+        )
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = [
+            'username',
+            'display_name',
+            'avatar',
+            'bio',
+            'occupation',
+            'company',
+            'location',
+            'website',
+            'github',
+            'linkedin',
+            'instagram',
+            'x',
+        ]
+
+    def clean_username(self):
+        return validate_profile_username(
+            self.cleaned_data['username']
+        )
