@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}
+    Set up your profile | Zharf
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/profile-setup.css' %}">
+{% endblock %}
+
+{% block content %}
+    <main class="profile-setup-page">
+        <div class="profile-setup-container">
+
+            <header class="profile-setup-header">
+                <h1>Set up your profile</h1>
+
+                <p>
+                    Tell us a little about yourself and make your space yours.
+                </p>
+            </header>
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                class="profile-setup-form"
+            >
+                {% csrf_token %}
+
+                <div class="profile-avatar-field">
+                    <label for="{{ form.avatar.id_for_label }}">
+                        <span class="profile-avatar-preview">
+                            <span>+</span>
+                        </span>
+
+                        <span class="profile-avatar-label">
+                            Add an avatar
+                        </span>
+                    </label>
+
+                    {{ form.avatar }}
+                </div>
+
+                <div class="profile-field">
+                    <label for="{{ form.username.id_for_label }}">
+                        Username
+                    </label>
+
+                    <div class="profile-username-input">
+                        <span>@</span>
+                        {{ form.username }}
+                    </div>
+
+                    {% if form.username.errors %}
+                        <div class="profile-field-errors">
+                            {{ form.username.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="profile-field">
+                    <label for="{{ form.bio.id_for_label }}">
+                        Bio
+                    </label>
+
+                    {{ form.bio }}
+
+                    {% if form.bio.errors %}
+                        <div class="profile-field-errors">
+                            {{ form.bio.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if form.non_field_errors %}
+                    <div class="profile-form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="profile-setup-submit">
+                    Continue
+                </button>
+
+            </form>
+
+        </div>
+    </main>
+{% endblock %}

@@ -43,4 +43,10 @@ urlpatterns = [
         ),
         name='password_reset_complete',
     ),
+
+    path(
+        'profile/setup/',
+        views.profile_setup,
+        name='profile_setup',
+    ),
 ]

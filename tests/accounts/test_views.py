@@ -1,20 +1,37 @@
+from io import BytesIO
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from PIL import Image
+
+from apps.accounts.models import Profile
+
 
 User = get_user_model()
 
 
 class SignUpViewTests(TestCase):
-    def test_signup_page_loads(self):
-        response = self.client.get(reverse('signup'))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/signup.html')
+    def test_signup_page_loads(self):
+        response = self.client.get(
+            reverse('signup')
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertTemplateUsed(
+            response,
+            'accounts/signup.html'
+        )
 
     def test_authenticated_user_is_redirected_from_signup(self):
         user = User.objects.create_user(
@@ -24,7 +41,9 @@ class SignUpViewTests(TestCase):
 
         self.client.force_login(user)
 
-        response = self.client.get(reverse('signup'))
+        response = self.client.get(
+            reverse('signup')
+        )
 
         self.assertRedirects(
             response,
@@ -86,7 +105,11 @@ class SignUpViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
         self.assertEqual(
             User.objects.filter(
                 email='user@example.com'
@@ -104,7 +127,10 @@ class SignUpViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
 
         self.assertFalse(
             User.objects.filter(
@@ -122,7 +148,10 @@ class SignUpViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
 
         self.assertFalse(
             User.objects.filter(
@@ -153,6 +182,7 @@ class SignUpViewTests(TestCase):
 
 
 class SignInViewTests(TestCase):
+
     def setUp(self):
         self.email = 'user@example.com'
         self.password = 'TestPassword123!'
@@ -163,15 +193,26 @@ class SignInViewTests(TestCase):
         )
 
     def test_signin_page_loads(self):
-        response = self.client.get(reverse('signin'))
+        response = self.client.get(
+            reverse('signin')
+        )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'accounts/signin.html')
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertTemplateUsed(
+            response,
+            'accounts/signin.html'
+        )
 
     def test_authenticated_user_is_redirected_from_signin(self):
         self.client.force_login(self.user)
 
-        response = self.client.get(reverse('signin'))
+        response = self.client.get(
+            reverse('signin')
+        )
 
         self.assertRedirects(
             response,
@@ -205,7 +246,11 @@ class SignInViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
         self.assertContains(
             response,
             'Invalid email or password.'
@@ -224,7 +269,11 @@ class SignInViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
         self.assertContains(
             response,
             'Invalid email or password.'
@@ -246,7 +295,11 @@ class SignInViewTests(TestCase):
             }
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
         self.assertContains(
             response,
             'Invalid email or password.'
@@ -258,6 +311,7 @@ class SignInViewTests(TestCase):
 
 
 class PasswordResetViewTests(TestCase):
+
     def setUp(self):
         self.email = 'user@example.com'
         self.password = 'TestPassword123!'
@@ -277,7 +331,11 @@ class PasswordResetViewTests(TestCase):
             reverse('password_reset')
         )
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
         self.assertTemplateUsed(
             response,
             'accounts/password_reset.html'
@@ -532,4 +590,236 @@ class PasswordResetViewTests(TestCase):
         self.assertContains(
             response,
             'Invalid email or password.'
+        )
+
+
+class ProfileSetupViewTests(TestCase):
+
+    def setUp(self):
+        self.email = 'user@example.com'
+        self.password = 'TestPassword123!'
+
+        self.user = User.objects.create_user(
+            email=self.email,
+            password=self.password
+        )
+
+        self.profile = Profile.objects.create(
+            user=self.user,
+            username='old_username',
+            bio='Old bio',
+            display_name='Old Name',
+            company='Old Company',
+            github='https://github.com/old_username'
+        )
+
+    def test_anonymous_user_is_redirected_to_signin(self):
+        response = self.client.get(
+            reverse('profile_setup')
+        )
+
+        self.assertRedirects(
+            response,
+            f"{reverse('signin')}?next={reverse('profile_setup')}"
+        )
+
+    def test_authenticated_user_can_access_profile_setup(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('profile_setup')
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertTemplateUsed(
+            response,
+            'accounts/profile/setup.html'
+        )
+
+    def test_profile_setup_loads_existing_profile_data(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('profile_setup')
+        )
+
+        form = response.context['form']
+
+        self.assertEqual(
+            form.initial['username'],
+            'old_username'
+        )
+
+        self.assertEqual(
+            form.initial['bio'],
+            'Old bio'
+        )
+
+    def test_valid_profile_setup_updates_profile(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('profile_setup'),
+            {
+                'username': 'new_username',
+                'bio': 'New bio',
+            }
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('workspace')
+        )
+
+        self.profile.refresh_from_db()
+
+        self.assertEqual(
+            self.profile.username,
+            'new_username'
+        )
+
+        self.assertEqual(
+            self.profile.bio,
+            'New bio'
+        )
+
+    def test_invalid_profile_setup_does_not_update_profile(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('profile_setup'),
+            {
+                'username': 'ab',
+                'bio': 'New bio',
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.profile.refresh_from_db()
+
+        self.assertEqual(
+            self.profile.username,
+            'old_username'
+        )
+
+        self.assertEqual(
+            self.profile.bio,
+            'Old bio'
+        )
+
+    def test_profile_setup_normalizes_username(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('profile_setup'),
+            {
+                'username': 'New_Username',
+                'bio': 'New bio',
+            }
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('workspace')
+        )
+
+        self.profile.refresh_from_db()
+
+        self.assertEqual(
+            self.profile.username,
+            'new_username'
+        )
+
+    def test_profile_setup_does_not_modify_other_profile_fields(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('profile_setup'),
+            {
+                'username': 'new_username',
+                'bio': 'New bio',
+                'display_name': 'New Name',
+                'company': 'New Company',
+                'github': 'https://github.com/new_username',
+            }
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('workspace')
+        )
+
+        self.profile.refresh_from_db()
+
+        self.assertEqual(
+            self.profile.display_name,
+            'Old Name'
+        )
+
+        self.assertEqual(
+            self.profile.company,
+            'Old Company'
+        )
+
+        self.assertEqual(
+            self.profile.github,
+            'https://github.com/old_username'
+        )
+
+    def test_profile_setup_uploads_avatar(self):
+        self.client.force_login(self.user)
+
+        image = Image.new(
+            'RGB',
+            (100, 100),
+            'white'
+        )
+
+        image_file = BytesIO()
+
+        image.save(
+            image_file,
+            format='JPEG'
+        )
+
+        image_file.seek(0)
+
+        avatar = SimpleUploadedFile(
+            'avatar.jpg',
+            image_file.read(),
+            content_type='image/jpeg'
+        )
+
+        response = self.client.post(
+            reverse('profile_setup'),
+            {
+                'username': 'new_username',
+                'bio': 'New bio',
+                'avatar': avatar,
+            }
+        )
+
+        self.assertRedirects(
+            response,
+            reverse('workspace')
+        )
+
+        self.profile.refresh_from_db()
+
+        self.assertTrue(
+            self.profile.avatar
+        )
+
+        self.assertTrue(
+            self.profile.avatar.name.startswith(
+                'profiles/avatars/'
+            )
         )

@@ -1,11 +1,12 @@
 from django.contrib.auth import login
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import SignInForm, SignUpForm
+from .forms import ProfileSetupForm, SignInForm, SignUpForm
 
 
 def signup(request):
+
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -15,7 +16,6 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-
             return redirect('home')
     else:
         form = SignUpForm()
@@ -26,7 +26,9 @@ def signup(request):
         {'form': form}
     )
 
+
 def signin(request):
+
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -35,7 +37,6 @@ def signin(request):
 
         if form.is_valid():
             login(request, form.user)
-
             return redirect('home')
     else:
         form = SignInForm()
@@ -43,5 +44,32 @@ def signin(request):
     return render(
         request,
         'accounts/signin.html',
+        {'form': form}
+    )
+
+
+@login_required
+def profile_setup(request):
+
+    profile = request.user.profile
+
+    if request.method == 'POST':
+        form = ProfileSetupForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('workspace')
+    else:
+        form = ProfileSetupForm(
+            instance=profile
+        )
+
+    return render(
+        request,
+        'accounts/profile/setup.html',
         {'form': form}
     )

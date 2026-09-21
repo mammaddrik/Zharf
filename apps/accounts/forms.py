@@ -192,6 +192,31 @@ class ProfileSetupForm(forms.ModelForm):
             'username',
             'bio',
         ]
+        widgets = {
+            'avatar': forms.ClearableFileInput(
+                attrs={
+                    'class': 'profile-avatar-input',
+                    'accept': 'image/*',
+                }
+            ),
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'profile-username-field',
+                    'placeholder': 'your_username',
+                    'autocomplete': 'username',
+                    'spellcheck': 'false',
+                    'maxlength': '30',
+                }
+            ),
+            'bio': forms.Textarea(
+                attrs={
+                    'class': 'profile-bio-field',
+                    'placeholder': 'Tell us a little about yourself...',
+                    'rows': 4,
+                    'maxlength': '300',
+                }
+            ),
+        }
 
     def clean_username(self):
         return validate_profile_username(

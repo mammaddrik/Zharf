@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'apps.landing',
     'apps.accounts',
+    'apps.workspace',
 ]
 
 MIDDLEWARE = [
@@ -102,6 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = 'signin'
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
