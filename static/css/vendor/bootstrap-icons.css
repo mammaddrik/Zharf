@@ -21,6 +21,10 @@
     content: "\F479";
 }
 
+.bi-x::before {
+    content: "\F62A";
+}
+
 .bi-arrow-right-short::before {
     content: "\F135";
 }

@@ -30,7 +30,7 @@ def signup(request):
 def signin(request):
 
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('workspace')
 
     if request.method == 'POST':
         form = SignInForm(request.POST)
