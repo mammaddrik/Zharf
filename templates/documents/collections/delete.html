@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Delete Collection | Zharf
+{% endblock %}
+
+{% block content %}
+
+    <main>
+
+        <h1>Delete Collection</h1>
+
+        <p>
+            Are you sure you want to delete
+            "{{ collection.name }}"?
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <button type="submit">
+                Delete
+            </button>
+
+        </form>
+
+    </main>
+
+{% endblock %}

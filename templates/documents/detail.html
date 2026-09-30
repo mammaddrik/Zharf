@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    {{ document.title }} | Zharf
+{% endblock %}
+
+{% block content %}
+
+    <main>
+        <h1>{{ document.title }}</h1>
+
+        <div>
+            {{ document.content }}
+        </div>
+
+        <a href="{% url 'documents:document_update' document.pk %}">
+            Edit
+        </a>
+
+        <a href="{% url 'documents:document_delete' document.pk %}">
+            Delete
+        </a>
+    </main>
+
+{% endblock %}

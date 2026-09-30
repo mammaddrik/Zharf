@@ -216,7 +216,7 @@ class SignInViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('home')
+            reverse('workspace')
         )
 
     def test_valid_signin_logs_user_in(self):

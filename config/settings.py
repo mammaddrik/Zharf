@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.landing',
     'apps.accounts',
     'apps.workspace',
+    'apps.documents',
 ]
 
 MIDDLEWARE = [

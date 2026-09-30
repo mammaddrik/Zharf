@@ -1,0 +1,23 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Collections | Zharf
+{% endblock %}
+
+{% block content %}
+
+    <main>
+
+        <h1>Collections</h1>
+
+        {% for collection in collections %}
+            <article>
+                <h2>{{ collection.name }}</h2>
+            </article>
+        {% empty %}
+            <p>No collections found.</p>
+        {% endfor %}
+
+    </main>
+
+{% endblock %}

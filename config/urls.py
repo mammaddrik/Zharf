@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('apps.landing.urls')),
     path('accounts/', include('apps.accounts.urls')),
     path('workspace/', include('apps.workspace.urls')),
+    path('documents/', include('apps.documents.urls')),
 ]

@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Document | Zharf
+{% endblock %}
+
+{% block content %}
+
+    <main>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit">
+                Save
+            </button>
+
+        </form>
+
+    </main>
+
+{% endblock %}
