@@ -14,6 +14,20 @@
 
     <div class="workspace">
 
+        <div class="workspace-mobile-header">
+
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
+
+        </div>
+
+        <div class="workspace-sidebar-overlay"></div>
+
         {% include 'workspace/components/sidebar.html' %}
 
         <main class="workspace-main">
