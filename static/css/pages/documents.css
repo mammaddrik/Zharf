@@ -1,0 +1,322 @@
+.documents-workspace {
+    overflow: hidden;
+}
+
+.documents-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+}
+
+.documents-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 28px 16px;
+    border-right: 1px solid var(--border-color);
+    background: var(--surface-color);
+    overflow-y: auto;
+}
+
+.documents-sidebar-header {
+    padding: 0 12px;
+}
+
+.documents-sidebar-header span {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.documents-navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.documents-navigation-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    text-decoration: none;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease;
+}
+
+.documents-navigation-link i {
+    width: 18px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.documents-navigation-link:hover {
+    color: var(--text-primary);
+    background: var(--surface-hover-color);
+}
+
+.documents-navigation-link.is-active {
+    color: var(--text-primary);
+    background: var(--surface-hover-color);
+}
+
+.documents-navigation-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 20px;
+}
+
+.documents-navigation-label {
+    padding: 0 12px 8px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.documents-navigation-empty {
+    padding: 8px 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.documents-content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.documents-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 32px 40px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.documents-header-eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.documents-header h1 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.documents-new-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--text-primary);
+    color: var(--background-color);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        opacity 160ms ease,
+        transform 160ms ease;
+}
+
+.documents-new-button:hover {
+    opacity: 0.88;
+}
+
+.documents-new-button:active {
+    transform: translateY(1px);
+}
+
+.documents-content-body {
+    flex: 1;
+    min-height: 0;
+    padding: 32px 40px;
+    overflow-y: auto;
+}
+
+.documents-list {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(260px, 1fr)
+    );
+    gap: 12px;
+}
+
+.document-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--surface-color);
+    transition:
+        border-color 160ms ease,
+        background-color 160ms ease;
+}
+
+.document-card:hover {
+    border-color: var(--border-strong-color);
+    background: var(--surface-hover-color);
+}
+
+.document-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: var(--surface-hover-color);
+    color: var(--text-secondary);
+    font-size: 17px;
+}
+
+.document-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.document-card-content h2 {
+    margin: 0;
+    overflow: hidden;
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.document-card-content span {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.documents-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 420px;
+    padding: 40px;
+    text-align: center;
+}
+
+.documents-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--surface-color);
+    color: var(--text-secondary);
+    font-size: 22px;
+}
+
+.documents-empty-state h2 {
+    margin: 0 0 8px;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.documents-empty-state p {
+    max-width: 360px;
+    margin: 0 0 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.documents-new-button {
+    text-decoration: none;
+}
+
+.document-card {
+    text-decoration: none;
+}
+
+@media (max-width: 900px) {
+
+    .documents-layout {
+        grid-template-columns: 210px minmax(0, 1fr);
+    }
+
+    .documents-header {
+        padding: 28px;
+    }
+
+    .documents-content-body {
+        padding: 28px;
+    }
+
+}
+
+@media (max-width: 700px) {
+
+    .documents-layout {
+        display: block;
+        overflow-y: auto;
+    }
+
+    .documents-sidebar {
+        display: none;
+    }
+
+    .documents-header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 24px 20px;
+    }
+
+    .documents-header h1 {
+        font-size: 24px;
+    }
+
+    .documents-new-button {
+        width: 100%;
+    }
+
+    .documents-content-body {
+        padding: 20px;
+    }
+
+    .documents-list {
+        grid-template-columns: 1fr;
+    }
+
+}

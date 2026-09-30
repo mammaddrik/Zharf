@@ -64,3 +64,23 @@
 .bi-layout-sidebar::before {
     content: "\F45F";
 }
+
+.bi-files::before {
+    content: "\F3F6";
+}
+
+.bi-star::before {
+    content: "\F588";
+}
+
+.bi-clock-history::before {
+    content: "\F293";
+}
+
+.bi-archive::before {
+    content: "\F102";
+}
+
+.bi-plus::before {
+    content: "\F4FE";
+}

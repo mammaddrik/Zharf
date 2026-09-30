@@ -9,4 +9,9 @@ urlpatterns = [
         views.workspace,
         name='workspace'
     ),
+    path(
+        'notes/',
+        views.notes,
+        name='notes'
+    ),
 ]

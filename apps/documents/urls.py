@@ -52,4 +52,9 @@ urlpatterns = [
         views.document_delete,
         name='document_delete'
     ),
+    path(
+        'workspace/',
+        views.workspace,
+        name='workspace'
+    ),
 ]

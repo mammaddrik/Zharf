@@ -226,3 +226,23 @@ def document_delete(request, pk):
             'document': document,
         }
     )
+
+@login_required
+def workspace(request):
+    documents = Document.objects.filter(
+        owner=request.user,
+        is_archived=False
+    )
+
+    collections = Collection.objects.filter(
+        owner=request.user
+    )
+
+    return render(
+        request,
+        'documents/workspace.html',
+        {
+            'documents': documents,
+            'collections': collections,
+        }
+    )

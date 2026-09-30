@@ -1,0 +1,239 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Notes | Zharf
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/documents.css' %}">
+{% endblock %}
+
+{% block content %}
+
+    <div class="workspace">
+
+        <div class="workspace-mobile-header">
+
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
+
+        </div>
+
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main documents-workspace">
+
+            <div class="documents-layout">
+
+                <aside class="documents-sidebar">
+
+                    <div class="documents-sidebar-header">
+                        <span>Notes</span>
+                    </div>
+
+                    <nav class="documents-navigation">
+
+                        <a
+                            href="{% url 'notes' %}"
+                            class="documents-navigation-link {% if not selected_collection %}is-active{% endif %}"
+                        >
+                            <i class="bi bi-files" aria-hidden="true"></i>
+                            <span>All Documents</span>
+                        </a>
+
+                        <a
+                            href="#"
+                            class="documents-navigation-link"
+                        >
+                            <i class="bi bi-star" aria-hidden="true"></i>
+                            <span>Favorites</span>
+                        </a>
+
+                        <a
+                            href="#"
+                            class="documents-navigation-link"
+                        >
+                            <i class="bi bi-clock-history" aria-hidden="true"></i>
+                            <span>Recent</span>
+                        </a>
+
+                        <div class="documents-navigation-section">
+
+                            <span class="documents-navigation-label">
+                                Collections
+                            </span>
+
+                            {% for collection in collections %}
+
+                                <a
+                                    href="{% url 'notes' %}?collection={{ collection.pk }}"
+                                    class="documents-navigation-link {% if selected_collection.pk == collection.pk %}is-active{% endif %}"
+                                >
+                                    <i
+                                        class="bi {{ collection.icon }}"
+                                        aria-hidden="true"
+                                    ></i>
+
+                                    <span>
+                                        {{ collection.name }}
+                                    </span>
+                                </a>
+
+                            {% empty %}
+
+                                <span class="documents-navigation-empty">
+                                    No collections
+                                </span>
+
+                            {% endfor %}
+
+                        </div>
+
+                        <a
+                            href="#"
+                            class="documents-navigation-link"
+                        >
+                            <i class="bi bi-archive" aria-hidden="true"></i>
+                            <span>Archive</span>
+                        </a>
+
+                    </nav>
+
+                </aside>
+
+                <section class="documents-content">
+
+                    <header class="documents-header">
+
+                        <div>
+
+                            <span class="documents-header-eyebrow">
+                                {% if selected_collection %}
+                                    Collection
+                                {% else %}
+                                    Notes
+                                {% endif %}
+                            </span>
+
+                            <h1>
+                                {% if selected_collection %}
+                                    {{ selected_collection.name }}
+                                {% else %}
+                                    Documents
+                                {% endif %}
+                            </h1>
+
+                        </div>
+
+                        <a
+                            href="{% url 'documents:document_create' %}"
+                            class="documents-new-button"
+                        >
+                            <i class="bi bi-plus" aria-hidden="true"></i>
+                            <span>New Document</span>
+                        </a>
+
+                    </header>
+
+                    <div class="documents-content-body">
+
+                        {% if documents %}
+
+                            <div class="documents-list">
+
+                                {% for document in documents %}
+
+                                    <a
+                                        href="{% url 'documents:document_detail' document.pk %}"
+                                        class="document-card"
+                                    >
+
+                                        <div class="document-card-icon">
+
+                                            <i
+                                                class="bi {{ document.icon }}"
+                                                aria-hidden="true"
+                                            ></i>
+
+                                        </div>
+
+                                        <div class="document-card-content">
+
+                                            <h2>
+                                                {{ document.title }}
+                                            </h2>
+
+                                            <span>
+                                                {{ document.updated_at }}
+                                            </span>
+
+                                        </div>
+
+                                    </a>
+
+                                {% endfor %}
+
+                            </div>
+
+                        {% else %}
+
+                            <div class="documents-empty-state">
+
+                                <div class="documents-empty-icon">
+
+                                    <i
+                                        class="bi bi-journal-text"
+                                        aria-hidden="true"
+                                    ></i>
+
+                                </div>
+
+                                <h2>
+                                    No documents yet
+                                </h2>
+
+                                <p>
+                                    {% if selected_collection %}
+                                        This collection does not contain any documents yet.
+                                    {% else %}
+                                        Create your first document to start building your workspace.
+                                    {% endif %}
+                                </p>
+
+                                <a
+                                    href="{% url 'documents:document_create' %}"
+                                    class="documents-new-button"
+                                >
+                                    <i class="bi bi-plus" aria-hidden="true"></i>
+                                    <span>Create Document</span>
+                                </a>
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+{% endblock %}
