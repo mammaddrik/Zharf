@@ -1,0 +1,25 @@
+<aside class="workspace-sidebar">
+
+    <div class="workspace-sidebar-header">
+        <a href="{% url 'workspace' %}" class="workspace-brand">
+            ZHARF
+        </a>
+
+        <button
+            type="button"
+            class="workspace-sidebar-toggle"
+            aria-label="Toggle sidebar"
+        >
+            <i class="bi bi-layout-sidebar" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="workspace-sidebar-content">
+        {% include 'workspace/components/navigation.html' %}
+    </div>
+
+    <div class="workspace-sidebar-footer">
+        {% include 'workspace/components/bottom_navigation.html' %}
+    </div>
+
+</aside>

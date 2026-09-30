@@ -1,10 +1,28 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
     Workspace | Zharf
 {% endblock %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+{% endblock %}
+
 {% block content %}
-    <main>
-    </main>
+
+    <div class="workspace">
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main">
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
 {% endblock %}

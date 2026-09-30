@@ -44,3 +44,23 @@
 .bi-arrow-repeat::before {
     content: "\F130";
 }
+
+.bi-grid-1x2::before {
+    content: "\F3FB";
+}
+
+.bi-journal-text::before {
+    content: "\F444";
+}
+
+.bi-gear::before {
+    content: "\F3E5";
+}
+
+.bi-person::before {
+    content: "\F4DA";
+}
+
+.bi-layout-sidebar::before {
+    content: "\F45F";
+}
