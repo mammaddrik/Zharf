@@ -84,3 +84,15 @@
 .bi-plus::before {
     content: "\F4FE";
 }
+
+.bi-chevron-down::before {
+    content: "\F282";
+}
+
+.bi-folder::before {
+    content: "\F3D7";
+}
+
+.bi-file-text::before {
+    content: "\F3B9";
+}

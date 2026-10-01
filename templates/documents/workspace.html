@@ -73,29 +73,7 @@
                                 Collections
                             </span>
 
-                            {% for collection in collections %}
-
-                                <a
-                                    href="{% url 'notes' %}?collection={{ collection.pk }}"
-                                    class="documents-navigation-link {% if selected_collection.pk == collection.pk %}is-active{% endif %}"
-                                >
-                                    <i
-                                        class="bi {{ collection.icon }}"
-                                        aria-hidden="true"
-                                    ></i>
-
-                                    <span>
-                                        {{ collection.name }}
-                                    </span>
-                                </a>
-
-                            {% empty %}
-
-                                <span class="documents-navigation-empty">
-                                    No collections
-                                </span>
-
-                            {% endfor %}
+                            {% include 'documents/components/collection_tree.html' %}
 
                         </div>
 
@@ -236,4 +214,5 @@
 
 {% block scripts %}
     <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+    <script src="{% static 'js/documents/workspace.js' %}"></script>
 {% endblock %}

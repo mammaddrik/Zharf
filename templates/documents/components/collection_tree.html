@@ -1,0 +1,66 @@
+<div class="documents-collection-tree">
+
+    {% for item in collection_tree %}
+
+        <div
+            class="documents-collection-item"
+            data-collection-depth="{{ item.depth }}"
+            data-collection-id="{{ item.collection.pk }}"
+        >
+
+            <div class="documents-collection-row">
+
+                <div
+                    class="documents-collection-indent"
+                    style="--collection-depth: {{ item.depth }};"
+                >
+
+                    {% if item.has_children %}
+
+                        <button
+                            type="button"
+                            class="documents-collection-toggle"
+                            aria-label="Toggle {{ item.collection.name }}"
+                            aria-expanded="true"
+                        >
+                            <i
+                                class="bi bi-chevron-down"
+                                aria-hidden="true"
+                            ></i>
+                        </button>
+
+                    {% else %}
+
+                        <span class="documents-collection-toggle-placeholder"></span>
+
+                    {% endif %}
+
+                    <a
+                        href="{% url 'notes' %}?collection={{ item.collection.pk }}"
+                        class="documents-navigation-link documents-collection-link {% if selected_collection.pk == item.collection.pk %}is-active{% endif %}"
+                    >
+                        <i
+                            class="bi {{ item.collection.icon }}"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            {{ item.collection.name }}
+                        </span>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <span class="documents-navigation-empty">
+            No collections
+        </span>
+
+    {% endfor %}
+
+</div>
