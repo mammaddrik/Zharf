@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from datetime import datetime, UTC
 
 from apps.documents.models import Collection, Document
 
@@ -302,4 +303,292 @@ class NotesViewTests(TestCase):
         self.assertEqual(
             len(tree_collections),
             2
+        )
+
+    def test_notes_recent_orders_by_last_opened_at(self):
+        older_document = Document.objects.create(
+            owner=self.user,
+            title='Older Document',
+            slug='older-document',
+            last_opened_at=datetime(
+                2026,
+                1,
+                1,
+                tzinfo=UTC
+            )
+        )
+
+        newer_document = Document.objects.create(
+            owner=self.user,
+            title='Newer Document',
+            slug='newer-document',
+            last_opened_at=datetime(
+                2026,
+                1,
+                2,
+                tzinfo=UTC
+            )
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'recent'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        documents = list(
+            response.context['documents']
+        )
+
+        self.assertEqual(
+            documents,
+            [
+                newer_document,
+                older_document,
+            ]
+        )
+
+    def test_notes_favorites_only_shows_favorite_documents(self):
+        favorite_document = Document.objects.create(
+            owner=self.user,
+            title='Favorite Document',
+            slug='favorite-document',
+            is_favorite=True
+        )
+
+        regular_document = Document.objects.create(
+            owner=self.user,
+            title='Regular Document',
+            slug='regular-document'
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'favorites'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertContains(
+            response,
+            favorite_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            regular_document.title
+        )
+
+    def test_notes_favorites_excludes_archived_documents(self):
+        favorite_document = Document.objects.create(
+            owner=self.user,
+            title='Favorite Document',
+            slug='favorite-document',
+            is_favorite=True
+        )
+
+        archived_favorite = Document.objects.create(
+            owner=self.user,
+            title='Archived Favorite',
+            slug='archived-favorite',
+            is_favorite=True,
+            is_archived=True
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'favorites'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertContains(
+            response,
+            favorite_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            archived_favorite.title
+        )
+
+    def test_notes_favorites_only_shows_owned_documents(self):
+        favorite_document = Document.objects.create(
+            owner=self.user,
+            title='My Favorite',
+            slug='my-favorite',
+            is_favorite=True
+        )
+
+        other_favorite = Document.objects.create(
+            owner=self.other_user,
+            title='Other Favorite',
+            slug='other-favorite',
+            is_favorite=True
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'favorites'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertContains(
+            response,
+            favorite_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            other_favorite.title
+        )
+
+    def test_notes_archive_only_shows_archived_documents(self):
+        archived_document = Document.objects.create(
+            owner=self.user,
+            title='Archived Document',
+            slug='archived-document',
+            is_archived=True
+        )
+
+        active_document = Document.objects.create(
+            owner=self.user,
+            title='Active Document',
+            slug='active-document'
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'archive'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertContains(
+            response,
+            archived_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            active_document.title
+        )
+
+    def test_notes_archive_only_shows_owned_documents(self):
+        archived_document = Document.objects.create(
+            owner=self.user,
+            title='My Archived Document',
+            slug='my-archived-document',
+            is_archived=True
+        )
+
+        other_archived_document = Document.objects.create(
+            owner=self.other_user,
+            title='Other Archived Document',
+            slug='other-archived-document',
+            is_archived=True
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'archive'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertContains(
+            response,
+            archived_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            other_archived_document.title
+        )
+
+    def test_notes_invalid_view_defaults_to_all(self):
+        active_document = Document.objects.create(
+            owner=self.user,
+            title='Active Document',
+            slug='active-document'
+        )
+
+        archived_document = Document.objects.create(
+            owner=self.user,
+            title='Archived Document',
+            slug='archived-document',
+            is_archived=True
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('notes'),
+            {
+                'view': 'invalid'
+            }
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.assertEqual(
+            response.context['selected_view'],
+            'all'
+        )
+
+        self.assertContains(
+            response,
+            active_document.title
+        )
+
+        self.assertNotContains(
+            response,
+            archived_document.title
         )

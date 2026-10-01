@@ -1,25 +1,240 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
     {{ document.title }} | Zharf
 {% endblock %}
 
+{% block styles %}
+
+    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/documents.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/document-detail.css' %}">
+
+{% endblock %}
+
 {% block content %}
 
-    <main>
-        <h1>{{ document.title }}</h1>
+    <div class="workspace">
 
-        <div>
-            {{ document.content }}
+        <div class="workspace-mobile-header">
+
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
+            </button>
+
         </div>
 
-        <a href="{% url 'documents:document_update' document.pk %}">
-            Edit
-        </a>
+        <div class="workspace-sidebar-overlay"></div>
 
-        <a href="{% url 'documents:document_delete' document.pk %}">
-            Delete
-        </a>
-    </main>
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main document-detail-workspace">
+
+            <article class="document-detail">
+
+                <header class="document-detail-header">
+
+                    <div class="document-detail-leading">
+
+                        <a
+                            href="{% url 'notes' %}"
+                            class="document-detail-back"
+                            aria-label="Back to notes"
+                            title="Back to notes"
+                        >
+                            <i
+                                class="bi bi-arrow-left"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                        <div class="document-detail-heading">
+
+                            <div class="document-detail-icon">
+
+                                <i
+                                    class="bi {{ document.icon }}"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+                            <div class="document-detail-title">
+
+                                <span>
+                                    {{ document.document_type }}
+                                </span>
+
+                                <h1>
+                                    {{ document.title }}
+                                </h1>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-detail-actions">
+
+                        <form
+                            method="post"
+                            action="{% url 'documents:document_toggle_favorite' document.pk %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="document-detail-action"
+                                aria-label="{% if document.is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}"
+                                title="{% if document.is_favorite %}Remove from favorites{% else %}Add to favorites{% endif %}"
+                            >
+
+                                <i
+                                    class="bi {% if document.is_favorite %}bi-star-fill{% else %}bi-star{% endif %}"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </button>
+
+                        </form>
+
+                        <form
+                            method="post"
+                            action="{% url 'documents:document_toggle_archive' document.pk %}"
+                        >
+
+                            {% csrf_token %}
+
+                            <button
+                                type="submit"
+                                class="document-detail-action"
+                                aria-label="{% if document.is_archived %}Unarchive document{% else %}Archive document{% endif %}"
+                                title="{% if document.is_archived %}Unarchive document{% else %}Archive document{% endif %}"
+                            >
+
+                                <i
+                                    class="bi {% if document.is_archived %}bi-archive-fill{% else %}bi-archive{% endif %}"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </button>
+
+                        </form>
+
+                        <a
+                            href="{% url 'documents:document_update' document.pk %}"
+                            class="document-detail-action"
+                            aria-label="Edit document"
+                            title="Edit document"
+                        >
+                            <i
+                                class="bi bi-pencil"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                        <a
+                            href="{% url 'documents:document_delete' document.pk %}"
+                            class="document-detail-action document-detail-action-danger"
+                            aria-label="Delete document"
+                            title="Delete document"
+                        >
+                            <i
+                                class="bi bi-trash"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                    </div>
+
+                </header>
+
+                <nav
+                    class="document-detail-breadcrumb"
+                    aria-label="Document location"
+                >
+
+                    <a href="{% url 'notes' %}">
+                        Notes
+                    </a>
+
+                    {% for collection in collection_path %}
+
+                        <i
+                            class="bi bi-chevron-right"
+                            aria-hidden="true"
+                        ></i>
+
+                        <a
+                            href="{% url 'notes' %}?collection={{ collection.pk }}"
+                        >
+                            {{ collection.name }}
+                        </a>
+
+                    {% endfor %}
+
+                    <i
+                        class="bi bi-chevron-right"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span>
+                        {{ document.title }}
+                    </span>
+
+                </nav>
+
+                <div class="document-detail-meta">
+
+                    <span>
+                        Updated {{ document.updated_at }}
+                    </span>
+
+                    <span>
+                        Created {{ document.created_at }}
+                    </span>
+
+                    {% if document.is_archived %}
+
+                        <span>
+                            Archived
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="document-detail-content">
+
+                    <div class="document-detail-content-inner">
+
+                        {{ document.content|linebreaks }}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
 
 {% endblock %}

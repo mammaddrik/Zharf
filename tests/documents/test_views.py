@@ -346,6 +346,194 @@ class DocumentViewTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    def test_document_toggle_favorite_requires_authentication(self):
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_favorite',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            302
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_favorite
+        )
+
+    def test_document_toggle_favorite_marks_document_as_favorite(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_favorite',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertRedirects(
+            response,
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertTrue(
+            self.document.is_favorite
+        )
+
+    def test_document_toggle_favorite_removes_favorite(self):
+        self.document.is_favorite = True
+
+        self.document.save(
+            update_fields=['is_favorite']
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_favorite',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertRedirects(
+            response,
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_favorite
+        )
+
+    def test_document_toggle_favorite_blocks_other_owner(self):
+        self.client.force_login(self.other_user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_favorite',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_favorite
+        )
+
+    def test_document_toggle_archive_requires_authentication(self):
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_archive',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            302
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_archived
+        )
+
+    def test_document_toggle_archive_archives_document(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_archive',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertRedirects(
+            response,
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertTrue(
+            self.document.is_archived
+        )
+
+    def test_document_toggle_archive_unarchives_document(self):
+        self.document.is_archived = True
+
+        self.document.save(
+            update_fields=['is_archived']
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_archive',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertRedirects(
+            response,
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_archived
+        )
+
+    def test_document_toggle_archive_blocks_other_owner(self):
+        self.client.force_login(self.other_user)
+
+        response = self.client.post(
+            reverse(
+                'documents:document_toggle_archive',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            404
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertFalse(
+            self.document.is_archived
+        )
+
     def test_document_create_requires_authentication(self):
         response = self.client.get(
             reverse('documents:document_create')
@@ -690,4 +878,54 @@ class DocumentViewTests(TestCase):
         self.assertRedirects(
             response,
             reverse('documents:document_list')
+        )
+    def test_document_detail_updates_last_opened_at(self):
+        self.client.force_login(self.user)
+
+        self.assertIsNone(
+            self.document.last_opened_at
+        )
+
+        response = self.client.get(
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertIsNotNone(
+            self.document.last_opened_at
+        )
+
+    def test_archived_document_detail_does_not_update_last_opened_at(self):
+        self.document.is_archived = True
+        self.document.save(
+            update_fields=['is_archived']
+        )
+
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse(
+                'documents:document_detail',
+                kwargs={'pk': self.document.pk}
+            )
+        )
+
+        self.assertEqual(
+            response.status_code,
+            200
+        )
+
+        self.document.refresh_from_db()
+
+        self.assertIsNone(
+            self.document.last_opened_at
         )

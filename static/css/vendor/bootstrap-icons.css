@@ -96,3 +96,31 @@
 .bi-file-text::before {
     content: "\F3B9";
 }
+
+.bi-star-fill::before {
+    content: "\F586";
+}
+
+.bi-archive-fill::before {
+    content: "\F101";
+}
+
+.bi-pencil::before {
+    content: "\F4CA";
+}
+
+.bi-trash::before {
+    content: "\F5DE";
+}
+
+.bi-arrow-left::before {
+    content: "\F12F";
+}
+
+.bi-chevron-right::before {
+    content: "\F285";
+}
+
+.bi-check2::before {
+    content: "\F26A";
+}

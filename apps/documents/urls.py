@@ -43,6 +43,16 @@ urlpatterns = [
         name='document_detail'
     ),
     path(
+        '<uuid:pk>/favorite/',
+        views.document_toggle_favorite,
+        name='document_toggle_favorite'
+    ),
+    path(
+        '<uuid:pk>/archive/',
+        views.document_toggle_archive,
+        name='document_toggle_archive'
+    ),
+    path(
         '<uuid:pk>/edit/',
         views.document_update,
         name='document_update'

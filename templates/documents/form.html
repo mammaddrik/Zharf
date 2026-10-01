@@ -1,25 +1,349 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
-    Document | Zharf
+
+    {% if document %}
+
+        Edit {{ document.title }} | Zharf
+
+    {% else %}
+
+        New Document | Zharf
+
+    {% endif %}
+
+{% endblock %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/workspace.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/documents.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/document-form.css' %}"
+    >
+
 {% endblock %}
 
 {% block content %}
 
-    <main>
+    <div class="workspace">
 
-        <form method="post">
+        <div class="workspace-mobile-header">
 
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type="submit">
-                Save
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
             </button>
 
-        </form>
+        </div>
 
-    </main>
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main document-form-workspace">
+
+            <div class="document-form-page">
+
+                <header class="document-form-header">
+
+                    <div class="document-form-heading">
+
+                        <a
+                            href="{% if document %}{% url 'documents:document_detail' document.pk %}{% else %}{% url 'notes' %}{% endif %}"
+                            class="document-form-back"
+                            aria-label="Back"
+                            title="Back"
+                        >
+                            <i
+                                class="bi bi-arrow-left"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                        <div>
+
+                            <span class="document-form-eyebrow">
+
+                                {% if document %}
+
+                                    Document
+
+                                {% else %}
+
+                                    New Document
+
+                                {% endif %}
+
+                            </span>
+
+                            <h1>
+
+                                {% if document %}
+
+                                    Edit Document
+
+                                {% else %}
+
+                                    Create Document
+
+                                {% endif %}
+
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+                </header>
+
+                <form
+                    method="post"
+                    class="document-form"
+                >
+
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+
+                        <div class="document-form-errors">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                    <div class="document-form-section">
+
+                        <div class="document-form-field">
+
+                            <label for="{{ form.title.id_for_label }}">
+                                Title
+                            </label>
+
+                            {{ form.title }}
+
+                            {% if form.title.errors %}
+
+                                <div class="document-form-field-errors">
+
+                                    {{ form.title.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        {% if document %}
+
+                            <div class="document-form-field">
+
+                                <label for="{{ form.slug.id_for_label }}">
+                                    Slug
+                                </label>
+
+                                {{ form.slug }}
+
+                                {% if form.slug.errors %}
+
+                                    <div class="document-form-field-errors">
+
+                                        {{ form.slug.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endif %}
+
+                        <div class="document-form-field">
+
+                            <label for="{{ form.content.id_for_label }}">
+                                Content
+                            </label>
+
+                            {{ form.content }}
+
+                            {% if form.content.errors %}
+
+                                <div class="document-form-field-errors">
+
+                                    {{ form.content.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-form-section">
+
+                        <div class="document-form-section-header">
+
+                            <span>
+                                Document Settings
+                            </span>
+
+                        </div>
+
+                        <div class="document-form-grid">
+
+                            <div class="document-form-field">
+
+                                <label for="{{ form.document_type.id_for_label }}">
+                                    Type
+                                </label>
+
+                                {{ form.document_type }}
+
+                                {% if form.document_type.errors %}
+
+                                    <div class="document-form-field-errors">
+
+                                        {{ form.document_type.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="document-form-field">
+
+                                <label for="{{ form.icon.id_for_label }}">
+                                    Icon
+                                </label>
+
+                                {{ form.icon }}
+
+                                {% if form.icon.errors %}
+
+                                    <div class="document-form-field-errors">
+
+                                        {{ form.icon.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="document-form-field">
+
+                                <label for="{{ form.parent.id_for_label }}">
+                                    Parent Document
+                                </label>
+
+                                {{ form.parent }}
+
+                                {% if form.parent.errors %}
+
+                                    <div class="document-form-field-errors">
+
+                                        {{ form.parent.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="document-form-field">
+
+                                <label for="{{ form.collection.id_for_label }}">
+                                    Collection
+                                </label>
+
+                                {{ form.collection }}
+
+                                {% if form.collection.errors %}
+
+                                    <div class="document-form-field-errors">
+
+                                        {{ form.collection.errors }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="document-form-actions">
+
+                        <a
+                            href="{% if document %}{% url 'documents:document_detail' document.pk %}{% else %}{% url 'notes' %}{% endif %}"
+                            class="document-form-button document-form-button-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="document-form-button document-form-button-primary"
+                        >
+                            <i
+                                class="bi bi-check2"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+
+                                {% if document %}
+
+                                    Save Changes
+
+                                {% else %}
+
+                                    Create Document
+
+                                {% endif %}
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+    <script src="{% static 'js/documents/document-form.js' %}"></script>
 
 {% endblock %}

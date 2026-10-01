@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .forms import CollectionForm, DocumentForm
 from .models import Collection, Document
@@ -128,11 +129,31 @@ def document_detail(request, pk):
         owner=request.user
     )
 
+    collection_path = []
+
+    collection = document.collection
+
+    while collection is not None:
+        collection_path.insert(
+            0,
+            collection
+        )
+
+        collection = collection.parent
+
+    if not document.is_archived:
+        document.last_opened_at = timezone.now()
+
+        document.save(
+            update_fields=['last_opened_at']
+        )
+
     return render(
         request,
         'documents/detail.html',
         {
             'document': document,
+            'collection_path': collection_path,
         }
     )
 
@@ -245,4 +266,44 @@ def workspace(request):
             'documents': documents,
             'collections': collections,
         }
+    )
+
+@login_required
+def document_toggle_favorite(request, pk):
+    document = get_object_or_404(
+        Document,
+        pk=pk,
+        owner=request.user
+    )
+
+    if request.method == 'POST':
+        document.is_favorite = not document.is_favorite
+
+        document.save(
+            update_fields=['is_favorite']
+        )
+
+    return redirect(
+        'documents:document_detail',
+        pk=document.pk
+    )
+
+@login_required
+def document_toggle_archive(request, pk):
+    document = get_object_or_404(
+        Document,
+        pk=pk,
+        owner=request.user
+    )
+
+    if request.method == 'POST':
+        document.is_archived = not document.is_archived
+
+        document.save(
+            update_fields=['is_archived']
+        )
+
+    return redirect(
+        'documents:document_detail',
+        pk=document.pk
     )

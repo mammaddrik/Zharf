@@ -3,12 +3,16 @@
 {% load static %}
 
 {% block title %}
+
     Notes | Zharf
+
 {% endblock %}
 
 {% block styles %}
+
     <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
     <link rel="stylesheet" href="{% static 'css/pages/documents.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -38,33 +42,43 @@
                 <aside class="documents-sidebar">
 
                     <div class="documents-sidebar-header">
-                        <span>Notes</span>
+
+                        <span>
+                            Notes
+                        </span>
+
                     </div>
 
                     <nav class="documents-navigation">
 
                         <a
                             href="{% url 'notes' %}"
-                            class="documents-navigation-link {% if not selected_collection %}is-active{% endif %}"
+                            class="documents-navigation-link {% if selected_view == 'all' and not selected_collection %}is-active{% endif %}"
                         >
                             <i class="bi bi-files" aria-hidden="true"></i>
-                            <span>All Documents</span>
+                            <span>
+                                All Documents
+                            </span>
                         </a>
 
                         <a
-                            href="#"
-                            class="documents-navigation-link"
+                            href="{% url 'notes' %}?view=favorites"
+                            class="documents-navigation-link {% if selected_view == 'favorites' %}is-active{% endif %}"
                         >
                             <i class="bi bi-star" aria-hidden="true"></i>
-                            <span>Favorites</span>
+                            <span>
+                                Favorites
+                            </span>
                         </a>
 
                         <a
-                            href="#"
-                            class="documents-navigation-link"
+                            href="{% url 'notes' %}?view=recent"
+                            class="documents-navigation-link {% if selected_view == 'recent' %}is-active{% endif %}"
                         >
                             <i class="bi bi-clock-history" aria-hidden="true"></i>
-                            <span>Recent</span>
+                            <span>
+                                Recent
+                            </span>
                         </a>
 
                         <div class="documents-navigation-section">
@@ -78,11 +92,13 @@
                         </div>
 
                         <a
-                            href="#"
-                            class="documents-navigation-link"
+                            href="{% url 'notes' %}?view=archive"
+                            class="documents-navigation-link {% if selected_view == 'archive' %}is-active{% endif %}"
                         >
                             <i class="bi bi-archive" aria-hidden="true"></i>
-                            <span>Archive</span>
+                            <span>
+                                Archive
+                            </span>
                         </a>
 
                     </nav>
@@ -96,19 +112,43 @@
                         <div>
 
                             <span class="documents-header-eyebrow">
+
                                 {% if selected_collection %}
+
                                     Collection
+
                                 {% else %}
+
                                     Notes
+
                                 {% endif %}
+
                             </span>
 
                             <h1>
+
                                 {% if selected_collection %}
+
                                     {{ selected_collection.name }}
+
+                                {% elif selected_view == 'favorites' %}
+
+                                    Favorites
+
+                                {% elif selected_view == 'recent' %}
+
+                                    Recent
+
+                                {% elif selected_view == 'archive' %}
+
+                                    Archive
+
                                 {% else %}
+
                                     Documents
+
                                 {% endif %}
+
                             </h1>
 
                         </div>
@@ -118,7 +158,11 @@
                             class="documents-new-button"
                         >
                             <i class="bi bi-plus" aria-hidden="true"></i>
-                            <span>New Document</span>
+
+                            <span>
+                                New Document
+                            </span>
+
                         </a>
 
                     </header>
@@ -177,24 +221,72 @@
                                 </div>
 
                                 <h2>
-                                    No documents yet
+
+                                    {% if selected_view == 'favorites' %}
+
+                                        No favorite documents
+
+                                    {% elif selected_view == 'recent' %}
+
+                                        No recent documents
+
+                                    {% elif selected_view == 'archive' %}
+
+                                        No archived documents
+
+                                    {% elif selected_collection %}
+
+                                        No documents in this collection
+
+                                    {% else %}
+
+                                        No documents yet
+
+                                    {% endif %}
+
                                 </h2>
 
                                 <p>
-                                    {% if selected_collection %}
+
+                                    {% if selected_view == 'favorites' %}
+
+                                        Documents you mark as favorite will appear here.
+
+                                    {% elif selected_view == 'recent' %}
+
+                                        Documents you recently open will appear here.
+
+                                    {% elif selected_view == 'archive' %}
+
+                                        Archived documents will appear here.
+
+                                    {% elif selected_collection %}
+
                                         This collection does not contain any documents yet.
+
                                     {% else %}
+
                                         Create your first document to start building your workspace.
+
                                     {% endif %}
+
                                 </p>
 
-                                <a
-                                    href="{% url 'documents:document_create' %}"
-                                    class="documents-new-button"
-                                >
-                                    <i class="bi bi-plus" aria-hidden="true"></i>
-                                    <span>Create Document</span>
-                                </a>
+                                {% if selected_view == 'all' and not selected_collection %}
+
+                                    <a
+                                        href="{% url 'documents:document_create' %}"
+                                        class="documents-new-button"
+                                    >
+                                        <i class="bi bi-plus" aria-hidden="true"></i>
+
+                                        <span>
+                                            Create Document
+                                        </span>
+
+                                    </a>
+
+                                {% endif %}
 
                             </div>
 
