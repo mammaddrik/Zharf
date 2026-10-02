@@ -34,7 +34,7 @@ def collection_create(request):
             collection.owner = request.user
             collection.save()
 
-            return redirect('documents:collection_list')
+            return redirect('notes')
     else:
         form = CollectionForm(
             owner=request.user
@@ -67,7 +67,7 @@ def collection_update(request, pk):
         if form.is_valid():
             form.save()
 
-            return redirect('documents:collection_list')
+            return redirect('notes')
     else:
         form = CollectionForm(
             instance=collection,
@@ -95,7 +95,7 @@ def collection_delete(request, pk):
     if request.method == 'POST':
         collection.delete()
 
-        return redirect('documents:collection_list')
+        return redirect('notes')
 
     return render(
         request,
@@ -160,6 +160,10 @@ def document_detail(request, pk):
 
 @login_required
 def document_create(request):
+    selected_collection = request.GET.get(
+        'collection'
+    )
+
     if request.method == 'POST':
         form = DocumentForm(
             request.POST,
@@ -179,6 +183,15 @@ def document_create(request):
         form = DocumentForm(
             owner=request.user
         )
+
+        if selected_collection:
+            collection = get_object_or_404(
+                Collection,
+                pk=selected_collection,
+                owner=request.user
+            )
+
+            form.initial['collection'] = collection
 
     return render(
         request,
@@ -238,7 +251,7 @@ def document_delete(request, pk):
     if request.method == 'POST':
         document.delete()
 
-        return redirect('documents:document_list')
+        return redirect('notes')
 
     return render(
         request,

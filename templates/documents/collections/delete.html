@@ -1,30 +1,137 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
-    Delete Collection | Zharf
+
+    Delete {{ collection.name }} | Zharf
+
+{% endblock %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/workspace.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/documents.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/collection-delete.css' %}"
+    >
+
 {% endblock %}
 
 {% block content %}
 
-    <main>
+    <div class="workspace">
 
-        <h1>Delete Collection</h1>
+        <div class="workspace-mobile-header">
 
-        <p>
-            Are you sure you want to delete
-            "{{ collection.name }}"?
-        </p>
-
-        <form method="post">
-
-            {% csrf_token %}
-
-            <button type="submit">
-                Delete
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
             </button>
 
-        </form>
+        </div>
 
-    </main>
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main collection-delete-workspace">
+
+            <div class="collection-delete-page">
+
+                <div class="collection-delete-card">
+
+                    <div class="collection-delete-icon">
+
+                        <i
+                            class="bi bi-trash"
+                            aria-hidden="true"
+                        ></i>
+
+                    </div>
+
+                    <span class="collection-delete-eyebrow">
+                        Collection
+                    </span>
+
+                    <h1>
+                        Delete Collection
+                    </h1>
+
+                    <p class="collection-delete-message">
+
+                        Are you sure you want to delete
+
+                        <span class="collection-delete-name">
+                            {{ collection.name }}
+                        </span>?
+
+                    </p>
+
+                    <div class="collection-delete-warning">
+
+                        Deleting this collection will also delete
+                        all of its child collections.
+
+                    </div>
+
+                    <form
+                        method="post"
+                        class="collection-delete-actions"
+                    >
+
+                        {% csrf_token %}
+
+                        <a
+                            href="{% url 'notes' %}"
+                            class="collection-delete-button collection-delete-button-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="collection-delete-button collection-delete-button-danger"
+                        >
+                            <i
+                                class="bi bi-trash"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Delete Collection
+                            </span>
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
 
 {% endblock %}

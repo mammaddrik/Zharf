@@ -74,8 +74,45 @@
     margin-top: 20px;
 }
 
+.documents-navigation-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-right: 8px;
+}
+
+.documents-navigation-section-header .documents-navigation-label {
+    flex: 1;
+    min-width: 0;
+}
+
+.documents-navigation-section-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: none;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+.documents-navigation-section-action:hover {
+    border-color: var(--border-color);
+    background: var(--surface-hover-color);
+    color: var(--text-primary);
+}
+
 .documents-navigation-label {
-    padding: 0 12px 8px;
+    padding: 0 12px 4px;
     color: var(--text-muted);
     font-size: 11px;
     font-weight: 700;
@@ -335,6 +372,49 @@
     flex: 1;
     min-width: 0;
     padding-left: 8px;
+}
+
+.documents-collection-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 160ms ease;
+}
+
+.documents-collection-item:hover .documents-collection-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.documents-collection-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: var(--text-muted);
+    font-size: 12px;
+    text-decoration: none;
+    transition:
+        color 160ms ease,
+        background-color 160ms ease,
+        border-color 160ms ease;
+}
+
+.documents-collection-action:hover {
+    border-color: var(--border-color);
+    background: var(--surface-hover-color);
+    color: var(--text-primary);
+}
+
+.documents-collection-action-danger:hover {
+    border-color: #ef4444;
+    color: var(--danger);
 }
 
 .documents-collection-item.is-hidden {

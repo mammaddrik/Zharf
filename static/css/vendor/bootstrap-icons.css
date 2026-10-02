@@ -78,7 +78,7 @@
 }
 
 .bi-archive::before {
-    content: "\F102";
+    content: "\F10D";
 }
 
 .bi-plus::before {
@@ -102,7 +102,7 @@
 }
 
 .bi-archive-fill::before {
-    content: "\F101";
+    content: "\F10C";
 }
 
 .bi-pencil::before {
@@ -123,4 +123,8 @@
 
 .bi-check2::before {
     content: "\F26A";
+}
+
+.bi-file-earmark-plus::before {
+    content: "\F37D";
 }

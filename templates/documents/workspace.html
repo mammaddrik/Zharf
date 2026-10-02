@@ -83,9 +83,25 @@
 
                         <div class="documents-navigation-section">
 
-                            <span class="documents-navigation-label">
-                                Collections
-                            </span>
+                            <div class="documents-navigation-section-header">
+
+                                <span class="documents-navigation-label">
+                                    Collections
+                                </span>
+
+                                <a
+                                    href="{% url 'documents:collection_create' %}"
+                                    class="documents-navigation-section-action"
+                                    aria-label="New collection"
+                                    title="New collection"
+                                >
+                                    <i
+                                        class="bi bi-plus"
+                                        aria-hidden="true"
+                                    ></i>
+                                </a>
+
+                            </div>
 
                             {% include 'documents/components/collection_tree.html' %}
 
@@ -154,10 +170,10 @@
                         </div>
 
                         <a
-                            href="{% url 'documents:document_create' %}"
+                            href="{% url 'documents:document_create' %}{% if selected_collection %}?collection={{ selected_collection.pk }}{% endif %}"
                             class="documents-new-button"
                         >
-                            <i class="bi bi-plus" aria-hidden="true"></i>
+                            <i class="bi bi-file-earmark-plus" aria-hidden="true"></i>
 
                             <span>
                                 New Document

@@ -87,7 +87,7 @@ class CollectionViewTests(TestCase):
             self.user
         )
 
-    def test_collection_create_redirects_to_list(self):
+    def test_collection_create_redirects_to_notes(self):
         self.client.force_login(self.user)
 
         response = self.client.post(
@@ -101,7 +101,7 @@ class CollectionViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('documents:collection_list')
+            reverse('notes')
         )
 
     def test_collection_update_requires_authentication(self):
@@ -167,7 +167,7 @@ class CollectionViewTests(TestCase):
             'bi-archive'
         )
 
-    def test_collection_update_redirects_to_list(self):
+    def test_collection_update_redirects_to_notes(self):
         self.client.force_login(self.user)
 
         response = self.client.post(
@@ -184,7 +184,7 @@ class CollectionViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('documents:collection_list')
+            reverse('notes')
         )
 
     def test_collection_delete_requires_authentication(self):
@@ -233,7 +233,7 @@ class CollectionViewTests(TestCase):
             ).exists()
         )
 
-    def test_collection_delete_redirects_to_list(self):
+    def test_collection_delete_redirects_to_notes(self):
         self.client.force_login(self.user)
 
         response = self.client.post(
@@ -245,7 +245,7 @@ class CollectionViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('documents:collection_list')
+            reverse('notes')
         )
 
 
@@ -865,7 +865,7 @@ class DocumentViewTests(TestCase):
             ).exists()
         )
 
-    def test_document_delete_redirects_to_list(self):
+    def test_document_delete_redirects_to_notes(self):
         self.client.force_login(self.user)
 
         response = self.client.post(
@@ -877,7 +877,7 @@ class DocumentViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('documents:document_list')
+            reverse('notes')
         )
     def test_document_detail_updates_last_opened_at(self):
         self.client.force_login(self.user)

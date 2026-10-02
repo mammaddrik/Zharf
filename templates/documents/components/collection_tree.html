@@ -47,7 +47,36 @@
                         <span>
                             {{ item.collection.name }}
                         </span>
+
                     </a>
+
+                    <div class="documents-collection-actions">
+
+                        <a
+                            href="{% url 'documents:collection_update' item.collection.pk %}"
+                            class="documents-collection-action"
+                            aria-label="Edit {{ item.collection.name }}"
+                            title="Edit {{ item.collection.name }}"
+                        >
+                            <i
+                                class="bi bi-pencil"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                        <a
+                            href="{% url 'documents:collection_delete' item.collection.pk %}"
+                            class="documents-collection-action documents-collection-action-danger"
+                            aria-label="Delete {{ item.collection.name }}"
+                            title="Delete {{ item.collection.name }}"
+                        >
+                            <i
+                                class="bi bi-trash"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                    </div>
 
                 </div>
 

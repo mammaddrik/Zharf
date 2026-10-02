@@ -1,25 +1,281 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
-    Collection | Zharf
+
+    {% if collection %}
+
+        Edit {{ collection.name }} | Zharf
+
+    {% else %}
+
+        New Collection | Zharf
+
+    {% endif %}
+
+{% endblock %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/workspace.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/documents.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/collection-form.css' %}"
+    >
+
 {% endblock %}
 
 {% block content %}
 
-    <main>
+    <div class="workspace">
 
-        <form method="post">
+        <div class="workspace-mobile-header">
 
-            {% csrf_token %}
-
-            {{ form.as_p }}
-
-            <button type="submit">
-                Save
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
             </button>
 
-        </form>
+        </div>
 
-    </main>
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main collection-form-workspace">
+
+            <div class="collection-form-page">
+
+                <header class="collection-form-header">
+
+                    <div class="collection-form-heading">
+
+                        <a
+                            href="{% url 'notes' %}"
+                            class="collection-form-back"
+                            aria-label="Back to notes"
+                            title="Back to notes"
+                        >
+                            <i
+                                class="bi bi-arrow-left"
+                                aria-hidden="true"
+                            ></i>
+                        </a>
+
+                        <div>
+
+                            <span class="collection-form-eyebrow">
+
+                                {% if collection %}
+
+                                    Collection
+
+                                {% else %}
+
+                                    New Collection
+
+                                {% endif %}
+
+                            </span>
+
+                            <h1>
+
+                                {% if collection %}
+
+                                    Edit Collection
+
+                                {% else %}
+
+                                    Create Collection
+
+                                {% endif %}
+
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+                </header>
+
+                <form
+                    method="post"
+                    class="collection-form"
+                >
+
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+
+                        <div class="collection-form-errors">
+
+                            {{ form.non_field_errors }}
+
+                        </div>
+
+                    {% endif %}
+
+                    <div class="collection-form-section">
+
+                        <div class="collection-form-field">
+
+                            <label for="{{ form.name.id_for_label }}">
+                                Name
+                            </label>
+
+                            {{ form.name }}
+
+                            {% if form.name.errors %}
+
+                                <div class="collection-form-field-errors">
+
+                                    {{ form.name.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="collection-form-field">
+
+                            <label for="{{ form.slug.id_for_label }}">
+                                Slug
+                            </label>
+
+                            {{ form.slug }}
+
+                            {% if form.slug.errors %}
+
+                                <div class="collection-form-field-errors">
+
+                                    {{ form.slug.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="collection-form-section">
+
+                        <div class="collection-form-section-header">
+
+                            <span>
+                                Collection Settings
+                            </span>
+
+                        </div>
+
+                        <div class="collection-form-field">
+
+                            <label for="{{ form.icon.id_for_label }}">
+                                Icon
+                            </label>
+
+                            {{ form.icon }}
+
+                            {% if form.icon.errors %}
+
+                                <div class="collection-form-field-errors">
+
+                                    {{ form.icon.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="collection-form-field">
+
+                            <label for="{{ form.parent.id_for_label }}">
+                                Parent Collection
+                            </label>
+
+                            {{ form.parent }}
+
+                            {% if form.parent.errors %}
+
+                                <div class="collection-form-field-errors">
+
+                                    {{ form.parent.errors }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <div class="collection-form-actions">
+
+                        <a
+                            href="{% url 'notes' %}"
+                            class="collection-form-button collection-form-button-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="collection-form-button collection-form-button-primary"
+                        >
+                            <i
+                                class="bi bi-check2"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+
+                                {% if collection %}
+
+                                    Save Changes
+
+                                {% else %}
+
+                                    Create Collection
+
+                                {% endif %}
+
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+    <script src="{% static 'js/documents/collection-form.js' %}"></script>
 
 {% endblock %}

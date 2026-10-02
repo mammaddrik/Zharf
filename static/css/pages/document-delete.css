@@ -1,0 +1,155 @@
+.document-delete-workspace {
+    overflow: auto;
+}
+
+.document-delete-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+    padding: 48px 32px;
+}
+
+.document-delete-card {
+    width: min(100%, 520px);
+    padding: 36px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background: var(--color-surface);
+}
+
+.document-delete-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-surface-elevated);
+    color: #ef4444;
+    font-size: 20px;
+}
+
+.document-delete-eyebrow {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.document-delete-card h1 {
+    margin: 0;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.document-delete-message {
+    margin: 16px 0 0;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.document-delete-name {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.document-delete-warning {
+    margin-top: 24px;
+    padding: 14px 16px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.06);
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.document-delete-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-border);
+}
+
+.document-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.document-delete-button-secondary {
+    border-color: var(--color-border);
+    background: transparent;
+    color: var(--color-text-muted);
+}
+
+.document-delete-button-secondary:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+.document-delete-button-danger {
+    border-color: #ef4444;
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.document-delete-button-danger:hover {
+    border-color: #dc2626;
+    background: #dc2626;
+}
+
+@media (max-width: 600px) {
+
+    .document-delete-page {
+        align-items: flex-start;
+        padding: 32px 20px 48px;
+    }
+
+    .document-delete-card {
+        padding: 28px 24px;
+    }
+
+    .document-delete-card h1 {
+        font-size: 24px;
+    }
+
+    .document-delete-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .document-delete-button {
+        width: 100%;
+    }
+
+}

@@ -1,30 +1,136 @@
 {% extends 'base/base.html' %}
 
+{% load static %}
+
 {% block title %}
-    Delete Document | Zharf
+
+    Delete {{ document.title }} | Zharf
+
+{% endblock %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/workspace.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/documents.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/document-delete.css' %}"
+    >
+
 {% endblock %}
 
 {% block content %}
 
-    <main>
+    <div class="workspace">
 
-        <h1>Delete Document</h1>
+        <div class="workspace-mobile-header">
 
-        <p>
-            Are you sure you want to delete
-            "{{ document.title }}"?
-        </p>
-
-        <form method="post">
-
-            {% csrf_token %}
-
-            <button type="submit">
-                Delete
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
             </button>
 
-        </form>
+        </div>
 
-    </main>
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main document-delete-workspace">
+
+            <div class="document-delete-page">
+
+                <div class="document-delete-card">
+
+                    <div class="document-delete-icon">
+
+                        <i
+                            class="bi bi-trash"
+                            aria-hidden="true"
+                        ></i>
+
+                    </div>
+
+                    <span class="document-delete-eyebrow">
+                        Document
+                    </span>
+
+                    <h1>
+                        Delete Document
+                    </h1>
+
+                    <p class="document-delete-message">
+
+                        Are you sure you want to delete
+
+                        <span class="document-delete-name">
+                            {{ document.title }}
+                        </span>?
+
+                    </p>
+
+                    <div class="document-delete-warning">
+
+                        This action cannot be undone.
+
+                    </div>
+
+                    <form
+                        method="post"
+                        class="document-delete-actions"
+                    >
+
+                        {% csrf_token %}
+
+                        <a
+                            href="{% url 'documents:document_detail' document.pk %}"
+                            class="document-delete-button document-delete-button-secondary"
+                        >
+                            Cancel
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="document-delete-button document-delete-button-danger"
+                        >
+                            <i
+                                class="bi bi-trash"
+                                aria-hidden="true"
+                            ></i>
+
+                            <span>
+                                Delete Document
+                            </span>
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
 
 {% endblock %}
