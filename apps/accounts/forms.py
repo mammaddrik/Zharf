@@ -2,7 +2,7 @@ import re
 
 from django import forms
 from django.contrib.auth import authenticate, password_validation
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, SetPasswordForm
 
 from .models import Profile, User
 
@@ -81,7 +81,6 @@ class SignUpForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-
         user.set_password(self.cleaned_data['password'])
 
         if commit:
@@ -172,6 +171,29 @@ class ZharfSetPasswordForm(SetPasswordForm):
         })
 
 
+class ZharfPasswordChangeForm(PasswordChangeForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['old_password'].widget.attrs.update({
+            'class': 'account-input',
+            'placeholder': 'Enter your current password',
+            'autocomplete': 'current-password',
+        })
+
+        self.fields['new_password1'].widget.attrs.update({
+            'class': 'account-input password-strength-input',
+            'placeholder': 'Create a new password',
+            'autocomplete': 'new-password',
+        })
+
+        self.fields['new_password2'].widget.attrs.update({
+            'class': 'account-input',
+            'placeholder': 'Repeat your new password',
+            'autocomplete': 'new-password',
+        })
+
 def validate_profile_username(username):
     username = username.strip().lower()
 
@@ -242,6 +264,91 @@ class ProfileForm(forms.ModelForm):
             'instagram',
             'x',
         ]
+        widgets = {
+            'username': forms.TextInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'your_username',
+                    'autocomplete': 'username',
+                    'spellcheck': 'false',
+                    'maxlength': '30',
+                }
+            ),
+            'display_name': forms.TextInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'Your display name',
+                    'autocomplete': 'name',
+                    'maxlength': '100',
+                }
+            ),
+            'avatar': forms.FileInput(
+                attrs={
+                    'class': 'account-avatar-input',
+                    'accept': 'image/*',
+                }
+            ),
+            'bio': forms.Textarea(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'Tell us a little about yourself...',
+                    'rows': 4,
+                    'maxlength': '300',
+                }
+            ),
+            'occupation': forms.TextInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'Your occupation',
+                    'maxlength': '100',
+                }
+            ),
+            'company': forms.TextInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'Your company',
+                    'maxlength': '100',
+                }
+            ),
+            'location': forms.TextInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'Your location',
+                    'maxlength': '100',
+                }
+            ),
+            'website': forms.URLInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'https://example.com',
+                    'autocomplete': 'url',
+                }
+            ),
+            'github': forms.URLInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'https://github.com/username',
+                }
+            ),
+            'linkedin': forms.URLInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'https://linkedin.com/in/username',
+                }
+            ),
+            'instagram': forms.URLInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'https://instagram.com/username',
+                }
+            ),
+            'x': forms.URLInput(
+                attrs={
+                    'class': 'account-input',
+                    'placeholder': 'https://x.com/username',
+                }
+            ),
+        }
 
     def clean_username(self):
         return validate_profile_username(

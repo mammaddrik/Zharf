@@ -6,9 +6,16 @@ from . import views
 
 
 urlpatterns = [
-    path('signup/', views.signup, name='signup'),
-    path('signin/', views.signin, name='signin'),
-
+    path(
+        'signup/',
+        views.signup,
+        name='signup',
+    ),
+    path(
+        'signin/',
+        views.signin,
+        name='signin',
+    ),
     path(
         'password-reset/',
         auth_views.PasswordResetView.as_view(
@@ -18,7 +25,6 @@ urlpatterns = [
         ),
         name='password_reset',
     ),
-
     path(
         'password-reset/done/',
         auth_views.PasswordResetDoneView.as_view(
@@ -26,7 +32,6 @@ urlpatterns = [
         ),
         name='password_reset_done',
     ),
-
     path(
         'reset/<uidb64>/<token>/',
         auth_views.PasswordResetConfirmView.as_view(
@@ -35,7 +40,6 @@ urlpatterns = [
         ),
         name='password_reset_confirm',
     ),
-
     path(
         'reset/complete/',
         auth_views.PasswordResetCompleteView.as_view(
@@ -43,7 +47,11 @@ urlpatterns = [
         ),
         name='password_reset_complete',
     ),
-
+    path(
+        'profile/',
+        views.profile,
+        name='profile',
+    ),
     path(
         'profile/setup/',
         views.profile_setup,

@@ -2,7 +2,13 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import ProfileSetupForm, SignInForm, SignUpForm
+from .forms import (
+    ProfileForm,
+    ProfileSetupForm,
+    SignInForm,
+    SignUpForm,
+    ZharfPasswordChangeForm,
+)
 
 
 def signup(request):
@@ -72,4 +78,59 @@ def profile_setup(request):
         request,
         'accounts/profile/setup.html',
         {'form': form}
+    )
+
+
+@login_required
+def profile(request):
+
+    profile = request.user.profile
+
+    profile_form = ProfileForm(
+        instance=profile
+    )
+
+    password_form = ZharfPasswordChangeForm(
+        request.user
+    )
+
+    if request.method == 'POST':
+
+        action = request.POST.get('action')
+
+        if action == 'profile':
+            profile_form = ProfileForm(
+                request.POST,
+                request.FILES,
+                instance=profile
+            )
+
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect('profile')
+
+        elif action == 'password':
+            password_form = ZharfPasswordChangeForm(
+                request.user,
+                request.POST
+            )
+
+            if password_form.is_valid():
+                user = password_form.save()
+
+                login(
+                    request,
+                    user,
+                    backend='django.contrib.auth.backends.ModelBackend'
+                )
+
+                return redirect('profile')
+
+    return render(
+        request,
+        'accounts/profile/profile.html',
+        {
+            'form': profile_form,
+            'password_form': password_form,
+        }
     )
