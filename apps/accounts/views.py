@@ -1,8 +1,9 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .forms import (
+    DeleteAccountForm,
     ProfileForm,
     ProfileSetupForm,
     SignInForm,
@@ -12,20 +13,16 @@ from .forms import (
 
 
 def signup(request):
-
     if request.user.is_authenticated:
         return redirect('home')
-
     if request.method == 'POST':
         form = SignUpForm(request.POST)
-
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('home')
     else:
         form = SignUpForm()
-
     return render(
         request,
         'accounts/signup.html',
@@ -34,19 +31,15 @@ def signup(request):
 
 
 def signin(request):
-
     if request.user.is_authenticated:
         return redirect('workspace')
-
     if request.method == 'POST':
         form = SignInForm(request.POST)
-
         if form.is_valid():
             login(request, form.user)
-            return redirect('home')
+            return redirect('workspace')
     else:
         form = SignInForm()
-
     return render(
         request,
         'accounts/signin.html',
@@ -54,18 +47,20 @@ def signin(request):
     )
 
 
+def signout(request):
+    logout(request)
+    return redirect('home')
+
+
 @login_required
 def profile_setup(request):
-
     profile = request.user.profile
-
     if request.method == 'POST':
         form = ProfileSetupForm(
             request.POST,
             request.FILES,
             instance=profile
         )
-
         if form.is_valid():
             form.save()
             return redirect('workspace')
@@ -73,7 +68,6 @@ def profile_setup(request):
         form = ProfileSetupForm(
             instance=profile
         )
-
     return render(
         request,
         'accounts/profile/setup.html',
@@ -83,19 +77,18 @@ def profile_setup(request):
 
 @login_required
 def profile(request):
-
     profile = request.user.profile
-
     profile_form = ProfileForm(
         instance=profile
     )
-
     password_form = ZharfPasswordChangeForm(
+        request.user
+    )
+    delete_form = DeleteAccountForm(
         request.user
     )
 
     if request.method == 'POST':
-
         action = request.POST.get('action')
 
         if action == 'profile':
@@ -104,7 +97,6 @@ def profile(request):
                 request.FILES,
                 instance=profile
             )
-
             if profile_form.is_valid():
                 profile_form.save()
                 return redirect('profile')
@@ -114,17 +106,23 @@ def profile(request):
                 request.user,
                 request.POST
             )
-
             if password_form.is_valid():
                 user = password_form.save()
-
                 login(
                     request,
                     user,
                     backend='django.contrib.auth.backends.ModelBackend'
                 )
-
                 return redirect('profile')
+
+        elif action == 'delete':
+            delete_form = DeleteAccountForm(
+                request.user,
+                request.POST
+            )
+            if delete_form.is_valid():
+                request.user.delete()
+                return redirect('home')
 
     return render(
         request,
@@ -132,5 +130,6 @@ def profile(request):
         {
             'form': profile_form,
             'password_form': password_form,
+            'delete_form': delete_form,
         }
     )

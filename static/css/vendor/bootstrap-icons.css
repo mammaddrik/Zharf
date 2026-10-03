@@ -128,3 +128,7 @@
 .bi-file-earmark-plus::before {
     content: "\F37D";
 }
+
+.bi-box-arrow-right::before {
+    content: "\F1C3";
+}

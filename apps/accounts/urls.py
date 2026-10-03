@@ -17,6 +17,11 @@ urlpatterns = [
         name='signin',
     ),
     path(
+        'signout/',
+        views.signout,
+        name='signout',
+    ),
+    path(
         'password-reset/',
         auth_views.PasswordResetView.as_view(
             form_class=forms.ZharfPasswordResetForm,

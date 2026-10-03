@@ -16,8 +16,7 @@
     padding: 24px 16px;
     border-right: 1px solid var(--color-border);
     background: var(--color-surface);
-    transition:
-        width 220ms ease;
+    transition: width var(--transition-fast);
 }
 
 .workspace-sidebar-header {
@@ -29,6 +28,7 @@
 
 .workspace-brand {
     color: var(--color-text);
+    font-family: var(--font-display);
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.18em;
@@ -48,8 +48,8 @@
     color: var(--color-text-muted);
     cursor: pointer;
     transition:
-        background 160ms ease,
-        color 160ms ease;
+        background-color var(--transition-fast),
+        color var(--transition-fast);
 }
 
 .workspace-sidebar-toggle:hover {
@@ -74,6 +74,7 @@
 .workspace-navigation-label {
     margin: 0 12px 12px;
     color: var(--color-text-muted);
+    font-family: var(--font-mono);
     font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.14em;
@@ -95,11 +96,12 @@
     padding: 0 12px;
     border-radius: var(--radius-small);
     color: var(--color-text-muted);
+    font-family: var(--font-sans);
     font-size: 13px;
     text-decoration: none;
     transition:
-        background 160ms ease,
-        color 160ms ease;
+        background-color var(--transition-fast),
+        color var(--transition-fast);
 }
 
 .workspace-navigation-link:hover {
@@ -115,6 +117,24 @@
     font-size: 16px;
 }
 
+.workspace-bottom-navigation form {
+    margin: 0;
+}
+
+.workspace-bottom-navigation .workspace-navigation-link {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    font-family: var(--font-sans);
+    text-align: left;
+    cursor: pointer;
+}
+
+.workspace-bottom-navigation .workspace-navigation-link-logout:hover {
+    background: rgba(255, 255, 255, 0.035);
+    color: var(--color-text);
+}
+
 .workspace-sidebar-footer {
     margin-top: auto;
 }
@@ -124,8 +144,8 @@
     min-height: 100vh;
     margin-left: 240px;
     transition:
-        width 220ms ease,
-        margin-left 220ms ease;
+        width var(--transition-fast),
+        margin-left var(--transition-fast);
 }
 
 .workspace-sidebar.is-collapsed {
@@ -171,7 +191,6 @@
 }
 
 @media (max-width: 767px) {
-
     .workspace {
         display: block;
     }
@@ -202,6 +221,9 @@
         background: transparent;
         color: var(--color-text-muted);
         cursor: pointer;
+        transition:
+            background-color var(--transition-fast),
+            color var(--transition-fast);
     }
 
     .workspace-mobile-menu:hover {
@@ -222,8 +244,7 @@
         height: 100vh;
         padding: 24px 16px;
         transform: translateX(-100%);
-        transition:
-            transform 220ms ease;
+        transition: transform var(--transition-fast);
     }
 
     .workspace-sidebar.is-mobile-open {
@@ -274,8 +295,8 @@
         opacity: 0;
         visibility: hidden;
         transition:
-            opacity 220ms ease,
-            visibility 220ms ease;
+            opacity var(--transition-fast),
+            visibility var(--transition-fast);
     }
 
     .workspace-sidebar-overlay.is-visible {

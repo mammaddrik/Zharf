@@ -354,3 +354,33 @@ class ProfileForm(forms.ModelForm):
         return validate_profile_username(
             self.cleaned_data['username']
         )
+
+class DeleteAccountForm(forms.Form):
+
+    password = forms.CharField(
+        label='Password',
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'account-input',
+                'placeholder': 'Enter your password',
+                'autocomplete': 'current-password',
+            }
+        )
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super().__init__(*args, **kwargs)
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+
+        if not authenticate(
+            username=self.user.email,
+            password=password
+        ):
+            raise forms.ValidationError(
+                'The password is incorrect.'
+            )
+
+        return password

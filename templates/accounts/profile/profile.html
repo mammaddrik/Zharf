@@ -3,542 +3,693 @@
 {% load static %}
 
 {% block title %}
-Account | Zharf
+    Account | Zharf
 {% endblock %}
 
-{% block styles %} <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}"> <link rel="stylesheet" href="{% static 'css/pages/account.css' %}"> <link rel="stylesheet" href="{% static 'css/components/password-strength.css' %}">
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/account.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components/password-strength.css' %}">
 {% endblock %}
 
-{% block content %} <div class="workspace">
+{% block content %}
+    <div class="workspace">
 
+        <div class="workspace-mobile-header">
 
-    <div class="workspace-mobile-header">
-        <button
-            type="button"
-            class="workspace-mobile-menu"
-            aria-label="Open sidebar"
-        >
-            <i class="bi bi-list" aria-hidden="true"></i>
-        </button>
-    </div>
-
-    <div class="workspace-sidebar-overlay"></div>
-
-    {% include 'workspace/components/sidebar.html' %}
-
-    <main class="workspace-main account-workspace">
-
-        <div class="account-page">
-
-            <header class="account-header">
-
-                <div>
-
-                    <span class="account-eyebrow">
-                        Account
-                    </span>
-
-                    <h1>
-                        Your Account
-                    </h1>
-
-                    <p>
-                        Manage your profile, social links, and security.
-                    </p>
-
-                </div>
-
-            </header>
-
-            <form
-                method="post"
-                enctype="multipart/form-data"
-                class="account-form"
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
             >
+                <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
 
-                {% csrf_token %}
+        </div>
 
-                <input
-                    type="hidden"
-                    name="action"
-                    value="profile"
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main account-workspace">
+
+            <div class="account-page">
+
+                <header class="account-header">
+
+                    <div>
+
+                        <span class="account-eyebrow">
+                            Account
+                        </span>
+
+                        <h1>
+                            Your Account
+                        </h1>
+
+                        <p>
+                            Manage your profile, social links, and security.
+                        </p>
+
+                    </div>
+
+                </header>
+
+                <form
+                    method="post"
+                    enctype="multipart/form-data"
+                    class="account-form"
                 >
 
-                <section class="account-section">
-
-                    <div class="account-section-header">
-
-                        <div>
-
-                            <span class="account-section-eyebrow">
-                                Profile
-                            </span>
-
-                            <h2>
-                                Personal information
-                            </h2>
-
-                        </div>
-
-                        <span class="account-section-description">
-                            How you appear across Zharf.
-                        </span>
-
-                    </div>
-
-                    <div class="account-profile">
-
-                        <div class="account-avatar">
-
-                            {% if form.instance.avatar %}
-
-                                <img
-                                    src="{{ form.instance.avatar.url }}"
-                                    alt="{{ form.instance.username }}"
-                                >
-
-                                <i
-                                    class="bi bi-person"
-                                    aria-hidden="true"
-                                    hidden
-                                ></i>
-
-                            {% else %}
-
-                                <img
-                                    src=""
-                                    alt=""
-                                    hidden
-                                >
-
-                                <i
-                                    class="bi bi-person"
-                                    aria-hidden="true"
-                                ></i>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-avatar-field">
-
-                            <label for="{{ form.avatar.id_for_label }}">
-                                Avatar
-                            </label>
-
-                            {{ form.avatar }}
-
-                            {% if form.avatar.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.avatar.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                    <div class="account-fields">
-
-                        <div class="account-field">
-
-                            <label for="{{ form.username.id_for_label }}">
-                                Username
-                            </label>
-
-                            {{ form.username }}
-
-                            {% if form.username.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.username.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.display_name.id_for_label }}">
-                                Display name
-                            </label>
-
-                            {{ form.display_name }}
-
-                            {% if form.display_name.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.display_name.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field account-field-full">
-
-                            <label for="{{ form.bio.id_for_label }}">
-                                Bio
-                            </label>
-
-                            {{ form.bio }}
-
-                            {% if form.bio.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.bio.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.occupation.id_for_label }}">
-                                Occupation
-                            </label>
-
-                            {{ form.occupation }}
-
-                            {% if form.occupation.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.occupation.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.company.id_for_label }}">
-                                Company
-                            </label>
-
-                            {{ form.company }}
-
-                            {% if form.company.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.company.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.location.id_for_label }}">
-                                Location
-                            </label>
-
-                            {{ form.location }}
-
-                            {% if form.location.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.location.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.website.id_for_label }}">
-                                Website
-                            </label>
-
-                            {{ form.website }}
-
-                            {% if form.website.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.website.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-                <section class="account-section">
-
-                    <div class="account-section-header">
-
-                        <div>
-
-                            <span class="account-section-eyebrow">
-                                Social
-                            </span>
-
-                            <h2>
-                                Social links
-                            </h2>
-
-                        </div>
-
-                        <span class="account-section-description">
-                            Connect your online presence.
-                        </span>
-
-                    </div>
-
-                    <div class="account-fields">
-
-                        <div class="account-field">
-
-                            <label for="{{ form.github.id_for_label }}">
-                                GitHub
-                            </label>
-
-                            {{ form.github }}
-
-                            {% if form.github.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.github.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.linkedin.id_for_label }}">
-                                LinkedIn
-                            </label>
-
-                            {{ form.linkedin }}
-
-                            {% if form.linkedin.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.linkedin.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.instagram.id_for_label }}">
-                                Instagram
-                            </label>
-
-                            {{ form.instagram }}
-
-                            {% if form.instagram.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.instagram.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                        <div class="account-field">
-
-                            <label for="{{ form.x.id_for_label }}">
-                                X
-                            </label>
-
-                            {{ form.x }}
-
-                            {% if form.x.errors %}
-
-                                <div class="account-field-errors">
-                                    {{ form.x.errors }}
-                                </div>
-
-                            {% endif %}
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-                {% if form.non_field_errors %}
-
-                    <div class="account-form-errors">
-                        {{ form.non_field_errors }}
-                    </div>
-
-                {% endif %}
-
-                <div class="account-actions">
-
-                    <a
-                        href="{% url 'workspace' %}"
-                        class="account-button account-button-secondary"
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="profile"
                     >
-                        Cancel
-                    </a>
 
-                    <button
-                        type="submit"
-                        class="account-button account-button-primary"
-                    >
-                        <i class="bi bi-check2" aria-hidden="true"></i>
-                        Save Changes
-                    </button>
+                    <section class="account-section">
 
-                </div>
+                        <div class="account-section-header">
 
-            </form>
+                            <div>
 
-            <form
-                method="post"
-                class="account-form"
-            >
+                                <span class="account-section-eyebrow">
+                                    Profile
+                                </span>
 
-                {% csrf_token %}
+                                <h2>
+                                    Personal information
+                                </h2>
 
-                <input
-                    type="hidden"
-                    name="action"
-                    value="password"
-                >
+                            </div>
 
-                <section class="account-section">
-
-                    <div class="account-section-header">
-
-                        <div>
-
-                            <span class="account-section-eyebrow">
-                                Security
+                            <span class="account-section-description">
+                                How you appear across Zharf.
                             </span>
-
-                            <h2>
-                                Change password
-                            </h2>
 
                         </div>
 
-                        <span class="account-section-description">
-                            Keep your account secure with a strong password.
-                        </span>
+                        <div class="account-profile">
 
-                    </div>
+                            <div class="account-avatar">
 
-                    {% if password_form.non_field_errors %}
+                                {% if form.instance.avatar %}
+
+                                    <img
+                                        src="{{ form.instance.avatar.url }}"
+                                        alt="{{ form.instance.username }}"
+                                    >
+
+                                    <i
+                                        class="bi bi-person"
+                                        aria-hidden="true"
+                                        hidden
+                                    ></i>
+
+                                {% else %}
+
+                                    <img
+                                        src=""
+                                        alt=""
+                                        hidden
+                                    >
+
+                                    <i
+                                        class="bi bi-person"
+                                        aria-hidden="true"
+                                    ></i>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-avatar-field">
+
+                                <label for="{{ form.avatar.id_for_label }}">
+                                    Avatar
+                                </label>
+
+                                {{ form.avatar }}
+
+                                {% if form.avatar.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.avatar.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                        <div class="account-fields">
+
+                            <div class="account-field">
+
+                                <label for="{{ form.username.id_for_label }}">
+                                    Username
+                                </label>
+
+                                {{ form.username }}
+
+                                {% if form.username.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.username.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.display_name.id_for_label }}">
+                                    Display name
+                                </label>
+
+                                {{ form.display_name }}
+
+                                {% if form.display_name.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.display_name.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field account-field-full">
+
+                                <label for="{{ form.bio.id_for_label }}">
+                                    Bio
+                                </label>
+
+                                {{ form.bio }}
+
+                                {% if form.bio.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.bio.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.occupation.id_for_label }}">
+                                    Occupation
+                                </label>
+
+                                {{ form.occupation }}
+
+                                {% if form.occupation.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.occupation.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.company.id_for_label }}">
+                                    Company
+                                </label>
+
+                                {{ form.company }}
+
+                                {% if form.company.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.company.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.location.id_for_label }}">
+                                    Location
+                                </label>
+
+                                {{ form.location }}
+
+                                {% if form.location.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.location.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.website.id_for_label }}">
+                                    Website
+                                </label>
+
+                                {{ form.website }}
+
+                                {% if form.website.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.website.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <section class="account-section">
+
+                        <div class="account-section-header">
+
+                            <div>
+
+                                <span class="account-section-eyebrow">
+                                    Social
+                                </span>
+
+                                <h2>
+                                    Social links
+                                </h2>
+
+                            </div>
+
+                            <span class="account-section-description">
+                                Connect your online presence.
+                            </span>
+
+                        </div>
+
+                        <div class="account-fields">
+
+                            <div class="account-field">
+
+                                <label for="{{ form.github.id_for_label }}">
+                                    GitHub
+                                </label>
+
+                                {{ form.github }}
+
+                                {% if form.github.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.github.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.linkedin.id_for_label }}">
+                                    LinkedIn
+                                </label>
+
+                                {{ form.linkedin }}
+
+                                {% if form.linkedin.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.linkedin.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.instagram.id_for_label }}">
+                                    Instagram
+                                </label>
+
+                                {{ form.instagram }}
+
+                                {% if form.instagram.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.instagram.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field">
+
+                                <label for="{{ form.x.id_for_label }}">
+                                    X
+                                </label>
+
+                                {{ form.x }}
+
+                                {% if form.x.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ form.x.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    {% if form.non_field_errors %}
 
                         <div class="account-form-errors">
-                            {{ password_form.non_field_errors }}
+                            {{ form.non_field_errors }}
                         </div>
 
                     {% endif %}
 
-                    <div class="account-fields">
+                    <div class="account-actions">
 
-                        <div class="account-field account-field-full">
+                        <a
+                            href="{% url 'workspace' %}"
+                            class="account-button account-button-secondary"
+                        >
+                            Cancel
+                        </a>
 
-                            <label for="{{ password_form.old_password.id_for_label }}">
-                                Current password
-                            </label>
+                        <button
+                            type="submit"
+                            class="account-button account-button-primary"
+                        >
+                            <i class="bi bi-check2" aria-hidden="true"></i>
+                            Save Changes
+                        </button>
 
-                            {{ password_form.old_password }}
+                    </div>
 
-                            {% if password_form.old_password.errors %}
+                </form>
 
-                                <div class="account-field-errors">
-                                    {{ password_form.old_password.errors }}
-                                </div>
+                <form
+                    method="post"
+                    class="account-form"
+                >
 
-                            {% endif %}
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="password"
+                    >
+
+                    <section class="account-section">
+
+                        <div class="account-section-header">
+
+                            <div>
+
+                                <span class="account-section-eyebrow">
+                                    Security
+                                </span>
+
+                                <h2>
+                                    Change password
+                                </h2>
+
+                            </div>
+
+                            <span class="account-section-description">
+                                Keep your account secure with a strong password.
+                            </span>
 
                         </div>
 
-                        <div class="account-field account-field-full">
+                        {% if password_form.non_field_errors %}
 
-                            <label for="{{ password_form.new_password1.id_for_label }}">
-                                New password
-                            </label>
+                            <div class="account-form-errors">
+                                {{ password_form.non_field_errors }}
+                            </div>
 
-                            {{ password_form.new_password1 }}
+                        {% endif %}
 
-                            {% include 'components/forms/password_strength.html' %}
+                        <div class="account-fields">
 
-                            {% if password_form.new_password1.errors %}
+                            <div class="account-field account-field-full">
 
-                                <div class="account-field-errors">
-                                    {{ password_form.new_password1.errors }}
-                                </div>
+                                <label for="{{ password_form.old_password.id_for_label }}">
+                                    Current password
+                                </label>
 
-                            {% endif %}
+                                {{ password_form.old_password }}
+
+                                {% if password_form.old_password.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ password_form.old_password.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field account-field-full">
+
+                                <label for="{{ password_form.new_password1.id_for_label }}">
+                                    New password
+                                </label>
+
+                                {{ password_form.new_password1 }}
+
+                                {% include 'components/forms/password_strength.html' %}
+
+                                {% if password_form.new_password1.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ password_form.new_password1.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            <div class="account-field account-field-full">
+
+                                <label for="{{ password_form.new_password2.id_for_label }}">
+                                    Confirm new password
+                                </label>
+
+                                {{ password_form.new_password2 }}
+
+                                {% if password_form.new_password2.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ password_form.new_password2.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
 
                         </div>
 
-                        <div class="account-field account-field-full">
+                    </section>
 
-                            <label for="{{ password_form.new_password2.id_for_label }}">
-                                Confirm new password
-                            </label>
+                    <div class="account-actions">
 
-                            {{ password_form.new_password2 }}
+                        <button
+                            type="submit"
+                            class="account-button account-button-primary"
+                        >
+                            <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                            Change Password
+                        </button>
 
-                            {% if password_form.new_password2.errors %}
+                    </div>
 
-                                <div class="account-field-errors">
-                                    {{ password_form.new_password2.errors }}
-                                </div>
+                </form>
 
-                            {% endif %}
+                <form
+                    method="post"
+                    class="account-form"
+                >
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="action"
+                        value="delete"
+                    >
+
+                    <section class="account-section account-section-danger">
+
+                        <div class="account-section-header">
+
+                            <div>
+
+                                <span class="account-section-eyebrow">
+                                    Danger zone
+                                </span>
+
+                                <h2>
+                                    Delete account
+                                </h2>
+
+                            </div>
+
+                            <span class="account-section-description">
+                                Permanently delete your account and all associated data.
+                            </span>
+
+                        </div>
+
+                        {% if delete_form.non_field_errors %}
+
+                            <div class="account-form-errors">
+                                {{ delete_form.non_field_errors }}
+                            </div>
+
+                        {% endif %}
+
+                        <div class="account-fields">
+
+                            <div class="account-field account-field-full">
+
+                                <label for="{{ delete_form.password.id_for_label }}">
+                                    Password
+                                </label>
+
+                                {{ delete_form.password }}
+
+                                {% if delete_form.password.errors %}
+
+                                    <div class="account-field-errors">
+                                        {{ delete_form.password.errors }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <div class="account-actions">
+
+                        <button
+                            type="button"
+                            class="account-button account-button-danger"
+                            data-delete-account-trigger
+                        >
+                            <i class="bi bi-trash" aria-hidden="true"></i>
+                            Delete Account
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <div
+                    class="account-modal"
+                    data-delete-account-modal
+                    aria-hidden="true"
+                >
+
+                    <div
+                        class="account-modal-backdrop"
+                        data-delete-account-close
+                    ></div>
+
+                    <div
+                        class="account-modal-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-account-modal-title"
+                    >
+
+                        <div class="account-modal-icon">
+                            <i
+                                class="bi bi-exclamation-triangle"
+                                aria-hidden="true"
+                            ></i>
+                        </div>
+
+                        <div class="account-modal-content">
+
+                            <span class="account-modal-eyebrow">
+                                Danger zone
+                            </span>
+
+                            <h2 id="delete-account-modal-title">
+                                Delete your account?
+                            </h2>
+
+                            <p>
+                                This action is permanent. Your account and all associated data will be deleted and cannot be recovered.
+                            </p>
+
+                        </div>
+
+                        <div class="account-modal-actions">
+
+                            <button
+                                type="button"
+                                class="account-button account-button-secondary"
+                                data-delete-account-close
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                class="account-button account-button-danger"
+                                data-delete-account-confirm
+                            >
+                                <i class="bi bi-trash" aria-hidden="true"></i>
+                                Delete Account
+                            </button>
 
                         </div>
 
                     </div>
 
-                </section>
-
-                <div class="account-actions">
-
-                    <button
-                        type="submit"
-                        class="account-button account-button-primary"
-                    >
-                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
-                        Change Password
-                    </button>
-
                 </div>
 
-            </form>
+            </div>
 
-        </div>
+        </main>
 
-    </main>
-
-</div>
-
-
+    </div>
 {% endblock %}
 
 {% block scripts %}
 
-<script src="{% static 'js/workspace/sidebar.js' %}"></script>
-<script src="{% static 'js/components/password-strength.js' %}"></script>
-<script src="{% static 'js/accounts/profile.js' %}"></script>
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+    <script src="{% static 'js/components/password-strength.js' %}"></script>
+    <script src="{% static 'js/accounts/profile.js' %}"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        ZharfPasswordStrength.init();
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            ZharfPasswordStrength.init();
+        });
+    </script>
 
 {% endblock %}
