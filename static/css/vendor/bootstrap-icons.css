@@ -38,7 +38,7 @@
 }
 
 .bi-eye-slash::before {
-    content: "\F33e";
+    content: "\F33E";
 }
 
 .bi-arrow-repeat::before {
@@ -85,6 +85,10 @@
     content: "\F4FE";
 }
 
+.bi-plus-lg::before {
+    content: "\F64D";
+}
+
 .bi-chevron-down::before {
     content: "\F282";
 }
@@ -113,6 +117,10 @@
     content: "\F5DE";
 }
 
+.bi-trash3::before {
+    content: "\F5DD";
+}
+
 .bi-arrow-left::before {
     content: "\F12F";
 }
@@ -123,6 +131,14 @@
 
 .bi-check2::before {
     content: "\F26A";
+}
+
+.bi-check2-square::before {
+    content: "\F270";
+}
+
+.bi-check-lg::before {
+    content: "\F26E";
 }
 
 .bi-file-earmark-plus::before {

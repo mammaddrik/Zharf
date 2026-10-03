@@ -1,0 +1,282 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    Todo | Zharf
+
+{% endblock %}
+
+{% block styles %}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/workspace.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/pages/todo.css' %}"
+    >
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="workspace">
+
+        <div class="workspace-mobile-header">
+
+            <button
+                type="button"
+                class="workspace-mobile-menu"
+                aria-label="Open sidebar"
+            >
+                <i
+                    class="bi bi-list"
+                    aria-hidden="true"
+                ></i>
+            </button>
+
+        </div>
+
+        <div class="workspace-sidebar-overlay"></div>
+
+        {% include 'workspace/components/sidebar.html' %}
+
+        <main class="workspace-main todo-workspace">
+
+            <div class="todo-page">
+
+                <header class="todo-header">
+
+                    <div>
+
+                        <span class="todo-eyebrow">
+                            Workspace
+                        </span>
+
+                        <h1>
+                            Todo List
+                        </h1>
+
+                        <p>
+                            Keep track of the things you need to get done.
+                        </p>
+
+                    </div>
+
+                </header>
+
+                <form
+                    method="post"
+                    action="{% url 'todo_create' %}"
+                    class="todo-form"
+                >
+
+                    {% csrf_token %}
+
+                    <div class="todo-form-fields">
+
+                        <div class="todo-form-field">
+
+                            <label for="{{ form.title.id_for_label }}">
+                                Todo
+                            </label>
+
+                            {{ form.title }}
+
+                            {% if form.title.errors %}
+
+                                <div class="todo-form-error">
+
+                                    {{ form.title.errors|striptags }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                        <div class="todo-form-field">
+
+                            <label for="{{ form.label.id_for_label }}">
+                                Label
+                            </label>
+
+                            {{ form.label }}
+
+                            {% if form.label.errors %}
+
+                                <div class="todo-form-error">
+
+                                    {{ form.label.errors|striptags }}
+
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="todo-add-button"
+                    >
+
+                        <i
+                            class="bi bi-plus-lg"
+                            aria-hidden="true"
+                        ></i>
+
+                        <span>
+                            Add Todo
+                        </span>
+
+                    </button>
+
+                </form>
+
+                <section class="todo-list">
+
+                    {% if todos %}
+
+                        {% for todo in todos %}
+
+                            <article
+                                class="todo-item{% if todo.completed %} is-completed{% endif %}"
+                            >
+
+                                <form
+                                    method="post"
+                                    action="{% url 'todo_toggle' todo.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="todo-checkbox"
+                                        aria-label="Toggle todo"
+                                    >
+
+                                        {% if todo.completed %}
+
+                                            <i
+                                                class="bi bi-check-lg"
+                                                aria-hidden="true"
+                                            ></i>
+
+                                        {% endif %}
+
+                                    </button>
+
+                                </form>
+
+                                <div class="todo-content">
+
+                                    <div class="todo-title-row">
+
+                                        <h2 class="todo-title">
+                                            {{ todo.title }}
+                                        </h2>
+
+                                        {% if todo.label %}
+
+                                            <span class="todo-label">
+                                                {{ todo.label }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    <span class="todo-date">
+                                        {{ todo.created_at|date:"M d, Y" }}
+                                    </span>
+
+                                </div>
+
+                                <a
+                                    href="{% url 'todo_edit' todo.id %}"
+                                    class="todo-edit-button"
+                                    aria-label="Edit todo"
+                                >
+
+                                    <i
+                                        class="bi bi-pencil"
+                                        aria-hidden="true"
+                                    ></i>
+
+                                </a>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'todo_delete' todo.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="todo-delete-button"
+                                        aria-label="Delete todo"
+                                    >
+
+                                        <i
+                                            class="bi bi-trash3"
+                                            aria-hidden="true"
+                                        ></i>
+
+                                    </button>
+
+                                </form>
+
+                            </article>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="todo-empty">
+
+                            <div class="todo-empty-icon">
+
+                                <i
+                                    class="bi bi-check2-square"
+                                    aria-hidden="true"
+                                ></i>
+
+                            </div>
+
+                            <h2>
+                                No todos yet
+                            </h2>
+
+                            <p>
+                                Add your first task and keep your workspace organized.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script
+        src="{% static 'js/workspace/sidebar.js' %}"
+    ></script>
+
+{% endblock %}

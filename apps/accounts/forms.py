@@ -174,6 +174,7 @@ class ZharfSetPasswordForm(SetPasswordForm):
 class ZharfPasswordChangeForm(PasswordChangeForm):
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
 
         self.fields['old_password'].widget.attrs.update({
@@ -181,6 +182,10 @@ class ZharfPasswordChangeForm(PasswordChangeForm):
             'placeholder': 'Enter your current password',
             'autocomplete': 'current-password',
         })
+        self.fields['old_password'].widget.attrs.pop(
+            'autofocus',
+            None
+        )
 
         self.fields['new_password1'].widget.attrs.update({
             'class': 'account-input password-strength-input',
