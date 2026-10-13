@@ -1,228 +1,347 @@
 {% extends 'base/base.html' %}
-
 {% load static %}
 
-{% block title %}
-    Todo | Zharf
-{% endblock %}
+{% block title %}Todo | Zharf{% endblock %}
 
 {% block styles %}
-    <link
-        rel="stylesheet"
-        href="{% static 'css/pages/workspace.css' %}"
-    >
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
-    >
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css"
-    >
-    <link
-        rel="stylesheet"
-        href="{% static 'css/pages/todo.css' %}"
-    >
-
+<link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+<link rel="stylesheet" href="{% static 'css/pages/todo.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="workspace">
+<div class="workspace">
 
-        <div class="workspace-mobile-header">
-            <button
-                type="button"
-                class="workspace-mobile-menu"
-                aria-label="Open sidebar"
-            >
-                <i class="bi bi-list" aria-hidden="true"></i>
-            </button>
-        </div>
+    <div class="workspace-mobile-header">
+        <button type="button" class="workspace-mobile-menu" aria-label="Open sidebar">
+            <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+    </div>
 
-        <div class="workspace-sidebar-overlay"></div>
+    <div class="workspace-sidebar-overlay"></div>
 
-        {% include 'workspace/components/sidebar.html' %}
+    {% include 'workspace/components/sidebar.html' %}
 
-        <main class="workspace-main todo-workspace">
-            <div class="todo-page">
+    <main class="workspace-main todo-workspace">
+        <div class="todo-page">
 
-                <header class="todo-header">
-                    <div>
-                        <span class="todo-eyebrow">
-                            Workspace
-                        </span>
+            <header class="todo-header">
+                <div>
+                    <span class="todo-eyebrow">Workspace</span>
+                    <h1>Todo List</h1>
+                    <p>Keep track of the things you need to get done.</p>
+                </div>
+            </header>
 
-                        <h1>
-                            Todo List
-                        </h1>
+            <form method="post" action="{% url 'todo_create' %}" class="todo-form">
+                {% csrf_token %}
 
-                        <p>
-                            Keep track of the things you need to get done.
-                        </p>
-                    </div>
-                </header>
+                <div class="todo-form-fields">
 
-                <form
-                    method="post"
-                    action="{% url 'todo_create' %}"
-                    class="todo-form"
-                >
-                    {% csrf_token %}
+                    <div class="todo-form-field">
+                        <label for="{{ form.title.id_for_label }}">Todo</label>
+                        {{ form.title }}
 
-                    <div class="todo-form-fields">
-
-                        <div class="todo-form-field">
-                            <label for="{{ form.title.id_for_label }}">
-                                Todo
-                            </label>
-
-                            {{ form.title }}
-
-                            {% if form.title.errors %}
-                                <div class="todo-form-error">
-                                    {{ form.title.errors|striptags }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="todo-form-field">
-                            <label for="{{ form.label.id_for_label }}">
-                                Label
-                            </label>
-
-                            {{ form.label }}
-
-                            {% if form.label.errors %}
-                                <div class="todo-form-error">
-                                    {{ form.label.errors|striptags }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="todo-form-field">
-                            <label for="{{ form.scheduled_at.id_for_label }}">
-                                Planned Date and Time
-                            </label>
-
-                            {{ form.scheduled_at }}
-
-                            {% if form.scheduled_at.errors %}
-                                <div class="todo-form-error">
-                                    {{ form.scheduled_at.errors|striptags }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                    </div>
-
-                    <button
-                        type="submit"
-                        class="todo-add-button"
-                    >
-                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
-
-                        <span>
-                            Add Todo
-                        </span>
-                    </button>
-                </form>
-
-                <section class="todo-list">
-                    {% if todos %}
-                        {% for todo in todos %}
-                            <article class="todo-item{% if todo.completed %} is-completed{% endif %}">
-
-                                <form
-                                    method="post"
-                                    action="{% url 'todo_toggle' todo.id %}"
-                                >
-                                    {% csrf_token %}
-
-                                    <button
-                                        type="submit"
-                                        class="todo-checkbox"
-                                        aria-label="Toggle todo"
-                                    >
-                                        {% if todo.completed %}
-                                            <i class="bi bi-check-lg" aria-hidden="true"></i>
-                                        {% endif %}
-                                    </button>
-                                </form>
-
-                                <div class="todo-content">
-                                    <div class="todo-title-row">
-                                        <h2 class="todo-title">
-                                            {{ todo.title }}
-                                        </h2>
-
-                                        {% if todo.label %}
-                                            <span class="todo-label">
-                                                {{ todo.label }}
-                                            </span>
-                                        {% endif %}
-                                    </div>
-
-                                    <span class="todo-date">
-                                        {{ todo.created_at|date:"M d, Y" }}
-                                    </span>
-
-                                    {% if todo.scheduled_at %}
-                                        <span class="todo-date">
-                                            Planned: {{ todo.scheduled_at|date:"M d, Y, H:i" }}
-                                        </span>
-                                    {% endif %}
-                                </div>
-
-                                <a
-                                    href="{% url 'todo_edit' todo.id %}"
-                                    class="todo-edit-button"
-                                    aria-label="Edit todo"
-                                >
-                                    <i class="bi bi-pencil" aria-hidden="true"></i>
-                                </a>
-
-                                <form
-                                    method="post"
-                                    action="{% url 'todo_delete' todo.id %}"
-                                >
-                                    {% csrf_token %}
-
-                                    <button
-                                        type="submit"
-                                        class="todo-delete-button"
-                                        aria-label="Delete todo"
-                                    >
-                                        <i class="bi bi-trash3" aria-hidden="true"></i>
-                                    </button>
-                                </form>
-
-                            </article>
-                        {% endfor %}
-                    {% else %}
-                        <div class="todo-empty">
-                            <div class="todo-empty-icon">
-                                <i class="bi bi-check2-square" aria-hidden="true"></i>
+                        {% if form.title.errors %}
+                            <div class="todo-form-error">
+                                {{ form.title.errors|striptags }}
                             </div>
+                        {% endif %}
+                    </div>
 
-                            <h2>
-                                No todos yet
-                            </h2>
+                    <div class="todo-form-field">
+                        <label for="{{ form.label.id_for_label }}">Label</label>
+                        {{ form.label }}
 
-                            <p>
-                                Add your first task and keep your workspace organized.
-                            </p>
+                        {% if form.label.errors %}
+                            <div class="todo-form-error">
+                                {{ form.label.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="todo-form-field">
+                        <label for="{{ form.scheduled_at.id_for_label }}">
+                            Planned Date and Time
+                        </label>
+                        {{ form.scheduled_at }}
+
+                        {% if form.scheduled_at.errors %}
+                            <div class="todo-form-error">
+                                {{ form.scheduled_at.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="todo-form-field todo-form-subtasks">
+                    <label>Subtasks</label>
+
+                    <div class="todo-subtask-add-row">
+                        <input
+                            type="text"
+                            id="todo-subtask-first-input"
+                            class="todo-form-input"
+                            placeholder="Enter a subtask..."
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="button"
+                            id="todo-add-subtask-input"
+                            class="todo-subtask-add-input"
+                        >
+                            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                            <span>Add subtask</span>
+                        </button>
+                    </div>
+
+                    <div id="todo-subtask-inputs">
+                        <div class="todo-subtask-input-row">
+                            <input type="hidden" name="subtasks" value="">
+                        </div>
+                    </div>
+
+                    {% if form.subtasks.errors %}
+                        <div class="todo-form-error">
+                            {{ form.subtasks.errors|striptags }}
                         </div>
                     {% endif %}
-                </section>
+                </div>
 
-            </div>
-        </main>
+                <button type="submit" class="todo-add-button">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                    <span>Add Todo</span>
+                </button>
+            </form>
 
-    </div>
+            <section class="todo-list">
+
+                {% if todos %}
+
+                    {% for todo in todos %}
+                        {% with items=todo.items.all %}
+
+                            <article class="todo-card">
+
+                                <div class="todo-item{% if todo.completed %} is-completed{% endif %}">
+
+                                    <form method="post" action="{% url 'todo_toggle' todo.id %}">
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="todo-checkbox"
+                                            aria-label="Toggle todo"
+                                        >
+                                            {% if todo.completed %}
+                                                <i class="bi bi-check-lg" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </button>
+                                    </form>
+
+                                    <div class="todo-content">
+
+                                        <div class="todo-title-row">
+                                            <h2 class="todo-title">{{ todo.title }}</h2>
+
+                                            {% if todo.label %}
+                                                <span class="todo-label">{{ todo.label }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <span class="todo-date">
+                                            {{ todo.created_at|date:"M d, Y" }}
+                                        </span>
+
+                                        {% if todo.scheduled_at %}
+                                            <span class="todo-date">
+                                                Planned: {{ todo.scheduled_at|date:"M d, Y, H:i" }}
+                                            </span>
+                                        {% endif %}
+
+                                        <div class="todo-subtask-summary">
+                                            <span>
+                                                <i class="bi bi-list-check" aria-hidden="true"></i>
+                                                Subtasks
+                                            </span>
+
+                                            <span>
+                                                {% if items %}
+                                                    {{ items|length }} total
+                                                {% else %}
+                                                    No subtasks
+                                                {% endif %}
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        class="todo-subtasks-toggle"
+                                        aria-expanded="false"
+                                        aria-controls="todo-subtasks-{{ todo.id }}"
+                                        aria-label="Show subtasks"
+                                    >
+                                        <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                                    </button>
+
+                                    <a
+                                        href="{% url 'todo_edit' todo.id %}"
+                                        class="todo-edit-button"
+                                        aria-label="Edit todo"
+                                    >
+                                        <i class="bi bi-pencil" aria-hidden="true"></i>
+                                    </a>
+
+                                    <form method="post" action="{% url 'todo_delete' todo.id %}">
+                                        {% csrf_token %}
+
+                                        <button
+                                            type="submit"
+                                            class="todo-delete-button"
+                                            aria-label="Delete todo"
+                                        >
+                                            <i class="bi bi-trash3" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                                <div
+                                    class="todo-subtasks-panel"
+                                    id="todo-subtasks-{{ todo.id }}"
+                                    hidden
+                                >
+
+                                    <form
+                                        method="post"
+                                        action="{% url 'todo_item_create' todo.id %}"
+                                        class="todo-subtask-form"
+                                    >
+                                        {% csrf_token %}
+
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            class="todo-form-input"
+                                            placeholder="Add a subtask..."
+                                            autocomplete="off"
+                                            aria-label="New subtask"
+                                            required
+                                        >
+
+                                        <button type="submit" class="todo-add-button">
+                                            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                                            <span>Add</span>
+                                        </button>
+                                    </form>
+
+                                    {% if items %}
+
+                                        <div
+                                            class="todo-subtask-list"
+                                            data-reorder-url="{% url 'todo_item_reorder' todo.id %}"
+                                        >
+
+                                            {% for item in items %}
+                                                <div
+                                                    class="todo-subtask-item"
+                                                    data-item-id="{{ item.id }}"
+                                                >
+
+                                                    <button
+                                                        type="button"
+                                                        class="todo-subtask-drag-handle"
+                                                        aria-label="Reorder {{ item.title }}"
+                                                        title="Drag to reorder"
+                                                        draggable="true"
+                                                    ></button>
+
+                                                    <form
+                                                        method="post"
+                                                        action="{% url 'todo_item_toggle' todo.id item.id %}"
+                                                    >
+                                                        {% csrf_token %}
+
+                                                        <button
+                                                            type="submit"
+                                                            class="todo-subtask-checkbox{% if item.completed %} is-completed{% endif %}"
+                                                            aria-label="Toggle subtask"
+                                                        >
+                                                            {% if item.completed %}
+                                                                <i class="bi bi-check-lg" aria-hidden="true"></i>
+                                                            {% endif %}
+                                                        </button>
+                                                    </form>
+
+                                                    <span class="todo-subtask-title{% if item.completed %} is-completed{% endif %}">
+                                                        {{ item.title }}
+                                                    </span>
+
+                                                    <form
+                                                        method="post"
+                                                        action="{% url 'todo_item_delete' todo.id item.id %}"
+                                                    >
+                                                        {% csrf_token %}
+
+                                                        <button
+                                                            type="submit"
+                                                            class="todo-subtask-delete"
+                                                            aria-label="Delete subtask"
+                                                        >
+                                                            <i class="bi bi-trash3" aria-hidden="true"></i>
+                                                        </button>
+                                                    </form>
+
+                                                </div>
+                                            {% endfor %}
+
+                                        </div>
+
+                                    {% else %}
+
+                                        <p class="todo-subtasks-empty">
+                                            No subtasks yet. Add the first step for this task.
+                                        </p>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </article>
+
+                        {% endwith %}
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="todo-empty">
+                        <div class="todo-empty-icon">
+                            <i class="bi bi-check2-square" aria-hidden="true"></i>
+                        </div>
+
+                        <h2>No todos yet</h2>
+                        <p>Add your first task and keep your workspace organized.</p>
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </div>
+    </main>
+
+</div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="{% static 'js/workspace/todo-datetime.js' %}"></script>
+<script src="{% static 'js/workspace/sidebar.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{% static 'js/workspace/todo-datetime.js' %}"></script>
+<script src="{% static 'js/workspace/todo-subtasks.js' %}"></script>
+<script src="{% static 'js/workspace/todo-subtask-reorder.js' %}"></script>
 {% endblock %}

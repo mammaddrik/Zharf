@@ -148,3 +148,7 @@
 .bi-box-arrow-right::before {
     content: "\F1C3";
 }
+
+.bi-grip-vertical::before {
+    content: "\F3FE";
+}

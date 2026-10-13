@@ -1,4 +1,3 @@
-
 import uuid
 
 from django.conf import settings
@@ -73,6 +72,10 @@ class TodoItem(models.Model):
         max_length=300
     )
 
+    position = models.PositiveIntegerField(
+        default=0
+    )
+
     completed = models.BooleanField(
         default=False
     )
@@ -89,7 +92,6 @@ class TodoItem(models.Model):
         null=True,
         blank=True
     )
-
 
     def save(self, *args, **kwargs):
         if self.completed:

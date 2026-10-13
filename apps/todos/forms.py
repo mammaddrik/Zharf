@@ -2,10 +2,30 @@
 from django import forms
 from django.utils import timezone
 
-from .models import Todo
+from .models import Todo, TodoItem
+
+
+class MultipleTextInputField(forms.Field):
+    widget = forms.TextInput
+
+    def to_python(self, value):
+        if value is None:
+            return []
+
+        if isinstance(value, (list, tuple)):
+            values = value
+        else:
+            values = [value]
+
+        return [
+            item.strip()
+            for item in values
+            if item and item.strip()
+        ]
 
 
 class TodoForm(forms.ModelForm):
+    subtasks = MultipleTextInputField(required=False)
 
     class Meta:
         model = Todo
@@ -57,10 +77,16 @@ class TodoForm(forms.ModelForm):
         scheduled_at = self.cleaned_data.get('scheduled_at')
 
         if scheduled_at is not None:
-            now = timezone.localtime().replace(second=0, microsecond=0)
+            now = timezone.localtime().replace(
+                second=0,
+                microsecond=0,
+            )
 
             if timezone.is_aware(scheduled_at):
-                now = timezone.now().replace(second=0, microsecond=0)
+                now = timezone.now().replace(
+                    second=0,
+                    microsecond=0,
+                )
 
             if scheduled_at <= now:
                 raise forms.ValidationError(
@@ -68,3 +94,19 @@ class TodoForm(forms.ModelForm):
                 )
 
         return scheduled_at
+
+
+class TodoItemForm(forms.ModelForm):
+    class Meta:
+        model = TodoItem
+        fields = ['title']
+
+        widgets = {
+            'title': forms.TextInput(
+                attrs={
+                    'class': 'todo-form-input',
+                    'placeholder': 'Add a subtask...',
+                    'autocomplete': 'off',
+                }
+            ),
+        }
