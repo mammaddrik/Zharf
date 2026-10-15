@@ -1,4 +1,3 @@
-
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, JsonResponse
@@ -15,17 +14,6 @@ def todo_list(request):
         'completed',
         '-created_at'
     )
-
-    print("Logged-in user:", request.user)
-    print("User Todo count:", todos.count())
-
-    for todo in todos:
-        print(
-            "Todo:",
-            todo.title,
-            "| Subtasks:",
-            todo.items.count()
-        )
 
     form = TodoForm()
 
@@ -59,8 +47,12 @@ def todo_create(request):
             todo.save()
 
             TodoItem.objects.bulk_create([
-                TodoItem(todo=todo, title=title)
-                for title in subtasks
+                TodoItem(
+                    todo=todo,
+                    title=title,
+                    position=position
+                )
+                for position, title in enumerate(subtasks)
             ])
 
     return redirect('todo_list')
@@ -91,9 +83,18 @@ def todo_edit(request, todo_id):
                 form.save()
 
                 TodoItem.objects.bulk_create([
-                    TodoItem(todo=todo, title=title)
-                    for title in subtasks
+                    TodoItem(
+                        todo=todo,
+                        title=title,
+                        position=position
+                    )
+                    for position, title in enumerate(
+                        subtasks,
+                        start=todo.items.count()
+                    )
                 ])
+
+                TodoItem.sync_todo_status(todo)
 
             return redirect('todo_list')
     else:
@@ -155,6 +156,7 @@ def todo_delete(request, todo_id):
     return redirect('todo_list')
 
 
+
 @login_required
 def todo_item_create(request, todo_id):
     if request.method != 'POST':
@@ -171,9 +173,28 @@ def todo_item_create(request, todo_id):
     if form.is_valid():
         item = form.save(commit=False)
         item.todo = todo
+        item.position = todo.items.count()
         item.save()
 
-    return redirect('todo_edit', todo_id=todo.id)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'item_id': str(item.id),
+                'title': item.title,
+                'completed': item.completed,
+                'position': item.position,
+            })
+
+        return redirect('todo_list')
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': False,
+            'errors': form.errors.get_json_data(),
+        }, status=400)
+
+    return redirect('todo_list')
+
 
 
 @login_required
@@ -191,7 +212,14 @@ def todo_item_toggle(request, todo_id, item_id):
     item.completed = not item.completed
     item.save(update_fields=['completed'])
 
-    return redirect('todo_edit', todo_id=todo_id)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'item_id': item.id,
+            'completed': item.completed,
+        })
+
+    return redirect('todo_list')
 
 
 @login_required
@@ -206,9 +234,16 @@ def todo_item_delete(request, todo_id, item_id):
         todo__owner=request.user
     )
 
+    deleted_item_id = item.id
     item.delete()
 
-    return redirect('todo_edit', todo_id=todo_id)
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'item_id': deleted_item_id,
+        })
+
+    return redirect('todo_list')
 
 
 @login_required
@@ -224,29 +259,33 @@ def todo_item_reorder(request, todo_id):
 
     item_ids = request.POST.getlist('item_ids[]')
 
-    items = list(
-        todo.items.filter(id__in=item_ids)
-    )
-
-    # Ensure all submitted IDs belong to this Todo,
-    # with no duplicates or missing items.
+    existing_ids = {
+        str(item_id)
+        for item_id in todo.items.values_list('id', flat=True)
+    }
     submitted_ids = set(item_ids)
-    existing_ids = {str(item.id) for item in items}
 
     if (
         len(item_ids) != len(submitted_ids)
         or submitted_ids != existing_ids
     ):
         return JsonResponse(
-            {'success': False, 'error': 'Invalid item IDs.'},
+            {
+                'success': False,
+                'error': 'Invalid item IDs.',
+            },
             status=400
         )
 
-    with transaction.atomic():
-        items_by_id = {str(item.id): item for item in items}
+    items_by_id = {
+        str(item.id): item
+        for item in todo.items.all()
+    }
 
+    with transaction.atomic():
         for position, item_id in enumerate(item_ids):
             item = items_by_id[item_id]
+
             if item.position != position:
                 item.position = position
                 item.save(update_fields=['position'])

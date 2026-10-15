@@ -20,13 +20,16 @@ document.addEventListener('DOMContentLoaded', () => {
     lists.forEach((list) => {
         let draggedItem = null;
         let originalOrder = [];
+        let savingOrder = false;
 
         const getItems = () => [
             ...list.querySelectorAll('.todo-subtask-item')
         ];
 
         getItems().forEach((item) => {
-            const handle = item.querySelector('.todo-subtask-drag-handle');
+            const handle = item.querySelector(
+                '.todo-subtask-drag-handle'
+            );
 
             if (!handle) {
                 return;
@@ -35,24 +38,35 @@ document.addEventListener('DOMContentLoaded', () => {
             handle.draggable = true;
 
             handle.addEventListener('dragstart', (event) => {
+                if (savingOrder) {
+                    event.preventDefault();
+                    return;
+                }
+
                 draggedItem = item;
                 originalOrder = getItems();
 
                 item.classList.add('is-dragging');
 
-                event.dataTransfer.effectAllowed = 'move';
-                event.dataTransfer.setData('text/plain', item.dataset.itemId);
+                if (event.dataTransfer) {
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData(
+                        'text/plain',
+                        item.dataset.itemId || ''
+                    );
+                }
             });
 
             item.addEventListener('dragover', (event) => {
-                event.preventDefault();
-
                 if (!draggedItem || draggedItem === item) {
                     return;
                 }
 
+                event.preventDefault();
+
                 const rect = item.getBoundingClientRect();
-                const insertAfter = event.clientY > rect.top + rect.height / 2;
+                const insertAfter =
+                    event.clientY > rect.top + rect.height / 2;
 
                 if (insertAfter) {
                     item.after(draggedItem);
@@ -62,7 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             item.addEventListener('drop', (event) => {
-                event.preventDefault();
+                if (draggedItem) {
+                    event.preventDefault();
+                }
             });
 
             handle.addEventListener('dragend', async () => {
@@ -70,25 +86,34 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                draggedItem.classList.remove('is-dragging');
+                const itemBeingDragged = draggedItem;
+
+                itemBeingDragged.classList.remove('is-dragging');
                 draggedItem = null;
 
                 const newOrder = getItems();
 
                 const orderChanged = newOrder.some(
-                    (item, index) => item !== originalOrder[index]
+                    (currentItem, index) =>
+                        currentItem !== originalOrder[index]
                 );
 
                 if (!orderChanged) {
                     return;
                 }
 
-                const saved = await saveOrder(list, newOrder);
+                savingOrder = true;
 
-                if (!saved) {
-                    originalOrder.forEach((item) => {
-                        list.appendChild(item);
-                    });
+                try {
+                    const saved = await saveOrder(list, newOrder);
+
+                    if (!saved) {
+                        originalOrder.forEach((originalItem) => {
+                            list.appendChild(originalItem);
+                        });
+                    }
+                } finally {
+                    savingOrder = false;
                 }
             });
         });
@@ -96,23 +121,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function saveOrder(list, items) {
         const csrfToken = getCookie('csrftoken');
+        const reorderUrl = list.dataset.reorderUrl;
 
         if (!csrfToken) {
             console.error('CSRF token not found.');
             return false;
         }
 
+        if (!reorderUrl) {
+            console.error('Subtask reorder URL not found.');
+            return false;
+        }
+
         const body = new URLSearchParams();
 
         items.forEach((item) => {
+            if (!item.dataset.itemId) {
+                console.error(
+                    'Subtask is missing data-item-id:',
+                    item
+                );
+                return;
+            }
+
             body.append('item_ids[]', item.dataset.itemId);
         });
 
         try {
-            const response = await fetch(list.dataset.reorderUrl, {
+            const response = await fetch(reorderUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    'Content-Type':
+                        'application/x-www-form-urlencoded;charset=UTF-8',
                     'X-CSRFToken': csrfToken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
@@ -132,7 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             return true;
         } catch (error) {
-            console.error('Error saving subtask order:', error);
+            console.error(
+                'Error saving subtask order:',
+                error
+            );
+
             return false;
         }
     }

@@ -122,7 +122,7 @@
                 {% if todos %}
 
                     {% for todo in todos %}
-                        {% with items=todo.items.all %}
+                        {% with items=todo.items.all|dictsort:"position" %}
 
                             <article class="todo-card">
 

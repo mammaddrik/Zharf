@@ -1,6 +1,4 @@
-
 {% extends 'base/base.html' %}
-
 {% load static %}
 
 {% block title %}
@@ -46,6 +44,7 @@
                 {% csrf_token %}
 
                 <div class="todo-form-fields">
+
                     <div class="todo-form-field">
                         <label for="{{ form.title.id_for_label }}">Todo</label>
                         {{ form.title }}
@@ -80,9 +79,11 @@
                             </div>
                         {% endif %}
                     </div>
+
                 </div>
 
                 <div class="todo-form-subtasks">
+
                     <div class="todo-subtasks-header">
                         <div>
                             <h2>Subtasks</h2>
@@ -94,16 +95,40 @@
                         </span>
                     </div>
 
-                    <div class="todo-subtask-list">
-                        {% for item in todo.items.all %}
-                            <div class="todo-subtask-item">
-                                <input
-                                    type="checkbox"
-                                    class="todo-subtask-inline-toggle"
-                                    data-toggle-url="{% url 'todo_item_toggle' todo.id item.id %}"
-                                    {% if item.completed %}checked{% endif %}
-                                    aria-label="Toggle {{ item.title }}"
+                    <div
+                        class="todo-subtask-list"
+                        data-reorder-url="{% url 'todo_item_reorder' todo.id %}"
+                    >
+                        {% for item in todo.items.all|dictsort:"position" %}
+
+                            <div
+                                class="todo-subtask-item"
+                                data-item-id="{{ item.id }}"
+                            >
+                                <button
+                                    type="button"
+                                    class="todo-subtask-drag-handle"
+                                    aria-label="Reorder {{ item.title }}"
+                                    title="Drag to reorder"
                                 >
+                                    <i
+                                        class="bi bi-grip-vertical"
+                                        aria-hidden="true"
+                                    ></i>
+                                </button>
+
+                                <div
+                                    class="todo-subtask-control"
+                                    style="display:flex; flex:0 0 auto; align-items:center; margin:0; padding:0 10px;"
+                                >
+                                    <input
+                                        type="checkbox"
+                                        class="todo-subtask-inline-toggle"
+                                        data-toggle-url="{% url 'todo_item_toggle' todo.id item.id %}"
+                                        {% if item.completed %}checked{% endif %}
+                                        aria-label="Toggle {{ item.title }}"
+                                    >
+                                </div>
 
                                 <span class="todo-subtask-title{% if item.completed %} is-completed{% endif %}">
                                     {{ item.title }}
@@ -118,15 +143,31 @@
                                     <i class="bi bi-trash" aria-hidden="true"></i>
                                 </button>
                             </div>
+
                         {% empty %}
-                            <p class="todo-subtasks-empty" id="todo-existing-subtasks-empty">
+
+                            <p
+                                class="todo-subtasks-empty"
+                                id="todo-existing-subtasks-empty"
+                            >
                                 No subtasks yet. Add your first one below.
                             </p>
+
                         {% endfor %}
                     </div>
 
                     <div id="todo-subtask-inputs">
                         <div class="todo-subtask-input-row">
+
+                            <button
+                                type="button"
+                                class="todo-subtask-drag-handle"
+                                aria-label="Reorder subtask"
+                                title="Drag to reorder"
+                                draggable="true"
+                                hidden
+                            ></button>
+
                             <input
                                 type="text"
                                 name="subtasks"
@@ -141,8 +182,9 @@
                                 aria-label="Remove subtask"
                                 hidden
                             >
-                                <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                <i class="bi bi-trash3" aria-hidden="true"></i>
                             </button>
+
                         </div>
                     </div>
 
@@ -160,10 +202,14 @@
                         <i class="bi bi-plus-lg" aria-hidden="true"></i>
                         <span>Add subtask</span>
                     </button>
+
                 </div>
 
                 <div class="todo-edit-actions">
-                    <a href="{% url 'todo_list' %}" class="todo-cancel-button">
+                    <a
+                        href="{% url 'todo_list' %}"
+                        class="todo-cancel-button"
+                    >
                         Cancel
                     </a>
 
@@ -172,6 +218,7 @@
                         <span>Save Changes</span>
                     </button>
                 </div>
+
             </form>
 
         </div>
@@ -180,11 +227,10 @@
 </div>
 {% endblock %}
 
-
 {% block scripts %}
     <script src="{% static 'js/workspace/sidebar.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="{% static 'js/workspace/todo-datetime.js' %}"></script>
     <script src="{% static 'js/workspace/todo-subtasks.js' %}"></script>
+    <script src="{% static 'js/workspace/todo-subtask-reorder.js' %}"></script>
 {% endblock %}
-
