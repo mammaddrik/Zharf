@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.db.models import Q
 from django.utils import timezone
 
 from .forms import TodoForm, TodoItemForm
@@ -10,7 +11,37 @@ from .models import Todo, TodoItem
 
 @login_required
 def todo_list(request):
-    todos = request.user.todos.order_by(
+    now = timezone.now()
+
+    status = request.GET.get('status', 'all')
+    query = request.GET.get('q', '').strip()
+
+    todos = request.user.todos.all()
+
+    if query:
+        todos = todos.filter(
+            Q(title__icontains=query)
+            | Q(label__icontains=query)
+        ).distinct()
+
+    if status == 'completed':
+        todos = todos.filter(completed=True)
+
+    elif status == 'pending':
+        todos = todos.filter(
+            completed=False
+        ).filter(
+            Q(scheduled_at__isnull=True)
+            | Q(scheduled_at__gte=now)
+        )
+
+    elif status == 'overdue':
+        todos = todos.filter(
+            completed=False,
+            scheduled_at__lt=now
+        )
+
+    todos = todos.order_by(
         'completed',
         '-created_at'
     )
@@ -23,6 +54,8 @@ def todo_list(request):
         {
             'todos': todos,
             'form': form,
+            'status': status,
+            'search_query': query,
         }
     )
 

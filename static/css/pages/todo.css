@@ -46,6 +46,172 @@
     line-height: 1.7;
 }
 
+.todo-filter-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin: 0 0 24px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background: var(--color-surface);
+}
+
+.todo-search {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 0 13px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-small);
+    background: var(--color-surface-elevated);
+    color: var(--color-text-muted);
+    transition:
+        border-color var(--transition-fast),
+        background-color var(--transition-fast);
+}
+
+.todo-search:focus-within {
+    border-color: var(--color-accent);
+}
+
+.todo-search > i {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.todo-search input {
+    display: block;
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 12px;
+}
+
+.todo-search input::placeholder {
+    color: var(--color-text-subtle);
+    opacity: 1;
+}
+
+.todo-search input:focus {
+    outline: none;
+}
+
+.todo-search-clear {
+    display: inline-flex;
+    flex: 0 0 28px;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-small);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.todo-search-clear:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
+.todo-search-clear i {
+    font-size: 12px;
+}
+
+.todo-status-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.todo-filter-button {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    min-height: 36px;
+    padding: 0 13px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-small);
+    background: transparent;
+    color: var(--color-text-muted);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.todo-filter-button i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.todo-filter-button:hover {
+    border-color: var(--color-border);
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+.todo-filter-button.is-active {
+    border-color: rgba(139, 92, 246, 0.35);
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--color-accent-bright);
+}
+
+.todo-filter-button:focus-visible,
+.todo-search-clear:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+}
+
+.todo-search input[type="search"]::-webkit-search-cancel-button,
+.todo-search input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+}
+
+.todo-search input[type="search"]::-ms-clear,
+.todo-search input[type="search"]::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
 .todo-add-button,
 .todo-cancel-button,
 .todo-subtask-add-input {
@@ -324,7 +490,6 @@
     border-color: var(--color-accent);
     opacity: 0.45;
 }
-
 
 /* In edit mode the handle already contains an HTML icon. */
 .todo-edit-form .todo-subtask-item .todo-subtask-drag-handle::before {
@@ -1304,6 +1469,25 @@
 
     .todo-header h1 {
         font-size: 26px;
+    }
+
+    .todo-filter-form {
+        gap: 12px;
+        margin-bottom: 20px;
+        padding: 12px;
+    }
+
+    .todo-status-filters {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .todo-filter-button {
+        width: 100%;
+        min-width: 0;
+        padding: 0 8px;
+        font-size: 11px;
     }
 
     .todo-form {

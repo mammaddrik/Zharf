@@ -117,6 +117,67 @@
                 </button>
             </form>
 
+            <form method="get" action="{% url 'todo_list' %}" class="todo-filter-form">
+
+                <div class="todo-search">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+
+                    <input
+                        type="search"
+                        name="q"
+                        value="{{ search_query|default:'' }}"
+                        placeholder="Search todos..."
+                        aria-label="Search todos"
+                    >
+
+                </div>
+
+                <div class="todo-status-filters" role="group" aria-label="Filter todos by status">
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="all"
+                        class="todo-filter-button{% if not status or status == 'all' %} is-active{% endif %}"
+                    >
+                        <i class="bi bi-grid" aria-hidden="true"></i>
+                        <span>All</span>
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="completed"
+                        class="todo-filter-button{% if status == 'completed' %} is-active{% endif %}"
+                    >
+                        <i class="bi bi-check-circle" aria-hidden="true"></i>
+                        <span>Completed</span>
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="pending"
+                        class="todo-filter-button{% if status == 'pending' %} is-active{% endif %}"
+                    >
+                        <i class="bi bi-clock" aria-hidden="true"></i>
+                        <span>Pending</span>
+                    </button>
+
+                    <button
+                        type="submit"
+                        name="status"
+                        value="overdue"
+                        class="todo-filter-button{% if status == 'overdue' %} is-active{% endif %}"
+                    >
+                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                        <span>Overdue</span>
+                    </button>
+
+                </div>
+
+            </form>
+
             <section class="todo-list">
 
                 {% if todos %}
@@ -324,8 +385,20 @@
                             <i class="bi bi-check2-square" aria-hidden="true"></i>
                         </div>
 
-                        <h2>No todos yet</h2>
-                        <p>Add your first task and keep your workspace organized.</p>
+                        <h2>No todos found</h2>
+                        <p>
+                            {% if search_query %}
+                                No todos match your search. Try a different keyword.
+                            {% elif status == 'completed' %}
+                                You don't have any completed todos yet.
+                            {% elif status == 'pending' %}
+                                You don't have any pending todos.
+                            {% elif status == 'overdue' %}
+                                You don't have any overdue todos.
+                            {% else %}
+                                Add your first task and keep your workspace organized.
+                            {% endif %}
+                        </p>
                     </div>
 
                 {% endif %}
@@ -344,4 +417,5 @@
 <script src="{% static 'js/workspace/todo-datetime.js' %}"></script>
 <script src="{% static 'js/workspace/todo-subtasks.js' %}"></script>
 <script src="{% static 'js/workspace/todo-subtask-reorder.js' %}"></script>
+<script src="{% static 'js/workspace/todo-search.js' %}"></script>
 {% endblock %}

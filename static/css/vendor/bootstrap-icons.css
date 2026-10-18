@@ -152,3 +152,27 @@
 .bi-grip-vertical::before {
     content: "\F3FE";
 }
+
+.bi-search::before {
+    content: "\F52A";
+}
+
+.bi-x-lg::before {
+    content: "\F659";
+}
+
+.bi-grid::before {
+    content: "\F3E0";
+}
+
+.bi-check-circle::before {
+    content: "\F26B";
+}
+
+.bi-clock::before {
+    content: "\F293";
+}
+
+.bi-exclamation-circle::before {
+    content: "\F333";
+}
