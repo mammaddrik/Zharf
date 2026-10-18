@@ -1,0 +1,164 @@
+
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}README Studio | Zharf{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pages/readme-studio.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="workspace">
+    <div class="workspace-mobile-header">
+        <button
+            type="button"
+            class="workspace-mobile-menu"
+            aria-label="Open sidebar"
+        >
+            <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="workspace-sidebar-overlay"></div>
+
+    {% include 'workspace/components/sidebar.html' %}
+
+    <main class="workspace-main readme-studio">
+        <div class="readme-studio-page">
+
+            <header class="readme-studio-header">
+                <div class="readme-studio-heading">
+                    <div class="readme-studio-breadcrumb">
+                        <span>WORKSPACE</span>
+                        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                        <span>DEVELOPER TOOLS</span>
+                    </div>
+
+                    <h1>README <span>Studio</span></h1>
+
+                    <p>
+                        Turn your project details into a README
+                        worth reading.
+                    </p>
+                </div>
+
+                <div class="readme-studio-version">
+                    <i class="bi bi-markdown" aria-hidden="true"></i>
+                    <span>MARKDOWN</span>
+                </div>
+            </header>
+
+            <section class="readme-studio-hero">
+                <div class="readme-studio-hero-content">
+                    <div class="readme-studio-status">
+                        <span class="readme-studio-status-dot"></span>
+                        YOUR NEXT PROJECT STARTS HERE
+                    </div>
+
+                    <h2>
+                        Give your project
+                        <span>a better introduction.</span>
+                    </h2>
+
+                    <p>
+                        Build a clean, structured README with customizable
+                        sections and a live Markdown preview.
+                    </p>
+
+                    <div class="readme-studio-features">
+                        <div>
+                            <i class="bi bi-layout-text-window" aria-hidden="true"></i>
+                            <span>Structured sections</span>
+                        </div>
+
+                        <div>
+                            <i class="bi bi-eye" aria-hidden="true"></i>
+                            <span>Live preview</span>
+                        </div>
+
+                        <div>
+                            <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
+                            <span>Export Markdown</span>
+                        </div>
+                    </div>
+
+                    <button class="readme-studio-start" type="button" disabled>
+                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                        <span>Builder coming next</span>
+                    </button>
+                </div>
+
+                <div class="readme-studio-preview-art" aria-hidden="true">
+                    <div class="readme-studio-orbit readme-studio-orbit-one"></div>
+                    <div class="readme-studio-orbit readme-studio-orbit-two"></div>
+
+                    <div class="readme-studio-code-window">
+                        <div class="readme-studio-window-bar">
+                            <div class="readme-studio-window-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span>README.md</span>
+                            <i class="bi bi-filetype-md"></i>
+                        </div>
+
+                        <div class="readme-studio-code">
+                            <div><span class="code-muted">#</span> <span class="code-heading">Your Project</span></div>
+                            <div class="code-gap"></div>
+                            <div><span class="code-purple">></span> Build something great.</div>
+                            <div class="code-muted">A short project description.</div>
+                            <div class="code-gap"></div>
+                            <div><span class="code-purple">##</span> Features</div>
+                            <div class="code-muted">- Simple and flexible</div>
+                            <div class="code-muted">- Easy to get started</div>
+                            <div class="code-gap"></div>
+                            <div><span class="code-purple">##</span> Installation</div>
+                            <div class="code-green">$ pip install your-project</div>
+                            <div class="code-cursor"></div>
+                        </div>
+
+                        <div class="readme-studio-code-footer">
+                            <span><i class="bi bi-check-circle"></i> Markdown</span>
+                            <span>UTF-8</span>
+                        </div>
+                    </div>
+
+                    <div class="readme-studio-floating-icon readme-studio-floating-top">
+                        <i class="bi bi-braces"></i>
+                    </div>
+
+                    <div class="readme-studio-floating-icon readme-studio-floating-bottom">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                </div>
+            </section>
+
+            <section class="readme-studio-next">
+                <div class="readme-studio-next-icon">
+                    <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                </div>
+
+                <div class="readme-studio-next-copy">
+                    <span>UP NEXT</span>
+                    <h3>Your README workspace</h3>
+                    <p>
+                        Add project details, organize sections, and see
+                        the Markdown output as you build.
+                    </p>
+                </div>
+
+                <i class="bi bi-arrow-down-right readme-studio-next-arrow"
+                   aria-hidden="true"></i>
+            </section>
+
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+{% endblock %}

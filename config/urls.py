@@ -26,6 +26,7 @@ urlpatterns = [
     path('workspace/', include('apps.workspace.urls')),
     path('documents/', include('apps.documents.urls')),
     path('workspace/todo/', include('apps.todos.urls')),
+    path('workspace/readme-studio/', include('apps.readme_studio.urls')),
 ]
 
 if settings.DEBUG:

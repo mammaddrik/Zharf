@@ -230,7 +230,7 @@ class SignInViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('home')
+            reverse('workspace')
         )
 
         self.assertTrue(
@@ -546,7 +546,7 @@ class PasswordResetViewTests(TestCase):
 
         self.assertRedirects(
             response,
-            reverse('home')
+            reverse('workspace')
         )
 
     def test_old_password_can_no_longer_sign_in(self):

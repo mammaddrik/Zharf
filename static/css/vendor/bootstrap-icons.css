@@ -176,3 +176,36 @@
 .bi-exclamation-circle::before {
     content: "\F333";
 }
+
+
+.bi-markdown::before {
+    content: "\F60A";
+}
+
+.bi-layout-text-window::before {
+    content: "\F451";
+}
+
+.bi-file-earmark-arrow-down::before {
+    content: "\F371";
+}
+
+.bi-pencil-square::before {
+    content: "\F4CB";
+}
+
+.bi-braces::before {
+    content: "\F4C0";
+}
+
+.bi-stars::before {
+    content: "\F588";
+}
+
+.bi-filetype-md::before {
+    content: "\F752";
+}
+
+.bi-arrow-down-right::before {
+    content: "\F124";
+}

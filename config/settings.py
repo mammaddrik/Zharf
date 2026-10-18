@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.workspace',
     'apps.documents',
     'apps.todos',
+    'apps.readme_studio',
 ]
 
 MIDDLEWARE = [
