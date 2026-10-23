@@ -269,3 +269,11 @@
 .bi-puzzle::before {
     content: "\F503";
 }
+
+.bi-link-45deg::before {
+    content: "\F470";
+}
+
+.bi-code::before {
+    content: "\F2C8";
+}

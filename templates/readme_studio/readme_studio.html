@@ -1,4 +1,3 @@
-
 {% extends 'base/base.html' %}
 {% load static %}
 
@@ -115,6 +114,21 @@
                             <span class="readme-component-copy">
                                 <strong>Banner / Image</strong>
                                 <span>Image, alignment, size and link</span>
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="readme-component-item"
+                            data-component="description"
+                        >
+                            <span class="readme-component-icon">
+                                <i class="bi bi-text-paragraph" aria-hidden="true"></i>
+                            </span>
+
+                            <span class="readme-component-copy">
+                                <strong>Project Description</strong>
+                                <span>Description and inline formatting</span>
                             </span>
                         </button>
                     </div>
@@ -390,12 +404,12 @@
                                     <label for="banner-image-url">Image URL</label>
 
                                     <input
-                                        type="text"
+                                        type="url"
                                         id="banner-image-url"
                                         class="readme-field-input"
                                         data-field-input="banner-url"
                                         placeholder="https://example.com/banner.png"
-                                        autocomplete="off"
+                                        autocomplete="url"
                                     >
                                 </div>
 
@@ -412,7 +426,6 @@
                                     >
                                 </div>
 
-                                <!-- Width, Height and Alignment: one row -->
                                 <div class="readme-field-toolbar">
 
                                     <div class="readme-field-control">
@@ -494,8 +507,169 @@
                                         class="readme-field-input"
                                         data-field-input="banner-link"
                                         placeholder="https://example.com"
-                                        autocomplete="off"
+                                        autocomplete="url"
                                     >
+                                </div>
+
+                            </div>
+
+                            <!-- Project Description Component -->
+                            <div class="readme-field readme-description-field" data-field-type="description">
+
+                                <div class="readme-field-header">
+                                    <label class="readme-field-label" for="project-description-input">
+                                        Project Description
+                                    </label>
+
+                                    <div class="readme-field-actions">
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-up"
+                                            aria-label="Move description up"
+                                            title="Move up"
+                                        >
+                                            <i class="bi bi-arrow-up" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-down"
+                                            aria-label="Move description down"
+                                            title="Move down"
+                                        >
+                                            <i class="bi bi-arrow-down" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="clear"
+                                            aria-label="Clear description"
+                                            title="Clear description"
+                                        >
+                                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="readme-field-control">
+                                    <label for="project-description-input">Description text</label>
+
+                                    <textarea
+                                        id="project-description-input"
+                                        class="readme-field-input readme-description-input"
+                                        data-field-input="description"
+                                        rows="7"
+                                        placeholder="Describe what your project does, its purpose, and its main benefits..."
+                                    ></textarea>
+                                </div>
+
+                                <div class="readme-field-toolbar">
+
+                                    <div class="readme-field-control">
+                                        <span class="readme-field-control-label">Text style</span>
+
+                                        <div
+                                            class="readme-field-button-group"
+                                            role="group"
+                                            aria-label="Format selected description text"
+                                        >
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-format="bold"
+                                                aria-label="Bold selected text"
+                                                title="Bold selected text"
+                                            >
+                                                <i class="bi bi-type-bold" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-format="italic"
+                                                aria-label="Italic selected text"
+                                                title="Italic selected text"
+                                            >
+                                                <i class="bi bi-type-italic" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-format="strike"
+                                                aria-label="Strikethrough selected text"
+                                                title="Strikethrough selected text"
+                                            >
+                                                <i class="bi bi-type-strikethrough" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-format="code"
+                                                aria-label="Format selected text as code"
+                                                title="Inline code"
+                                            >
+                                                <i class="bi bi-code" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-format="link"
+                                                aria-label="Add link to selected text"
+                                                title="Add link"
+                                            >
+                                                <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="readme-field-control">
+                                        <span class="readme-field-control-label">Alignment</span>
+
+                                        <div class="readme-field-button-group">
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button is-active"
+                                                data-description-setting="alignment"
+                                                data-value="left"
+                                                aria-pressed="true"
+                                                aria-label="Align description left"
+                                                title="Align left"
+                                            >
+                                                <i class="bi bi-text-left" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-setting="alignment"
+                                                data-value="center"
+                                                aria-pressed="false"
+                                                aria-label="Align description center"
+                                                title="Align center"
+                                            >
+                                                <i class="bi bi-text-center" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button"
+                                                data-description-setting="alignment"
+                                                data-value="right"
+                                                aria-pressed="false"
+                                                aria-label="Align description right"
+                                                title="Align right"
+                                            >
+                                                <i class="bi bi-text-right" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                             </div>

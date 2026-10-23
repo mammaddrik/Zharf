@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         '.readme-builder-nav-item[data-panel]'
     );
 
-    const componentsPanel = builder.querySelector('.readme-components-panel');
+    const componentsPanel = builder.querySelector(
+        '.readme-components-panel'
+    );
 
     const viewButtons = builder.querySelectorAll(
         '.readme-document-tab[data-view]'
@@ -34,9 +36,22 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     const projectNameInput = builder.querySelector('#project-name-input');
+
     const headingSelect = builder.querySelector(
         '[data-field-setting="tag"]'
     );
+
+    const descriptionInput = builder.querySelector(
+        '#project-description-input'
+    );
+
+    const bannerInputs = {
+        url: builder.querySelector('[data-field-input="banner-url"]'),
+        alt: builder.querySelector('[data-field-input="banner-alt"]'),
+        width: builder.querySelector('[data-field-input="banner-width"]'),
+        height: builder.querySelector('[data-field-input="banner-height"]'),
+        link: builder.querySelector('[data-field-input="banner-link"]')
+    };
 
     const projectField = builder.querySelector(
         '.readme-field[data-field-type="project-name"]'
@@ -46,8 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
         '.readme-field[data-field-type="banner"]'
     );
 
+    const descriptionField = builder.querySelector(
+        '.readme-field[data-field-type="description"]'
+    );
+
     if (!canvas || !previewPanel || !sourceInput) {
-        console.error('README Studio: Required document elements were not found.');
+        console.error(
+            'README Studio: Required document elements were not found.'
+        );
         return;
     }
 
@@ -68,12 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alignment: 'left'
     };
 
-    const bannerInputs = {
-        url: builder.querySelector('[data-field-input="banner-url"]'),
-        alt: builder.querySelector('[data-field-input="banner-alt"]'),
-        width: builder.querySelector('[data-field-input="banner-width"]'),
-        height: builder.querySelector('[data-field-input="banner-height"]'),
-        link: builder.querySelector('[data-field-input="banner-link"]')
+    const descriptionState = {
+        alignment: 'left'
     };
 
     // --------------------------------------------------
@@ -157,13 +174,32 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
+    function getSafeUrl(value) {
+        const input = String(value ?? '').trim();
+
+        if (!input) return '';
+
+        try {
+            const url = new URL(input);
+
+            if (!['http:', 'https:'].includes(url.protocol)) {
+                return '';
+            }
+
+            return url.href;
+        } catch {
+            return '';
+        }
+    }
+
     function getSafeDimension(value) {
         const dimension = String(value ?? '').trim();
 
         if (!dimension) return '';
 
-        // Allow positive pixel values, percentages, and common CSS units.
-        if (!/^\d+(?:\.\d+)?(?:px|%|em|rem|vw|vh)?$/i.test(dimension)) {
+        if (
+            !/^\d+(?:\.\d+)?(?:px|%|em|rem|vw|vh)?$/i.test(dimension)
+        ) {
             return '';
         }
 
@@ -182,6 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return projectNameInput?.value.trim() || '';
     }
 
+    function getDescription() {
+        return descriptionInput?.value.trim() || '';
+    }
+
     function getBannerData() {
         return {
             url: getSafeUrl(bannerInputs.url?.value),
@@ -194,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function hasBannerContent() {
-        return Boolean(bannerInputs.url?.value.trim());
+        return Boolean(getBannerData().url);
     }
 
     function getFields() {
@@ -202,19 +242,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function isFieldPopulated(field) {
-        if (field.dataset.fieldType === 'project-name') {
-            return Boolean(getProjectName());
-        }
+        switch (field.dataset.fieldType) {
+            case 'project-name':
+                return Boolean(getProjectName());
 
-        if (field.dataset.fieldType === 'banner') {
-            return hasBannerContent();
-        }
+            case 'banner':
+                return hasBannerContent();
 
-        return false;
+            case 'description':
+                return Boolean(getDescription());
+
+            default:
+                return false;
+        }
+    }
+
+    function getAlignment(value) {
+        return ['left', 'center', 'right'].includes(value)
+            ? value
+            : 'left';
     }
 
     // --------------------------------------------------
-    // Text Markdown
+    // Project Name Markdown
     // --------------------------------------------------
 
     function getTextMarkdown() {
@@ -240,8 +290,16 @@ document.addEventListener('DOMContentLoaded', () => {
             content = `<ins>${content}</ins>`;
         }
 
-        if (textState.tag !== 'p') {
-            const level = Number(textState.tag.slice(1));
+        const allowedTags = [
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'
+        ];
+
+        const tag = allowedTags.includes(textState.tag)
+            ? textState.tag
+            : 'h1';
+
+        if (tag !== 'p') {
+            const level = Number(tag.slice(1));
             content = `${'#'.repeat(level)} ${content}`;
         }
 
@@ -270,11 +328,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         if (banner.width) {
-            attributes.push(`width="${escapeHtml(banner.width)}"`);
+            attributes.push(
+                `width="${escapeHtml(banner.width)}"`
+            );
         }
 
         if (banner.height) {
-            attributes.push(`height="${escapeHtml(banner.height)}"`);
+            attributes.push(
+                `height="${escapeHtml(banner.height)}"`
+            );
         }
 
         const image = `<img ${attributes.join(' ')} />`;
@@ -291,7 +353,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // Preview rendering
+    // Description Markdown
+    // --------------------------------------------------
+
+    function getDescriptionMarkdown() {
+        const description = getDescription();
+
+        if (!description) return '';
+
+        if (descriptionState.alignment === 'left') {
+            return description;
+        }
+
+        return (
+            `<div align="${descriptionState.alignment}">\n\n` +
+            `${description}\n\n` +
+            '</div>'
+        );
+    }
+
+    // --------------------------------------------------
+    // Preview: Empty State
     // --------------------------------------------------
 
     function renderEmptyPreview() {
@@ -317,17 +399,25 @@ document.addEventListener('DOMContentLoaded', () => {
         previewPanel.append(emptyState);
     }
 
+    // --------------------------------------------------
+    // Preview: Project Name
+    // --------------------------------------------------
+
     function renderTextPreview() {
         const name = getProjectName();
 
         if (!name) return;
 
-        const allowedTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'];
+        const allowedTags = [
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'
+        ];
+
         const tag = allowedTags.includes(textState.tag)
             ? textState.tag
             : 'h1';
 
         const element = document.createElement(tag);
+
         element.textContent = name;
         element.style.textAlign = textState.alignment;
 
@@ -356,18 +446,26 @@ document.addEventListener('DOMContentLoaded', () => {
         previewPanel.append(element);
     }
 
+    // --------------------------------------------------
+    // Preview: Banner
+    // --------------------------------------------------
+
     function renderBannerPreview() {
         const banner = getBannerData();
 
         if (!banner.url) return;
 
         const wrapper = document.createElement('div');
-        wrapper.className = `readme-banner-preview align-${banner.alignment}`;
+
+        wrapper.className =
+            `readme-banner-preview align-${banner.alignment}`;
 
         const image = document.createElement('img');
+
         image.src = banner.url;
         image.alt = banner.alt;
         image.loading = 'lazy';
+        image.style.maxWidth = '100%';
 
         if (banner.width) {
             image.style.width = banner.width;
@@ -375,11 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (banner.height) {
             image.style.height = banner.height;
-        }
-
-        image.style.maxWidth = '100%';
-
-        if (banner.height) {
             image.style.objectFit = 'contain';
         }
 
@@ -389,10 +482,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (banner.link) {
             const link = document.createElement('a');
+
             link.href = banner.link;
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
-            link.setAttribute('aria-label', banner.alt || 'Open banner link');
+            link.setAttribute(
+                'aria-label',
+                banner.alt || 'Open banner link'
+            );
 
             link.append(image);
             wrapper.append(link);
@@ -404,28 +501,122 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // Build document Markdown in canvas order
+    // Preview: Description
+    // --------------------------------------------------
+
+    function appendInlineMarkdown(parent, text) {
+        const pattern =
+            /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*(.+?)\*\*|~~(.+?)~~|`([^`]+)`|\*([^*\n]+)\*/g;
+
+        let lastIndex = 0;
+        let match;
+
+        while ((match = pattern.exec(text)) !== null) {
+            if (match.index > lastIndex) {
+                parent.append(
+                    document.createTextNode(
+                        text.slice(lastIndex, match.index)
+                    )
+                );
+            }
+
+            if (match[1] !== undefined) {
+                const safeUrl = getSafeUrl(match[2]);
+
+                if (safeUrl) {
+                    const link = document.createElement('a');
+
+                    link.href = safeUrl;
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    link.textContent = match[1];
+
+                    parent.append(link);
+                } else {
+                    parent.append(
+                        document.createTextNode(match[0])
+                    );
+                }
+            } else if (match[3] !== undefined) {
+                const strong = document.createElement('strong');
+
+                strong.textContent = match[3];
+                parent.append(strong);
+            } else if (match[4] !== undefined) {
+                const deleted = document.createElement('del');
+
+                deleted.textContent = match[4];
+                parent.append(deleted);
+            } else if (match[5] !== undefined) {
+                const code = document.createElement('code');
+
+                code.textContent = match[5];
+                parent.append(code);
+            } else if (match[6] !== undefined) {
+                const italic = document.createElement('em');
+
+                italic.textContent = match[6];
+                parent.append(italic);
+            }
+
+            lastIndex = pattern.lastIndex;
+        }
+
+        if (lastIndex < text.length) {
+            parent.append(
+                document.createTextNode(text.slice(lastIndex))
+            );
+        }
+    }
+
+    function renderDescriptionPreview() {
+        const description = getDescription();
+
+        if (!description) return;
+
+        const wrapper = document.createElement('div');
+
+        wrapper.className =
+            `readme-description-preview align-${descriptionState.alignment}`;
+
+        description.split('\n').forEach((line, index) => {
+            if (index > 0) {
+                wrapper.append(document.createElement('br'));
+            }
+
+            appendInlineMarkdown(wrapper, line);
+        });
+
+        previewPanel.append(wrapper);
+    }
+
+    // --------------------------------------------------
+    // Build Markdown in Canvas Order
     // --------------------------------------------------
 
     function getDocumentMarkdown() {
         return getFields()
             .map((field) => {
-                if (field.dataset.fieldType === 'project-name') {
-                    return getTextMarkdown();
-                }
+                switch (field.dataset.fieldType) {
+                    case 'project-name':
+                        return getTextMarkdown();
 
-                if (field.dataset.fieldType === 'banner') {
-                    return getBannerMarkdown();
-                }
+                    case 'banner':
+                        return getBannerMarkdown();
 
-                return '';
+                    case 'description':
+                        return getDescriptionMarkdown();
+
+                    default:
+                        return '';
+                }
             })
             .filter(Boolean)
             .join('\n\n');
     }
 
     // --------------------------------------------------
-    // Render complete document
+    // Render Complete Document
     // --------------------------------------------------
 
     function renderDocument() {
@@ -438,21 +629,29 @@ document.addEventListener('DOMContentLoaded', () => {
             renderEmptyPreview();
         } else {
             populatedFields.forEach((field) => {
-                if (field.dataset.fieldType === 'project-name') {
-                    renderTextPreview();
-                }
+                switch (field.dataset.fieldType) {
+                    case 'project-name':
+                        renderTextPreview();
+                        break;
 
-                if (field.dataset.fieldType === 'banner') {
-                    renderBannerPreview();
+                    case 'banner':
+                        renderBannerPreview();
+                        break;
+
+                    case 'description':
+                        renderDescriptionPreview();
+                        break;
                 }
             });
         }
 
         const markdown = getDocumentMarkdown();
+
         sourceInput.value = markdown;
 
         if (blockCount) {
             const count = populatedFields.length;
+
             blockCount.textContent =
                 `${count} ${count === 1 ? 'block' : 'blocks'}`;
         }
@@ -474,7 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --------------------------------------------------
-    // Text events
+    // Project Name Events
     // --------------------------------------------------
 
     if (projectNameInput) {
@@ -501,10 +700,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     alignmentButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            textState.alignment = button.dataset.value;
+            const alignment = getAlignment(button.dataset.value);
+
+            textState.alignment = alignment;
 
             alignmentButtons.forEach((item) => {
-                const active = item === button;
+                const active = item.dataset.value === alignment;
 
                 item.classList.toggle('is-active', active);
                 item.setAttribute('aria-pressed', String(active));
@@ -528,6 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
             textState[setting] = !textState[setting];
 
             button.classList.toggle('is-active', textState[setting]);
+
             button.setAttribute(
                 'aria-pressed',
                 String(textState[setting])
@@ -538,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------------------------------
-    // Banner events
+    // Banner Events
     // --------------------------------------------------
 
     Object.values(bannerInputs).forEach((input) => {
@@ -554,16 +756,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     bannerAlignmentButtons.forEach((button) => {
         button.addEventListener('click', () => {
-            const alignment = button.dataset.value;
-
-            if (!['left', 'center', 'right'].includes(alignment)) {
-                return;
-            }
+            const alignment = getAlignment(button.dataset.value);
 
             bannerState.alignment = alignment;
 
             bannerAlignmentButtons.forEach((item) => {
-                const active = item === button;
+                const active = item.dataset.value === alignment;
 
                 item.classList.toggle('is-active', active);
                 item.setAttribute('aria-pressed', String(active));
@@ -574,7 +772,184 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------------------------------
-    // Clear and reorder any component
+    // Description Events
+    // --------------------------------------------------
+
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', renderDocument);
+        descriptionInput.addEventListener('change', renderDocument);
+    }
+
+    const descriptionAlignmentButtons = builder.querySelectorAll(
+        '[data-description-setting="alignment"][data-value]'
+    );
+
+    descriptionAlignmentButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const alignment = getAlignment(button.dataset.value);
+
+            descriptionState.alignment = alignment;
+
+            descriptionAlignmentButtons.forEach((item) => {
+                const active = item.dataset.value === alignment;
+
+                item.classList.toggle('is-active', active);
+                item.setAttribute('aria-pressed', String(active));
+            });
+
+            renderDocument();
+        });
+    });
+
+    function applyDescriptionFormat(format) {
+        if (!descriptionInput) return;
+
+        const start = descriptionInput.selectionStart;
+        const end = descriptionInput.selectionEnd;
+
+        if (start === end) {
+            descriptionInput.focus();
+            return;
+        }
+
+        const value = descriptionInput.value;
+        const selectedText = value.slice(start, end);
+
+        const formats = {
+            bold: {
+                prefix: '**',
+                suffix: '**'
+            },
+            italic: {
+                prefix: '*',
+                suffix: '*'
+            },
+            strike: {
+                prefix: '~~',
+                suffix: '~~'
+            },
+            code: {
+                prefix: '`',
+                suffix: '`'
+            }
+        };
+
+        if (format === 'link') {
+            const inputUrl = window.prompt(
+                'Enter the URL for the selected text:',
+                'https://example.com'
+            );
+
+            if (inputUrl === null) return;
+
+            const safeUrl = getSafeUrl(inputUrl);
+
+            if (!safeUrl) {
+                window.alert('Please enter a valid HTTP or HTTPS URL.');
+                descriptionInput.focus();
+                descriptionInput.setSelectionRange(start, end);
+                return;
+            }
+
+            const prefix = '[';
+            const suffix = `](${safeUrl})`;
+
+            const alreadyLinked =
+                selectedText.startsWith('[') &&
+                selectedText.endsWith(`](${safeUrl})`);
+
+            let replacement;
+            let selectionStart;
+            let selectionEnd;
+
+            if (alreadyLinked) {
+                replacement = selectedText.slice(
+                    prefix.length,
+                    selectedText.length - suffix.length
+                );
+
+                selectionStart = start;
+                selectionEnd = start + replacement.length;
+            } else {
+                replacement = `${prefix}${selectedText}${suffix}`;
+                selectionStart = start + prefix.length;
+                selectionEnd = selectionStart + selectedText.length;
+            }
+
+            descriptionInput.setRangeText(
+                replacement,
+                start,
+                end,
+                'select'
+            );
+
+            descriptionInput.focus();
+            descriptionInput.setSelectionRange(
+                selectionStart,
+                selectionEnd
+            );
+
+            renderDocument();
+            return;
+        }
+
+        const definition = formats[format];
+
+        if (!definition) return;
+
+        const { prefix, suffix } = definition;
+
+        const alreadyFormatted =
+            selectedText.startsWith(prefix) &&
+            selectedText.endsWith(suffix) &&
+            selectedText.length >= prefix.length + suffix.length;
+
+        let replacement;
+        let selectionStart;
+        let selectionEnd;
+
+        if (alreadyFormatted) {
+            replacement = selectedText.slice(
+                prefix.length,
+                selectedText.length - suffix.length
+            );
+
+            selectionStart = start;
+            selectionEnd = start + replacement.length;
+        } else {
+            replacement = `${prefix}${selectedText}${suffix}`;
+            selectionStart = start + prefix.length;
+            selectionEnd = selectionStart + selectedText.length;
+        }
+
+        descriptionInput.setRangeText(
+            replacement,
+            start,
+            end,
+            'select'
+        );
+
+        descriptionInput.focus();
+        descriptionInput.setSelectionRange(
+            selectionStart,
+            selectionEnd
+        );
+
+        renderDocument();
+    }
+
+    const descriptionFormatButtons = builder.querySelectorAll(
+        '[data-description-format]'
+    );
+
+    descriptionFormatButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            applyDescriptionFormat(button.dataset.descriptionFormat);
+        });
+    });
+
+    // --------------------------------------------------
+    // Clear and Reorder Components
     // --------------------------------------------------
 
     const fieldActionButtons = builder.querySelectorAll(
@@ -593,6 +968,34 @@ document.addEventListener('DOMContentLoaded', () => {
             if (action === 'clear') {
                 if (fieldType === 'project-name' && projectNameInput) {
                     projectNameInput.value = '';
+
+                    textState.tag = 'h1';
+                    textState.alignment = 'left';
+                    textState.bold = false;
+                    textState.italic = false;
+                    textState.underline = false;
+                    textState.strikethrough = false;
+
+                    if (headingSelect) {
+                        headingSelect.value = 'h1';
+                    }
+
+                    alignmentButtons.forEach((item) => {
+                        const active = item.dataset.value === 'left';
+
+                        item.classList.toggle('is-active', active);
+                        item.setAttribute('aria-pressed', String(active));
+                    });
+
+                    styleButtons.forEach((item) => {
+                        const setting = item.dataset.fieldSetting;
+
+                        item.classList.remove('is-active');
+                        item.setAttribute(
+                            'aria-pressed',
+                            String(Boolean(textState[setting]))
+                        );
+                    });
                 }
 
                 if (fieldType === 'banner') {
@@ -610,13 +1013,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
+                if (fieldType === 'description' && descriptionInput) {
+                    descriptionInput.value = '';
+                    descriptionState.alignment = 'left';
+
+                    descriptionAlignmentButtons.forEach((item) => {
+                        const active = item.dataset.value === 'left';
+
+                        item.classList.toggle('is-active', active);
+                        item.setAttribute('aria-pressed', String(active));
+                    });
+                }
+
                 renderDocument();
 
-                const firstInput = field.querySelector(
-                    '[data-field-input]'
-                );
-
+                const firstInput = field.querySelector('[data-field-input]');
                 firstInput?.focus();
+
                 return;
             }
 
@@ -631,16 +1044,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (action === 'move-down' && index < fields.length - 1) {
-                const nextField = fields[index + 1];
-
-                canvas.insertBefore(nextField, field);
+                canvas.insertBefore(fields[index + 1], field);
                 renderDocument();
             }
         });
     });
 
     // --------------------------------------------------
-    // Component navigation
+    // Component Navigation
     // --------------------------------------------------
 
     const componentButtons = builder.querySelectorAll(
@@ -671,7 +1082,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------------------------------
-    // Initial render
+    // Initial Render
     // --------------------------------------------------
 
     renderDocument();

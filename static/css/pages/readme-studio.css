@@ -908,6 +908,126 @@
     max-width: 100%;
 }
 
+.readme-description-field {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+}
+
+.readme-description-field .readme-field-header {
+    margin-bottom: 0;
+}
+
+.readme-description-field > .readme-field-control {
+    width: 100%;
+    min-width: 0;
+}
+
+.readme-description-field .readme-field-control > label,
+.readme-description-field .readme-field-control-label {
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+/* Description Textarea */
+
+.readme-description-field textarea.readme-field-input {
+    min-height: 160px;
+    resize: vertical;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Description Toolbar */
+
+.readme-description-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    margin-top: 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+}
+
+.readme-description-toolbar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+}
+
+.readme-description-toolbar-group > label,
+.readme-description-toolbar-group > .readme-field-control-label {
+    color: var(--color-text-muted);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* Text Style and Alignment Buttons */
+
+.readme-description-toolbar .readme-field-button-group {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+    max-width: 100%;
+}
+
+.readme-description-toolbar .readme-icon-button {
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+}
+
+.readme-description-toolbar .readme-icon-button.is-active,
+.readme-description-toolbar .readme-icon-button[aria-pressed="true"] {
+    border-color: var(--color-border);
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+/* Description Preview */
+
+.readme-preview-content .readme-description-preview {
+    min-width: 0;
+    margin: 16px 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    line-height: 1.8;
+}
+
+.readme-preview-content .readme-description-preview.align-left {
+    text-align: left;
+}
+
+.readme-preview-content .readme-description-preview.align-center {
+    text-align: center;
+}
+
+.readme-preview-content .readme-description-preview.align-right {
+    text-align: right;
+}
+
+.readme-preview-content .readme-description-preview a {
+    color: var(--color-accent-bright);
+    overflow-wrap: anywhere;
+}
+
+.readme-preview-content .readme-description-preview code {
+    padding: 2px 5px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: var(--color-background);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
 /* Responsive: Small Desktop */
 
 @media (max-width: 1100px) {
@@ -1012,6 +1132,14 @@
     .readme-document-footer {
         padding: 13px 16px;
     }
+
+    .readme-description-field textarea.readme-field-input {
+        min-height: 140px;
+    }
+
+    .readme-description-toolbar {
+        gap: 14px;
+    }
 }
 
 /* Responsive: Mobile */
@@ -1095,5 +1223,13 @@
 
     .readme-banner-field .readme-field-actions {
         flex-shrink: 0;
+    }
+
+    .readme-description-field textarea.readme-field-input {
+        min-height: 120px;
+    }
+
+    .readme-description-toolbar .readme-field-button-group {
+        gap: 2px;
     }
 }
