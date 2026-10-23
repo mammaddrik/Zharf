@@ -5,18 +5,14 @@
 {% block title %}README Studio | Zharf{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pages/readme-studio.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/workspace.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/readme-studio.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="workspace">
     <div class="workspace-mobile-header">
-        <button
-            type="button"
-            class="workspace-mobile-menu"
-            aria-label="Open sidebar"
-        >
+        <button type="button" class="workspace-mobile-menu" aria-label="Open sidebar">
             <i class="bi bi-list" aria-hidden="true"></i>
         </button>
     </div>
@@ -33,132 +29,374 @@
                     <div class="readme-studio-breadcrumb">
                         <span>WORKSPACE</span>
                         <i class="bi bi-chevron-right" aria-hidden="true"></i>
-                        <span>DEVELOPER TOOLS</span>
+                        <span>README STUDIO</span>
                     </div>
 
                     <h1>README <span>Studio</span></h1>
-
-                    <p>
-                        Turn your project details into a README
-                        worth reading.
-                    </p>
-                </div>
-
-                <div class="readme-studio-version">
-                    <i class="bi bi-markdown" aria-hidden="true"></i>
-                    <span>MARKDOWN</span>
+                    <p>Build your project documentation with a visual editor.</p>
                 </div>
             </header>
 
-            <section class="readme-studio-hero">
-                <div class="readme-studio-hero-content">
-                    <div class="readme-studio-status">
-                        <span class="readme-studio-status-dot"></span>
-                        YOUR NEXT PROJECT STARTS HERE
+            <section class="readme-builder">
+
+                <div class="readme-builder-toolbar">
+                    <div class="readme-builder-sidebar-heading">
+                        <h2>README Builder</h2>
                     </div>
 
-                    <h2>
-                        Give your project
-                        <span>a better introduction.</span>
-                    </h2>
+                    <div class="readme-builder-navigation">
+                        <button
+                            type="button"
+                            class="readme-builder-nav-item is-active"
+                            data-panel="sections"
+                            aria-pressed="true"
+                        >
+                            <i class="bi bi-filetype-md" aria-hidden="true"></i>
+                            <span>README sections</span>
+                        </button>
 
-                    <p>
-                        Build a clean, structured README with customizable
-                        sections and a live Markdown preview.
-                    </p>
+                        <button
+                            type="button"
+                            class="readme-builder-nav-item"
+                            data-panel="portfolio"
+                            aria-pressed="false"
+                        >
+                            <i class="bi bi-file-earmark-person" aria-hidden="true"></i>
+                            <span>Portfolio sections</span>
+                        </button>
 
-                    <div class="readme-studio-features">
-                        <div>
-                            <i class="bi bi-layout-text-window" aria-hidden="true"></i>
-                            <span>Structured sections</span>
-                        </div>
-
-                        <div>
-                            <i class="bi bi-eye" aria-hidden="true"></i>
-                            <span>Live preview</span>
-                        </div>
-
-                        <div>
-                            <i class="bi bi-file-earmark-arrow-down" aria-hidden="true"></i>
-                            <span>Export Markdown</span>
-                        </div>
+                        <button
+                            type="button"
+                            class="readme-builder-nav-item"
+                            data-panel="custom"
+                            aria-pressed="false"
+                        >
+                            <i class="bi bi-puzzle" aria-hidden="true"></i>
+                            <span>Custom sections</span>
+                        </button>
                     </div>
-
-                    <button class="readme-studio-start" type="button" disabled>
-                        <i class="bi bi-plus-lg" aria-hidden="true"></i>
-                        <span>Builder coming next</span>
-                    </button>
                 </div>
 
-                <div class="readme-studio-preview-art" aria-hidden="true">
-                    <div class="readme-studio-orbit readme-studio-orbit-one"></div>
-                    <div class="readme-studio-orbit readme-studio-orbit-two"></div>
+                <aside class="readme-components-panel">
+                    <div class="readme-components-header">
+                        <div>
+                            <h2>Components</h2>
+                            <p>Add elements to your document.</p>
+                        </div>
+                    </div>
 
-                    <div class="readme-studio-code-window">
-                        <div class="readme-studio-window-bar">
-                            <div class="readme-studio-window-dots">
-                                <span></span>
-                                <span></span>
-                                <span></span>
+                    <div class="readme-components-group">
+                        <span class="readme-components-group-title">PROJECT DETAILS</span>
+
+                        <button
+                            type="button"
+                            class="readme-component-item"
+                            data-component="project-name"
+                        >
+                            <span class="readme-component-icon">
+                                <i class="bi bi-type-h1" aria-hidden="true"></i>
+                            </span>
+
+                            <span class="readme-component-copy">
+                                <strong>Text</strong>
+                                <span>Text</span>
+                            </span>
+                        </button>
+                    </div>
+                </aside>
+
+                <section class="readme-document-panel">
+
+                    <div class="readme-document-header">
+                        <div class="readme-document-title">
+                            <i class="bi bi-filetype-md" aria-hidden="true"></i>
+
+                            <div>
+                                <h2>Project details</h2>
+                                <span>Untitled README.md</span>
                             </div>
-                            <span>README.md</span>
-                            <i class="bi bi-filetype-md"></i>
                         </div>
 
-                        <div class="readme-studio-code">
-                            <div><span class="code-muted">#</span> <span class="code-heading">Your Project</span></div>
-                            <div class="code-gap"></div>
-                            <div><span class="code-purple">></span> Build something great.</div>
-                            <div class="code-muted">A short project description.</div>
-                            <div class="code-gap"></div>
-                            <div><span class="code-purple">##</span> Features</div>
-                            <div class="code-muted">- Simple and flexible</div>
-                            <div class="code-muted">- Easy to get started</div>
-                            <div class="code-gap"></div>
-                            <div><span class="code-purple">##</span> Installation</div>
-                            <div class="code-green">$ pip install your-project</div>
-                            <div class="code-cursor"></div>
-                        </div>
+                        <div class="readme-document-actions">
+                            <div class="readme-document-tabs" role="group" aria-label="Document view">
 
-                        <div class="readme-studio-code-footer">
-                            <span><i class="bi bi-check-circle"></i> Markdown</span>
-                            <span>UTF-8</span>
+                                <button
+                                    type="button"
+                                    class="readme-icon-button readme-document-tab is-active"
+                                    aria-label="Edit"
+                                    title="Edit"
+                                    aria-pressed="true"
+                                    data-view="edit"
+                                >
+                                    <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="readme-icon-button readme-document-tab"
+                                    aria-label="Preview"
+                                    title="Preview"
+                                    aria-pressed="false"
+                                    data-view="preview"
+                                >
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="readme-icon-button readme-document-tab"
+                                    aria-label="Source Code"
+                                    title="Source Code"
+                                    aria-pressed="false"
+                                    data-view="source"
+                                >
+                                    <i class="bi bi-code-slash" aria-hidden="true"></i>
+                                </button>
+
+                            </div>
                         </div>
                     </div>
 
-                    <div class="readme-studio-floating-icon readme-studio-floating-top">
-                        <i class="bi bi-braces"></i>
+                    <div
+                        class="readme-document-view readme-document-edit-view"
+                        data-view-panel="edit"
+                    >
+                        <div class="readme-document-canvas" id="readme-document-canvas">
+
+                            <div class="readme-field" data-field-type="project-name">
+
+                                <div class="readme-field-header">
+                                    <label
+                                        class="readme-field-label"
+                                        for="project-name-input"
+                                    >
+                                        Project name
+                                    </label>
+
+                                    <div class="readme-field-actions">
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-up"
+                                            aria-label="Move field up"
+                                            title="Move up"
+                                        >
+                                            <i class="bi bi-arrow-up" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-down"
+                                            aria-label="Move field down"
+                                            title="Move down"
+                                        >
+                                            <i class="bi bi-arrow-down" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="clear"
+                                            aria-label="Clear project name"
+                                            title="Clear value"
+                                        >
+                                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                        </button>
+
+                                    </div>
+                                </div>
+
+                                <input
+                                    type="text"
+                                    id="project-name-input"
+                                    class="readme-field-input"
+                                    data-field-input="project-name"
+                                    placeholder="Enter your project name"
+                                    autocomplete="off"
+                                >
+
+                                <div class="readme-field-toolbar">
+
+                                    <div class="readme-field-control">
+                                        <label for="project-name-heading">Text type</label>
+
+                                        <select
+                                            id="project-name-heading"
+                                            data-field-setting="tag"
+                                        >
+                                            <option value="h1" selected>Heading h1</option>
+                                            <option value="h2">Heading h2</option>
+                                            <option value="h3">Heading h3</option>
+                                            <option value="h4">Heading h4</option>
+                                            <option value="h5">Heading h5</option>
+                                            <option value="h6">Heading h6</option>
+                                            <option value="p">Paragraph (P)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="readme-field-control">
+                                        <span class="readme-field-control-label">Alignment</span>
+
+                                        <div class="readme-field-button-group">
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action is-active"
+                                                data-field-setting="alignment"
+                                                data-value="left"
+                                                aria-pressed="true"
+                                                aria-label="Align left"
+                                                title="Align left"
+                                            >
+                                                <i class="bi bi-text-left" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="alignment"
+                                                data-value="center"
+                                                aria-pressed="false"
+                                                aria-label="Align center"
+                                                title="Align center"
+                                            >
+                                                <i class="bi bi-text-center" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="alignment"
+                                                data-value="right"
+                                                aria-pressed="false"
+                                                aria-label="Align right"
+                                                title="Align right"
+                                            >
+                                                <i class="bi bi-text-right" aria-hidden="true"></i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="readme-field-control">
+                                        <span class="readme-field-control-label">Text style</span>
+
+                                        <div class="readme-field-button-group">
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="bold"
+                                                aria-pressed="false"
+                                                aria-label="Bold"
+                                                title="Bold"
+                                            >
+                                                <i class="bi bi-type-bold" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="italic"
+                                                aria-pressed="false"
+                                                aria-label="Italic"
+                                                title="Italic"
+                                            >
+                                                <i class="bi bi-type-italic" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="underline"
+                                                aria-pressed="false"
+                                                aria-label="Underline"
+                                                title="Underline"
+                                            >
+                                                <i class="bi bi-type-underline" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-field-setting="strikethrough"
+                                                aria-pressed="false"
+                                                aria-label="Strikethrough"
+                                                title="Strikethrough"
+                                            >
+                                                <i class="bi bi-type-strikethrough" aria-hidden="true"></i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
 
-                    <div class="readme-studio-floating-icon readme-studio-floating-bottom">
-                        <i class="bi bi-stars"></i>
+                    <div
+                        class="readme-document-view readme-document-preview-view"
+                        id="readme-preview-panel"
+                        data-view-panel="preview"
+                        hidden
+                    >
+                        <div class="readme-preview-content" id="readme-preview-content">
+
+                            <div class="readme-document-empty">
+                                <span class="readme-document-empty-icon">
+                                    <i class="bi bi-eye" aria-hidden="true"></i>
+                                </span>
+
+                                <h3>Preview will appear here</h3>
+
+                                <p>Your README preview will be displayed here without editing controls.</p>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
+
+                    <div
+                        class="readme-document-view readme-document-source-view"
+                        id="readme-source-panel"
+                        data-view-panel="source"
+                        hidden
+                    >
+                        <textarea
+                            class="readme-source-content"
+                            id="readme-source-content"
+                            aria-label="Markdown source"
+                            spellcheck="false"
+                            placeholder="Markdown source will appear here..."
+                            readonly
+                        ></textarea>
+                    </div>
+
+                    <div class="readme-document-footer">
+                        <span>
+                            <i class="bi bi-layers" aria-hidden="true"></i>
+                            <span id="readme-block-count">0 blocks</span>
+                        </span>
+
+                        <span>
+                            <i class="bi bi-file-text" aria-hidden="true"></i>
+                            <span id="readme-preview-character-count">0 characters</span>
+                        </span>
+                    </div>
+
+                </section>
+
             </section>
-
-            <section class="readme-studio-next">
-                <div class="readme-studio-next-icon">
-                    <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                </div>
-
-                <div class="readme-studio-next-copy">
-                    <span>UP NEXT</span>
-                    <h3>Your README workspace</h3>
-                    <p>
-                        Add project details, organize sections, and see
-                        the Markdown output as you build.
-                    </p>
-                </div>
-
-                <i class="bi bi-arrow-down-right readme-studio-next-arrow"
-                   aria-hidden="true"></i>
-            </section>
-
         </div>
     </main>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/workspace/sidebar.js' %}"></script>
+<script src="{% static 'js/workspace/sidebar.js' %}"></script>
+<script src="{% static 'js/pages/readme-studio.js' %}"></script>
 {% endblock %}

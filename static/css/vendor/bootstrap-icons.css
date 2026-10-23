@@ -101,6 +101,14 @@
     content: "\F3B9";
 }
 
+.bi-file-earmark-person::before {
+    content: "\F379";
+}
+
+.bi-code-slash::before{
+    content: "\F2C6";
+}
+
 .bi-star-fill::before {
     content: "\F586";
 }
@@ -203,9 +211,61 @@
 }
 
 .bi-filetype-md::before {
-    content: "\F752";
+    content: "\F750";
 }
 
 .bi-arrow-down-right::before {
     content: "\F124";
+}
+
+.bi-type-h1::before {
+    content: "\F5F1";
+}
+
+.bi-type-bold::before {
+    content: "\F5F0";
+}
+
+.bi-type-italic::before {
+    content: "\F5F4";
+}
+
+.bi-type-strikethrough::before {
+    content: "\F5F5";
+}
+
+.bi-text-left::before {
+    content: "\F5C7";
+}
+
+.bi-text-center::before {
+    content: "\F5C4";
+}
+
+.bi-text-right::before {
+    content: "\F5C9";
+}
+
+.bi-lightbulb::before {
+    content: "\F46B";
+}
+
+.bi-type::before {
+    content: "\F5F7";
+}
+
+.bi-type-underline::before {
+    content: "\F5F6";
+}
+
+.bi-arrow-up::before {
+    content: "\F148";
+}
+
+.bi-arrow-down::before {
+    content: "\F128";
+}
+
+.bi-puzzle::before {
+    content: "\F503";
 }
