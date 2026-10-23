@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const builder = document.querySelector('.readme-builder');
 
@@ -27,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sourceInput = builder.querySelector('#readme-source-content');
 
     const blockCount = builder.querySelector('#readme-block-count');
+
     const characterCount = builder.querySelector(
         '#readme-preview-character-count'
     );
@@ -65,6 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
         '.readme-field[data-field-type="description"]'
     );
 
+    const linkModal = document.getElementById('readme-link-modal');
+
+    const linkModalForm = document.getElementById(
+        'readme-link-modal-form'
+    );
+
+    const linkUrlInput = document.getElementById(
+        'readme-link-url-input'
+    );
+
+    const linkSelectedText = document.getElementById(
+        'readme-link-selected-text'
+    );
+
+    const linkUrlError = document.getElementById(
+        'readme-link-url-error'
+    );
+
+    const linkCloseButtons = document.querySelectorAll(
+        '[data-link-modal-close]'
+    );
+
     if (!canvas || !previewPanel || !sourceInput) {
         console.error(
             'README Studio: Required document elements were not found.'
@@ -92,6 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const descriptionState = {
         alignment: 'left'
     };
+
+    // Stores the selected text and its original position
+    // while the link modal is open.
+    let pendingLinkSelection = null;
 
     // --------------------------------------------------
     // Navigation
@@ -123,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     activateBuilderPanel(initialNavigation?.dataset.panel || 'sections');
 
     // --------------------------------------------------
-    // Document views
+    // Document Views
     // --------------------------------------------------
 
     function activateView(selectedView) {
@@ -262,6 +288,177 @@ document.addEventListener('DOMContentLoaded', () => {
             ? value
             : 'left';
     }
+
+    // --------------------------------------------------
+    // Add Link Modal
+    // --------------------------------------------------
+
+    function isLinkModalOpen() {
+        return Boolean(linkModal && !linkModal.hidden);
+    }
+
+    function clearLinkModalError() {
+        if (linkUrlError) {
+            linkUrlError.textContent = '';
+            linkUrlError.hidden = true;
+        }
+
+        if (linkUrlInput) {
+            linkUrlInput.removeAttribute('aria-invalid');
+        }
+    }
+
+    function showLinkModalError(message) {
+        if (!linkUrlError || !linkUrlInput) return;
+
+        linkUrlError.textContent = message;
+        linkUrlError.hidden = false;
+
+        linkUrlInput.setAttribute('aria-invalid', 'true');
+        linkUrlInput.focus();
+    }
+
+    function openLinkModal(start, end, selectedText) {
+        if (
+            !linkModal ||
+            !linkModalForm ||
+            !linkUrlInput ||
+            !linkSelectedText
+        ) {
+            console.error(
+                'README Studio: Link modal elements were not found.'
+            );
+            return;
+        }
+
+        pendingLinkSelection = {
+            start,
+            end,
+            selectedText
+        };
+
+        clearLinkModalError();
+
+        linkModalForm.reset();
+
+        // Set a useful example without requiring the user to remove it.
+        linkUrlInput.value = 'https://example.com';
+
+        // Display the selected text safely.
+        linkSelectedText.textContent = selectedText;
+
+        linkModal.hidden = false;
+        linkModal.setAttribute('aria-hidden', 'false');
+        linkModal.classList.add('is-open');
+
+        requestAnimationFrame(() => {
+            linkUrlInput.focus();
+            linkUrlInput.select();
+        });
+    }
+
+    function closeLinkModal() {
+        if (!linkModal) return;
+
+        linkModal.hidden = true;
+        linkModal.setAttribute('aria-hidden', 'true');
+        linkModal.classList.remove('is-open');
+
+        clearLinkModalError();
+
+        pendingLinkSelection = null;
+
+        if (descriptionInput) {
+            descriptionInput.focus();
+        }
+    }
+
+    // Close buttons and backdrop.
+    linkCloseButtons.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            closeLinkModal();
+        });
+    });
+
+    if (linkModal) {
+        linkModal.addEventListener('click', (event) => {
+            if (
+                event.target instanceof Element &&
+                event.target.matches('[data-link-modal-close]')
+            ) {
+                closeLinkModal();
+            }
+        });
+    }
+
+    // Clear validation errors when the URL changes.
+    if (linkUrlInput) {
+        linkUrlInput.addEventListener('input', clearLinkModalError);
+    }
+
+    // Validate and insert the Markdown link.
+    if (linkModalForm) {
+        linkModalForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (
+                !descriptionInput ||
+                !pendingLinkSelection ||
+                !linkUrlInput
+            ) {
+                closeLinkModal();
+                return;
+            }
+
+            const safeUrl = getSafeUrl(linkUrlInput.value);
+
+            if (!safeUrl) {
+                showLinkModalError(
+                    'Please enter a valid absolute HTTP or HTTPS URL.'
+                );
+                return;
+            }
+
+            const {
+                start,
+                end,
+                selectedText
+            } = pendingLinkSelection;
+
+            const replacement = `[${selectedText}](${safeUrl})`;
+
+            // Insert the Markdown link at the original selection.
+            descriptionInput.setRangeText(
+                replacement,
+                start,
+                end,
+                'select'
+            );
+
+            // Close the modal and return focus to the description editor.
+            closeLinkModal();
+
+            // Select only the link text, not the Markdown syntax.
+            const selectionStart = start + 1;
+            const selectionEnd = selectionStart + selectedText.length;
+
+            descriptionInput.setSelectionRange(
+                selectionStart,
+                selectionEnd
+            );
+
+            renderDocument();
+        });
+    }
+
+    // Close the modal with Escape.
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isLinkModalOpen()) {
+            event.preventDefault();
+            closeLinkModal();
+        }
+    });
 
     // --------------------------------------------------
     // Project Name Markdown
@@ -506,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function appendInlineMarkdown(parent, text) {
         const pattern =
-            /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*(.+?)\*\*|~~(.+?)~~|`([^`]+)`|\*([^*\n]+)\*/g;
+            /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|\*\*(.+?)\*\*|~~(.+?)~~|`([^`]+)`|\*([^\*\n]+)\*/g;
 
         let lastIndex = 0;
         let match;
@@ -801,6 +998,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --------------------------------------------------
+    // Description Formatting
+    // --------------------------------------------------
+
     function applyDescriptionFormat(format) {
         if (!descriptionInput) return;
 
@@ -814,6 +1015,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const value = descriptionInput.value;
         const selectedText = value.slice(start, end);
+
+        // Open the custom modal instead of using prompt().
+        if (format === 'link') {
+            openLinkModal(start, end, selectedText);
+            return;
+        }
 
         const formats = {
             bold: {
@@ -833,65 +1040,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 suffix: '`'
             }
         };
-
-        if (format === 'link') {
-            const inputUrl = window.prompt(
-                'Enter the URL for the selected text:',
-                'https://example.com'
-            );
-
-            if (inputUrl === null) return;
-
-            const safeUrl = getSafeUrl(inputUrl);
-
-            if (!safeUrl) {
-                window.alert('Please enter a valid HTTP or HTTPS URL.');
-                descriptionInput.focus();
-                descriptionInput.setSelectionRange(start, end);
-                return;
-            }
-
-            const prefix = '[';
-            const suffix = `](${safeUrl})`;
-
-            const alreadyLinked =
-                selectedText.startsWith('[') &&
-                selectedText.endsWith(`](${safeUrl})`);
-
-            let replacement;
-            let selectionStart;
-            let selectionEnd;
-
-            if (alreadyLinked) {
-                replacement = selectedText.slice(
-                    prefix.length,
-                    selectedText.length - suffix.length
-                );
-
-                selectionStart = start;
-                selectionEnd = start + replacement.length;
-            } else {
-                replacement = `${prefix}${selectedText}${suffix}`;
-                selectionStart = start + prefix.length;
-                selectionEnd = selectionStart + selectedText.length;
-            }
-
-            descriptionInput.setRangeText(
-                replacement,
-                start,
-                end,
-                'select'
-            );
-
-            descriptionInput.focus();
-            descriptionInput.setSelectionRange(
-                selectionStart,
-                selectionEnd
-            );
-
-            renderDocument();
-            return;
-        }
 
         const definition = formats[format];
 
@@ -930,6 +1078,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         descriptionInput.focus();
+
         descriptionInput.setSelectionRange(
             selectionStart,
             selectionEnd
@@ -991,6 +1140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         const setting = item.dataset.fieldSetting;
 
                         item.classList.remove('is-active');
+
                         item.setAttribute(
                             'aria-pressed',
                             String(Boolean(textState[setting]))

@@ -1,4 +1,3 @@
-
 .readme-studio {
     width: 100%;
     min-width: 0;
@@ -227,7 +226,7 @@
     line-height: 1.6;
 }
 
-/* Custom Sections: two columns */
+/* Custom Sections */
 
 .readme-builder:has(
     .readme-builder-nav-item[data-panel="custom"].is-active
@@ -235,7 +234,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* README Sections: one column */
+/* README Sections */
 
 .readme-builder:has(
     .readme-builder-nav-item[data-panel="sections"].is-active
@@ -243,7 +242,7 @@
     grid-template-columns: minmax(0, 1fr);
 }
 
-/* Portfolio Sections: one column */
+/* Portfolio Sections */
 
 .readme-builder:has(
     .readme-builder-nav-item[data-panel="portfolio"].is-active
@@ -908,6 +907,8 @@
     max-width: 100%;
 }
 
+/* Description Component */
+
 .readme-description-field {
     display: flex;
     flex-direction: column;
@@ -1026,6 +1027,309 @@
     background: var(--color-background);
     font-family: var(--font-mono);
     font-size: 0.9em;
+}
+
+/* ========================================
+   Add Link Modal
+======================================== */
+
+.readme-link-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.readme-link-modal[hidden] {
+    display: none !important;
+}
+
+/* Modal Backdrop */
+
+.readme-link-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 58%);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    animation: readme-link-backdrop-in 180ms ease-out;
+}
+
+/* Modal Dialog */
+
+.readme-link-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 460px;
+    min-width: 0;
+    margin: auto;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: 0 24px 80px rgb(0 0 0 / 28%);
+    animation: readme-link-dialog-in 200ms ease-out;
+}
+
+/* Modal Header */
+
+.readme-link-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.readme-link-modal-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+}
+
+.readme-link-modal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background: var(--color-background);
+    color: var(--color-accent-bright);
+    font-size: 21px;
+}
+
+.readme-link-modal-heading > div {
+    min-width: 0;
+    padding-top: 2px;
+}
+
+.readme-link-modal-heading h2 {
+    margin: 0;
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 750;
+    line-height: 1.5;
+}
+
+.readme-link-modal-heading p {
+    margin: 5px 0 0;
+    color: var(--color-text-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.readme-link-modal-close {
+    width: 32px;
+    height: 32px;
+    margin: -3px -5px 0 0;
+    font-size: 13px;
+}
+
+/* Modal Form */
+
+#readme-link-modal-form {
+    margin: 0;
+}
+
+.readme-link-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+}
+
+.readme-link-modal-body .readme-field-control {
+    width: 100%;
+    min-width: 0;
+    gap: 9px;
+}
+
+.readme-link-modal-body .readme-field-control > label {
+    color: var(--color-text);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+/* Selected Text */
+
+.readme-link-selected-text {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background: var(--color-background);
+    color: var(--color-text-muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* URL Input */
+
+.readme-link-modal-body #readme-link-url-input {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    outline: none;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.readme-link-modal-body #readme-link-url-input::placeholder {
+    color: var(--color-text-subtle);
+}
+
+.readme-link-modal-body #readme-link-url-input:hover {
+    border-color: var(--color-border-strong);
+}
+
+.readme-link-modal-body #readme-link-url-input:focus {
+    border-color: var(--color-accent-bright);
+    box-shadow: 0 0 0 3px rgb(100 116 139 / 12%);
+    outline: none;
+}
+
+.readme-link-modal-body #readme-link-url-input[aria-invalid="true"] {
+    border-color: #dc6262;
+}
+
+/* Validation Message */
+
+.readme-link-modal-error {
+    margin: 0;
+    color: #e06464;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.readme-link-modal-error[hidden] {
+    display: none !important;
+}
+
+/* Modal Footer */
+
+.readme-link-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-background);
+}
+
+/* Modal Buttons */
+
+.readme-link-modal-footer button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 10px 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.4;
+    cursor: pointer;
+    transition:
+        color var(--transition-fast),
+        background var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.readme-link-modal-footer button:active {
+    transform: translateY(1px);
+}
+
+.readme-link-modal-footer button:focus-visible,
+.readme-link-modal-close:focus-visible {
+    outline: 2px solid var(--color-accent-bright);
+    outline-offset: 3px;
+}
+
+/* Cancel Button */
+
+.readme-link-modal-cancel {
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+}
+
+.readme-link-modal-cancel:hover {
+    border-color: var(--color-border-strong);
+    background: var(--color-surface-elevated);
+    color: var(--color-text);
+}
+
+/* Submit Button */
+
+.readme-link-modal-submit {
+    border-color: var(--color-accent-bright) !important;
+    background: var(--color-accent-bright);
+    color: #fff;
+}
+
+.readme-link-modal-submit:hover {
+    filter: brightness(1.08);
+}
+
+.readme-link-modal-submit i {
+    font-size: 15px;
+}
+
+/* Modal Animations */
+
+@keyframes readme-link-backdrop-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes readme-link-dialog-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Responsive: Small Desktop */
@@ -1231,5 +1535,66 @@
 
     .readme-description-toolbar .readme-field-button-group {
         gap: 2px;
+    }
+
+    /* Link Modal: Mobile */
+
+    .readme-link-modal {
+        align-items: center;
+        padding: 14px;
+    }
+
+    .readme-link-modal-dialog {
+        max-width: none;
+        border-radius: var(--radius-medium);
+    }
+
+    .readme-link-modal-header {
+        gap: 10px;
+        padding: 18px;
+    }
+
+    .readme-link-modal-heading {
+        gap: 11px;
+    }
+
+    .readme-link-modal-icon {
+        flex-basis: 38px;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+    }
+
+    .readme-link-modal-heading h2 {
+        font-size: 16px;
+    }
+
+    .readme-link-modal-body {
+        gap: 18px;
+        padding: 20px 18px;
+    }
+
+    .readme-link-modal-footer {
+        padding: 14px 18px;
+    }
+
+    .readme-link-modal-footer button {
+        flex: 1 1 auto;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+
+@media (prefers-reduced-motion: reduce) {
+    .readme-link-modal-backdrop,
+    .readme-link-modal-dialog {
+        animation: none;
+    }
+
+    .readme-link-modal *,
+    .readme-link-modal *::before,
+    .readme-link-modal *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
     }
 }

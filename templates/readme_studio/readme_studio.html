@@ -729,6 +729,107 @@
                 </section>
 
             </section>
+
+            <!-- Add Link Modal -->
+            <div
+                class="readme-link-modal"
+                id="readme-link-modal"
+                aria-hidden="true"
+                hidden
+            >
+                <div
+                    class="readme-link-modal-backdrop"
+                    data-link-modal-close
+                ></div>
+
+                <section
+                    class="readme-link-modal-dialog"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="readme-link-modal-title"
+                    aria-describedby="readme-link-modal-description"
+                >
+                    <header class="readme-link-modal-header">
+                        <div class="readme-link-modal-heading">
+                            <span class="readme-link-modal-icon">
+                                <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                            </span>
+
+                            <div>
+                                <h2 id="readme-link-modal-title">Add link</h2>
+                                <p id="readme-link-modal-description">
+                                    Add a URL to the selected text in your description.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="readme-icon-button readme-link-modal-close"
+                            data-link-modal-close
+                            aria-label="Close dialog"
+                            title="Close"
+                        >
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </header>
+
+                    <form id="readme-link-modal-form" novalidate>
+                        <div class="readme-link-modal-body">
+                            <div class="readme-field-control">
+                                <label for="readme-link-selected-text">
+                                    Selected text
+                                </label>
+
+                                <div
+                                    class="readme-link-selected-text"
+                                    id="readme-link-selected-text"
+                                ></div>
+                            </div>
+
+                            <div class="readme-field-control">
+                                <label for="readme-link-url-input">URL</label>
+
+                                <input
+                                    type="url"
+                                    id="readme-link-url-input"
+                                    class="readme-field-input"
+                                    placeholder="https://example.com"
+                                    autocomplete="url"
+                                    required
+                                    aria-describedby="readme-link-url-error"
+                                >
+
+                                <p
+                                    class="readme-link-modal-error"
+                                    id="readme-link-url-error"
+                                    role="alert"
+                                    hidden
+                                ></p>
+                            </div>
+                        </div>
+
+                        <footer class="readme-link-modal-footer">
+                            <button
+                                type="button"
+                                class="readme-link-modal-cancel"
+                                data-link-modal-close
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="readme-link-modal-submit"
+                            >
+                                <i class="bi bi-link-45deg" aria-hidden="true"></i>
+                                <span>Add link</span>
+                            </button>
+                        </footer>
+                    </form>
+                </section>
+            </div>
+
         </div>
     </main>
 </div>
