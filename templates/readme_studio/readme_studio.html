@@ -99,7 +99,22 @@
 
                             <span class="readme-component-copy">
                                 <strong>Text</strong>
-                                <span>Text</span>
+                                <span>Project name and text formatting</span>
+                            </span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="readme-component-item"
+                            data-component="banner"
+                        >
+                            <span class="readme-component-icon">
+                                <i class="bi bi-image" aria-hidden="true"></i>
+                            </span>
+
+                            <span class="readme-component-copy">
+                                <strong>Banner / Image</strong>
+                                <span>Image, alignment, size and link</span>
                             </span>
                         </button>
                     </div>
@@ -118,8 +133,11 @@
                         </div>
 
                         <div class="readme-document-actions">
-                            <div class="readme-document-tabs" role="group" aria-label="Document view">
-
+                            <div
+                                class="readme-document-tabs"
+                                role="group"
+                                aria-label="Document view"
+                            >
                                 <button
                                     type="button"
                                     class="readme-icon-button readme-document-tab is-active"
@@ -152,29 +170,26 @@
                                 >
                                     <i class="bi bi-code-slash" aria-hidden="true"></i>
                                 </button>
-
                             </div>
                         </div>
                     </div>
 
+                    <!-- Edit View -->
                     <div
                         class="readme-document-view readme-document-edit-view"
                         data-view-panel="edit"
                     >
                         <div class="readme-document-canvas" id="readme-document-canvas">
 
+                            <!-- Project Name Component -->
                             <div class="readme-field" data-field-type="project-name">
 
                                 <div class="readme-field-header">
-                                    <label
-                                        class="readme-field-label"
-                                        for="project-name-input"
-                                    >
+                                    <label class="readme-field-label" for="project-name-input">
                                         Project name
                                     </label>
 
                                     <div class="readme-field-actions">
-
                                         <button
                                             type="button"
                                             class="readme-icon-button readme-field-action"
@@ -204,7 +219,6 @@
                                         >
                                             <i class="bi bi-x-lg" aria-hidden="true"></i>
                                         </button>
-
                                     </div>
                                 </div>
 
@@ -240,7 +254,6 @@
                                         <span class="readme-field-control-label">Alignment</span>
 
                                         <div class="readme-field-button-group">
-
                                             <button
                                                 type="button"
                                                 class="readme-icon-button readme-field-action is-active"
@@ -276,7 +289,6 @@
                                             >
                                                 <i class="bi bi-text-right" aria-hidden="true"></i>
                                             </button>
-
                                         </div>
                                     </div>
 
@@ -284,7 +296,6 @@
                                         <span class="readme-field-control-label">Text style</span>
 
                                         <div class="readme-field-button-group">
-
                                             <button
                                                 type="button"
                                                 class="readme-icon-button readme-field-action"
@@ -328,10 +339,163 @@
                                             >
                                                 <i class="bi bi-type-strikethrough" aria-hidden="true"></i>
                                             </button>
-
                                         </div>
                                     </div>
 
+                                </div>
+                            </div>
+
+                            <!-- Banner / Image Component -->
+                            <div class="readme-field readme-banner-field" data-field-type="banner">
+
+                                <div class="readme-field-header">
+                                    <label class="readme-field-label" for="banner-image-url">
+                                        Banner
+                                    </label>
+
+                                    <div class="readme-field-actions">
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-up"
+                                            aria-label="Move banner up"
+                                            title="Move up"
+                                        >
+                                            <i class="bi bi-arrow-up" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="move-down"
+                                            aria-label="Move banner down"
+                                            title="Move down"
+                                        >
+                                            <i class="bi bi-arrow-down" aria-hidden="true"></i>
+                                        </button>
+
+                                        <button
+                                            type="button"
+                                            class="readme-icon-button readme-field-action"
+                                            data-action="clear"
+                                            aria-label="Clear banner"
+                                            title="Clear banner"
+                                        >
+                                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="readme-field-control">
+                                    <label for="banner-image-url">Image URL</label>
+
+                                    <input
+                                        type="text"
+                                        id="banner-image-url"
+                                        class="readme-field-input"
+                                        data-field-input="banner-url"
+                                        placeholder="https://example.com/banner.png"
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <div class="readme-field-control">
+                                    <label for="banner-alt-text">Alt text</label>
+
+                                    <input
+                                        type="text"
+                                        id="banner-alt-text"
+                                        class="readme-field-input"
+                                        data-field-input="banner-alt"
+                                        placeholder="Describe the image"
+                                        autocomplete="off"
+                                    >
+                                </div>
+
+                                <!-- Width, Height and Alignment: one row -->
+                                <div class="readme-field-toolbar">
+
+                                    <div class="readme-field-control">
+                                        <label for="banner-width">Width</label>
+
+                                        <input
+                                            type="text"
+                                            id="banner-width"
+                                            class="readme-field-input"
+                                            data-field-input="banner-width"
+                                            placeholder="e.g. 800px or 100%"
+                                            inputmode="text"
+                                        >
+                                    </div>
+
+                                    <div class="readme-field-control">
+                                        <label for="banner-height">Height</label>
+
+                                        <input
+                                            type="text"
+                                            id="banner-height"
+                                            class="readme-field-input"
+                                            data-field-input="banner-height"
+                                            placeholder="e.g. 200px or 100%"
+                                            inputmode="text"
+                                        >
+                                    </div>
+
+                                    <div class="readme-field-control">
+                                        <span class="readme-field-control-label">Alignment</span>
+
+                                        <div class="readme-field-button-group">
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action is-active"
+                                                data-banner-setting="alignment"
+                                                data-value="left"
+                                                aria-pressed="true"
+                                                aria-label="Align banner left"
+                                                title="Align left"
+                                            >
+                                                <i class="bi bi-text-left" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-banner-setting="alignment"
+                                                data-value="center"
+                                                aria-pressed="false"
+                                                aria-label="Align banner center"
+                                                title="Align center"
+                                            >
+                                                <i class="bi bi-text-center" aria-hidden="true"></i>
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="readme-icon-button readme-field-action"
+                                                data-banner-setting="alignment"
+                                                data-value="right"
+                                                aria-pressed="false"
+                                                aria-label="Align banner right"
+                                                title="Align right"
+                                            >
+                                                <i class="bi bi-text-right" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="readme-field-control">
+                                    <label for="banner-link-url">Link URL (optional)</label>
+
+                                    <input
+                                        type="url"
+                                        id="banner-link-url"
+                                        class="readme-field-input"
+                                        data-field-input="banner-link"
+                                        placeholder="https://example.com"
+                                        autocomplete="off"
+                                    >
                                 </div>
 
                             </div>
@@ -339,6 +503,7 @@
                         </div>
                     </div>
 
+                    <!-- Preview View -->
                     <div
                         class="readme-document-view readme-document-preview-view"
                         id="readme-preview-panel"
@@ -346,20 +511,18 @@
                         hidden
                     >
                         <div class="readme-preview-content" id="readme-preview-content">
-
                             <div class="readme-document-empty">
                                 <span class="readme-document-empty-icon">
                                     <i class="bi bi-eye" aria-hidden="true"></i>
                                 </span>
 
                                 <h3>Preview will appear here</h3>
-
                                 <p>Your README preview will be displayed here without editing controls.</p>
                             </div>
-
                         </div>
                     </div>
 
+                    <!-- Markdown Source View -->
                     <div
                         class="readme-document-view readme-document-source-view"
                         id="readme-source-panel"
@@ -376,6 +539,7 @@
                         ></textarea>
                     </div>
 
+                    <!-- Footer -->
                     <div class="readme-document-footer">
                         <span>
                             <i class="bi bi-layers" aria-hidden="true"></i>
