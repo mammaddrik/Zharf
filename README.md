@@ -1,4 +1,5 @@
 # Zharf
+[![XERJ Contributor](https://img.shields.io/badge/XERJ-Corpus_Hub_Contributor-8B5CF6?style=for-the-badge&labelColor=07070A)](https://hub.xerj.org/contributors/mammaddrik)
 
 A digital space for everything.
 
